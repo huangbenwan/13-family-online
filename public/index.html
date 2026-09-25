@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>五人十三支</title>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17202a;background:#f1f5f9}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:980px;margin:auto;padding:16px}.card{background:white;border:1px solid #dbe3ea;border-radius:14px;padding:14px;margin-bottom:12px}
+h1{font-size:24px;margin:0 0 4px}.muted{color:#64748b;font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input{height:44px;border:1px solid #cbd5e1;border-radius:10px;padding:0 12px;font-size:16px;min-width:0}
+button{min-height:44px;border:1px solid #cbd5e1;border-radius:10px;background:white;padding:8px 14px;font-weight:700;cursor:pointer}
+button.primary{background:#2563eb;color:white;border-color:#2563eb}button:disabled{opacity:.45;cursor:not-allowed}
+.hidden{display:none}.players{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.p{background:#f8fafc;border-radius:10px;padding:9px;text-align:center}.p.me{outline:2px solid #2563eb}
+.score{font-size:12px;color:#64748b;margin-top:3px}.backs{display:flex;justify-content:center;gap:2px;margin-top:6px}.back{width:15px;height:22px;border-radius:3px;background:#475569}
+.table{background:#123b32;color:#fff;border-radius:16px;padding:12px}.zones{display:grid;grid-template-columns:1fr 1.4fr 1.4fr;gap:8px}.zone{border:1px dashed rgba(255,255,255,.35);border-radius:10px;padding:8px;min-height:88px}.zone h3{font-size:13px;margin:0 0 6px}.zonecards,.hand{display:flex;gap:5px;flex-wrap:wrap}
+.pcard{width:47px;height:67px;border:1px solid #d5dbe1;border-radius:7px;background:#fff;color:#17202a;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;cursor:pointer;box-shadow:0 2px 4px #0002}.pcard.red{color:#c81e1e}.pcard.sel{transform:translateY(-6px);outline:3px solid #60a5fa}.rank{font-size:17px}.suit{font-size:18px}
+.msg{padding:9px 11px;border-radius:9px;background:#f1f5f9;margin-top:8px;font-size:13px}.bad{background:#fef2f2;color:#991b1b}.ok{background:#ecfdf5;color:#166534}
+.hand{min-height:88px}.hand.sorting{align-items:flex-start}.zone.dragover{border:2px dashed #fbbf24;background:rgba(251,191,36,.12)}.pcard.dragging{opacity:.45}.sortbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sortbar button{min-height:38px;font-size:13px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.resultgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.res{text-align:center;background:#f8fafc;border-radius:10px;padding:9px}.plus{color:#15803d;font-weight:900}.minus{color:#b91c1c;font-weight:900}
+@media(max-width:650px){.players{grid-template-columns:repeat(5,1fr)}.p{padding:6px 2px;font-size:12px}.zones{grid-template-columns:1fr}.pcard{width:43px;height:62px}.resultgrid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body><main class="wrap">
+<div class="card">
+  <h1>五人十三支</h1>
+  <div class="muted">65 張特殊牌組｜最多 5 人｜線上房間｜無現金、純遊戲戰績</div>
+</div>
+
+<div id="lobby" class="card">
+  <div class="row">
+    <input id="name" maxlength="16" placeholder="你的暱稱">
+    <button id="create" class="primary">建立房間</button>
+    <input id="room" maxlength="5" placeholder="房號">
+    <button id="join">加入房間</button>
+  </div>
+  <div id="lobbyMsg" class="msg">先建立房間，或輸入家人分享的房號。</div>
+</div>
+
+<div id="game" class="hidden">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <strong>房號：<span id="code"></span></strong>
+      <span id="phase" class="muted"></span>
+      <button id="start" class="primary hidden">開始遊戲</button>
+      <button id="next" class="primary hidden">下一局</button>
+    </div>
+  </div>
+  <div class="card"><div id="players" class="players"></div></div>
+
+  <div id="playArea" class="hidden">
+    <div class="table">
+      <div class="zones">
+        <section class="zone" data-zone="head"><h3>頭墩 · 3 張</h3><div id="head" class="zonecards"></div></section>
+        <section class="zone" data-zone="middle"><h3>中墩 · 5 張</h3><div id="middle" class="zonecards"></div></section>
+        <section class="zone" data-zone="tail"><h3>尾墩 · 5 張</h3><div id="tail" class="zonecards"></div></section>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><strong>我的手牌 <span id="count"></span></strong><span class="muted">可直接拖曳牌到頭／中／尾墩</span></div>
+      <div id="hand" class="hand" style="margin-top:8px"></div>
+      <div class="sortbar"><button id="sortSuit">↕ 按花色排列</button><button id="sortRank">↕ 按大小排列</button></div>
+      <div class="actions">
+        <button id="toHead">放頭</button><button id="toMiddle">放中</button><button id="toTail">放尾</button><button id="back">移回</button><button id="submit" class="primary">完成排牌</button>
+      </div>
+      <div id="msg" class="msg">請把 13 張牌分成 3 / 5 / 5。</div>
+    </div>
+  </div>
+
+  <div id="result" class="card hidden"></div>
+</div>
+</main>
+<script>
+const socket=io();
+let roomCode="", state={hand:[],z:{head:[],middle:[],tail:[]},selected:new Set()}, host=false, phase="lobby";
+const $=id=>document.getElementById(id);
+const rv={2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13,A:14};
+const suitOrder={"♠":0,"♥":1,"♦":2,"♣":3};
+let dragId=null;
+function card(c, source="hand"){
+  return `<button class="pcard ${"♥♦".includes(c.s)?"red":""}" draggable="true" data-id="${c.id}" data-source="${source}"><span class="rank">${c.r}</span><span class="suit">${c.s}</span></button>`
+}
+function renderPrivate(d){
+  state.hand=d.hand||[]; state.z=d.z||{head:[],middle:[],tail:[]};
+  $("hand").innerHTML=state.hand.map(c=>card(c,"hand")).join("");
+  $("count").textContent=`${state.hand.length} 張`;
+  for(const z of ["head","middle","tail"]) $(z).innerHTML=state.z[z].map(c=>card(c,z)).join("");
+  bindCards(); bindZones();
+}
+function bindCards(){
+  document.querySelectorAll(".pcard").forEach(el=>{
+    el.onclick=()=>{const id=+el.dataset.id;if(state.selected.has(id))state.selected.delete(id);else state.selected.add(id);renderPrivate({hand:state.hand,z:state.z});};
+    el.ondragstart=e=>{dragId=+el.dataset.id;el.classList.add("dragging");e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",String(dragId));};
+    el.ondragend=()=>{dragId=null;el.classList.remove("dragging");document.querySelectorAll(".zone").forEach(z=>z.classList.remove("dragover"));};
+  });
+}
+function bindZones(){
+  document.querySelectorAll(".zone").forEach(zone=>{
+    zone.ondragover=e=>{e.preventDefault();zone.classList.add("dragover");e.dataTransfer.dropEffect="move";};
+    zone.ondragleave=()=>zone.classList.remove("dragover");
+    zone.ondrop=e=>{e.preventDefault();zone.classList.remove("dragover");const id=dragId||Number(e.dataTransfer.getData("text/plain"));if(id)moveCardToZone(id,zone.dataset.zone);dragId=null;};
+  });
+}
+function moveCardToZone(id,zone){
+  const cap={head:3,middle:5,tail:5}[zone];
+  if(state.z[zone].length>=cap){showMsg(`此墩最多 ${cap} 張。`,false);return;}
+  let c=null;
+  const hi=state.hand.findIndex(x=>x.id===id);
+  if(hi>=0)c=state.hand.splice(hi,1)[0];
+  if(!c){for(const z of ["head","middle","tail"]){const i=state.z[z].findIndex(x=>x.id===id);if(i>=0){c=state.z[z].splice(i,1)[0];break;}}}
+  if(c)state.z[zone].push(c);
+  state.selected.delete(id);renderPrivate({hand:state.hand,z:state.z});
+}
+function move(zone){
+  const cap={head:3,middle:5,tail:5}[zone], ids=[...state.selected];
+  if(!ids.length)return;
+  if(state.z[zone].length+ids.length>cap){showMsg(`此墩最多 ${cap} 張。`,false);return;}
+  const moved=[];
+  for(const id of ids){const i=state.hand.findIndex(c=>c.id===id);if(i>=0)moved.push(state.hand.splice(i,1)[0]);}
+  state.z[zone].push(...moved);state.selected.clear();renderPrivate({hand:state.hand,z:state.z});
+}
+function back(){
+  const ids=[...state.selected];
+  for(const z of ["head","middle","tail"]) state.z[z]=state.z[z].filter(c=>{if(ids.includes(c.id)){state.hand.push(c);return false}return true});
+  state.selected.clear();renderPrivate({hand:state.hand,z:state.z});
+}
+function sortHand(mode){
+  state.hand.sort((a,b)=>mode==="suit" ? (suitOrder[a.s]-suitOrder[b.s] || rv[b.r]-rv[a.r] || a.id-b.id) : (rv[b.r]-rv[a.r] || suitOrder[a.s]-suitOrder[b.s] || a.id-b.id));
+  renderPrivate({hand:state.hand,z:state.z});
+}
+function showMsg(t,ok){$("msg").textContent=t;$("msg").className="msg "+(ok?"ok":"bad")}
+$("create").onclick=()=>{const name=$("name").value.trim()||"玩家";socket.emit("createRoom",{name},r=>{if(!r.ok)return $("lobbyMsg").textContent=r.error;roomCode=r.code;enterGame();})};
+$("join").onclick=()=>{const name=$("name").value.trim()||"玩家";const code=$("room").value.trim().toUpperCase();socket.emit("joinRoom",{name,code},r=>{if(!r.ok)return $("lobbyMsg").textContent=r.error;roomCode=r.code;enterGame();})};
+function enterGame(){$("lobby").classList.add("hidden");$("game").classList.remove("hidden");$("code").textContent=roomCode}
+socket.on("roomState",r=>{
+  roomCode=r.code;phase=r.phase;host=r.players[0]?.id===socket.id;
+  $("phase").textContent=phase==="lobby"?"等待玩家加入":phase==="playing"?`進行中 · 已提交 ${r.submittedCount}/${r.players.length}`:"本局完成";
+  $("players").innerHTML=r.players.map(p=>`<div class="p ${p.id===socket.id?"me":""}"><strong>${p.name}</strong><div class="score">${p.id===socket.id?"我":""}</div><div class="score">等待/提交：${p.submitted?"✓":"—"}</div></div>`).join("");
+  $("start").classList.toggle("hidden",!(host&&phase==="lobby"));$("next").classList.toggle("hidden",!(host&&phase==="result"));$("playArea").classList.toggle("hidden",phase!=="playing");
+});
+socket.on("privateState",d=>{renderPrivate(d);$("playArea").classList.toggle("hidden",d.phase!=="playing")});
+socket.on("roundResult",r=>{$("result").classList.remove("hidden");$("result").innerHTML=`<strong>本局結果</strong><div class="muted" style="margin:5px 0 10px">兩人對戰只有頭、中、尾三墩全部勝出才得 100 戰績分；否則該對戰 0 / 0。</div><div class="resultgrid">${r.names.map((n,i)=>`<div class="res"><strong>${n}</strong><div class="${r.delta[i]>=0?"plus":"minus"}">${r.delta[i]>=0?"+":""}${r.delta[i]} 分</div><div class="muted">總分 ${r.totals[i]}</div></div>`).join("")}</div>`});
+$("start").onclick=()=>socket.emit("startGame",{code:roomCode});$("next").onclick=()=>socket.emit("nextRound",{code:roomCode});
+$("toHead").onclick=()=>move("head");$("toMiddle").onclick=()=>move("middle");$("toTail").onclick=()=>move("tail");$("back").onclick=back;
+$("sortSuit").onclick=()=>sortHand("suit");$("sortRank").onclick=()=>sortHand("rank");
+$("submit").onclick=()=>socket.emit("submitHand",{code:roomCode,z:{head:state.z.head.map(c=>c.id),middle:state.z.middle.map(c=>c.id),tail:state.z.tail.map(c=>c.id)}},r=>showMsg(r.ok?"已提交，等待其他家人完成排牌。":r.error,r.ok));
+</script>
+</body></html>
