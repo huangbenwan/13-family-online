@@ -74,7 +74,7 @@ button.primary{background:#2563eb;color:white;border-color:#2563eb}button:disabl
 </main>
 <script>
 const socket=io();
-let roomCode="", state={hand:[],z:{head:[],middle:[],tail:[]},selected:new Set(),submitted:false}, host=false, phase="lobby";
+let roomCode="", state={hand:[],z:{head:[],middle:[],tail:[]},selected:new Set(),submitted:false,round:null}, host=false, phase="lobby";
 const $=id=>document.getElementById(id);
 const rv={2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13,A:14};
 const suitOrder={"♠":0,"♥":1,"♦":2,"♣":3};
@@ -84,12 +84,23 @@ function card(c, source="hand"){
   return `<button class="pcard ${"♥♦".includes(c.s)?"red":""}${locked}" draggable="${!state.submitted}" data-id="${c.id}" data-source="${source}"><span class="rank">${c.r}</span><span class="suit">${c.s}</span></button>`
 }
 function renderPrivate(d){
-  // 排牌中，伺服器的 hand 是「原始牌組」。不要在別人完成排牌時，
-  // 把玩家目前本地已拖曳的手牌數量重新灌回 13 張。
-  // 只有初次發牌（本地尚未有 13 張）或結果階段，才同步伺服器 hand。
-  const localTotal=state.hand.length+Object.values(state.z).reduce((n,a)=>n+a.length,0);
-  if(d.hand && (d.z || localTotal===0 || state.hand.length===0 || d.phase!=="playing")) state.hand=d.hand;
-  if(d.z) state.z=d.z;
+  // 伺服器的 hand 是玩家本局固定的 13 張原始牌組。
+  // 同一局中，其他玩家完成排牌時絕對不能覆蓋本地正在排的牌。
+  // 只有「新局 round 改變」時，才重置頭／中／尾並載入新手牌。
+  const newRound = d.round !== undefined && d.round !== state.round;
+  if(newRound){
+    state.round=d.round;
+    state.hand=d.hand || [];
+    state.z={head:[],middle:[],tail:[]};
+    state.selected.clear();
+  } else if(d.phase!=="playing" && d.hand){
+    state.hand=d.hand;
+    if(d.z) state.z=d.z;
+  } else if(state.hand.length===0 && d.hand){
+    // 第一次進入遊戲時載入手牌。
+    state.hand=d.hand;
+  }
+  if(d.z && d.phase!=="playing") state.z=d.z;
   if(typeof d.submitted === "boolean") state.submitted=d.submitted;
   $("hand").innerHTML=state.hand.map(c=>card(c,"hand")).join("");
   $("count").textContent=`${state.hand.length} 張`;
