@@ -161,7 +161,12 @@ function startGame(room){
   room.round=(room.round||0)+1;
   room.phase="playing";
   room.players.forEach(p=>{p.hand=[];p.submitted=null;});
-  d.forEach((card,i)=>room.players[i%room.players.length].hand.push(card));
+  // 65 張牌固定切成 5 組、每組 13 張。
+  // 玩家不足 5 人時，只啟用前 N 組，其餘牌組閒置，不重新平均分配。
+  // 例如 3 人：玩家各拿 13 張，另外 2 組（26 張）閒置。
+  room.players.forEach((p,i)=>{
+    p.hand=d.slice(i*13,i*13+13);
+  });
   broadcast(room);
   return true;
 }
