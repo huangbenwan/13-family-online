@@ -127,7 +127,10 @@ function broadcast(room){
     io.to(p.id).emit("privateState", {
       phase:room.phase,
       hand:p.hand || [],
-      z:p.submitted || {head:[],middle:[],tail:[]},
+      // 排牌階段不要把其他玩家的提交狀態灌回未提交玩家的畫面，
+      // 否則 A 提交時，B 的本地排牌會被重置。
+      z:(room.phase === "result" || p.submitted) ? (p.submitted || {head:[],middle:[],tail:[]}) : null,
+      submitted:!!p.submitted,
       scores:p.score
     });
   }
@@ -187,6 +190,7 @@ io.on("connection", socket=>{
     if(!room || room.phase!=="playing") return cb({ok:false,error:"目前不能提交。"});
     const p=room.players.find(x=>x.id===socket.id);
     if(!p) return cb({ok:false,error:"玩家不存在。"});
+    if(p.submitted) return cb({ok:false,error:"你已經完成排牌，請等待其他玩家。"});
     const ids=[...(z.head||[]),...(z.middle||[]),...(z.tail||[])].map(Number);
     if(ids.length!==13 || new Set(ids).size!==13) return cb({ok:false,error:"牌組數量不正確。"});
     const owned=new Set(p.hand.map(c=>c.id));
