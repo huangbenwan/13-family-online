@@ -139,6 +139,7 @@ function broadcast(room){
   for(const p of room.players){
     io.to(p.id).emit("privateState", {
       phase:room.phase,
+      round:room.round,
       hand:p.hand || [],
       // 排牌階段不要把其他玩家的提交狀態灌回未提交玩家的畫面，
       // 否則 A 提交時，B 的本地排牌會被重置。
@@ -157,6 +158,7 @@ function roomCode(){
 function startGame(room){
   if(room.players.length<2) return false;
   const d=shuffle(deck65());
+  room.round=(room.round||0)+1;
   room.phase="playing";
   room.players.forEach(p=>{p.hand=[];p.submitted=null;});
   d.forEach((card,i)=>room.players[i%room.players.length].hand.push(card));
@@ -168,7 +170,7 @@ io.on("connection", socket=>{
   socket.on("createRoom", ({name}, cb)=>{
     name=String(name||"玩家").trim().slice(0,16)||"玩家";
     const code=roomCode();
-    const room={code,phase:"lobby",players:[],hostId:socket.id};
+    const room={code,phase:"lobby",players:[],hostId:socket.id,round:0};
     rooms.set(code,room);
     room.players.push({id:socket.id,name,score:0,ready:false,hand:[],submitted:null});
     socket.join(code);
