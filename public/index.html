@@ -18,7 +18,7 @@ button.primary{background:#2563eb;color:white;border-color:#2563eb}button:disabl
 .table{background:#123b32;color:#fff;border-radius:16px;padding:12px}.zones{display:grid;grid-template-columns:1fr 1.4fr 1.4fr;gap:8px}.zone{border:1px dashed rgba(255,255,255,.35);border-radius:10px;padding:8px;min-height:88px}.zone h3{font-size:13px;margin:0 0 6px}.zonecards,.hand{display:flex;gap:5px;flex-wrap:wrap}
 .pcard{width:47px;height:67px;border:1px solid #d5dbe1;border-radius:7px;background:#fff;color:#17202a;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;cursor:pointer;box-shadow:0 2px 4px #0002}.pcard.red{color:#c81e1e}.pcard.sel{transform:translateY(-6px);outline:3px solid #60a5fa}.rank{font-size:17px}.suit{font-size:18px}
 .msg{padding:9px 11px;border-radius:9px;background:#f1f5f9;margin-top:8px;font-size:13px}.bad{background:#fef2f2;color:#991b1b}.ok{background:#ecfdf5;color:#166534}
-.hand{min-height:88px}.hand.sorting{align-items:flex-start}.zone.dragover{border:2px dashed #fbbf24;background:rgba(251,191,36,.12)}.pcard.dragging{opacity:.45}.sortbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sortbar button{min-height:38px;font-size:13px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.resultgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.res{text-align:center;background:#f8fafc;border-radius:10px;padding:9px}.plus{color:#15803d;font-weight:900}.minus{color:#b91c1c;font-weight:900}
+.hand{min-height:88px}.hand.sorting{align-items:flex-start}.zone.dragover{border:2px dashed #fbbf24;background:rgba(251,191,36,.12)}.pcard.dragging{opacity:.45}.sortbar{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sortbar button{min-height:38px;font-size:13px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.resultgrid{display:grid;grid-template-columns:1fr;gap:10px}.resultPlayer{background:#f8fafc;border:1px solid #dbe3ea;border-radius:12px;padding:10px}.resultHead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.plus{color:#15803d;font-weight:900}.minus{color:#b91c1c;font-weight:900}.miniRow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:4px 0}.miniRow>b{width:22px}.rescard{width:35px;height:46px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;line-height:1.05}.rescard b{font-size:14px}.rescard.red{color:#c81e1e}.relations{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px;font-size:13px}.win{color:#15803d}.lose{color:#b91c1c}.tie{color:#64748b}
 @media(max-width:650px){.players{grid-template-columns:repeat(5,1fr)}.p{padding:6px 2px;font-size:12px}.zones{grid-template-columns:1fr}.pcard{width:43px;height:62px}.resultgrid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -84,8 +84,11 @@ function card(c, source="hand"){
   return `<button class="pcard ${"♥♦".includes(c.s)?"red":""}${locked}" draggable="${!state.submitted}" data-id="${c.id}" data-source="${source}"><span class="rank">${c.r}</span><span class="suit">${c.s}</span></button>`
 }
 function renderPrivate(d){
-  state.hand=d.hand||state.hand;
-  // z 為 null 時代表伺服器只是通知「別人完成了」，不要覆蓋本地未提交排牌。
+  // 排牌中，伺服器的 hand 是「原始牌組」。不要在別人完成排牌時，
+  // 把玩家目前本地已拖曳的手牌數量重新灌回 13 張。
+  // 只有初次發牌（本地尚未有 13 張）或結果階段，才同步伺服器 hand。
+  const localTotal=state.hand.length+Object.values(state.z).reduce((n,a)=>n+a.length,0);
+  if(d.hand && (d.z || localTotal===0 || state.hand.length===0 || d.phase!=="playing")) state.hand=d.hand;
   if(d.z) state.z=d.z;
   if(typeof d.submitted === "boolean") state.submitted=d.submitted;
   $("hand").innerHTML=state.hand.map(c=>card(c,"hand")).join("");
@@ -158,7 +161,21 @@ socket.on("roomState",r=>{
   if(me) setSubmittedUI(!!me.submitted);
 });
 socket.on("privateState",d=>{renderPrivate(d);$("playArea").classList.toggle("hidden",d.phase!=="playing");setSubmittedUI(!!d.submitted)});
-socket.on("roundResult",r=>{$("result").classList.remove("hidden");$("result").innerHTML=`<strong>本局結果</strong><div class="muted" style="margin:5px 0 10px">兩人對戰只有頭、中、尾三墩全部勝出才得 100 戰績分；否則該對戰 0 / 0。</div><div class="resultgrid">${r.names.map((n,i)=>`<div class="res"><strong>${n}</strong><div class="${r.delta[i]>=0?"plus":"minus"}">${r.delta[i]>=0?"+":""}${r.delta[i]} 分</div><div class="muted">總分 ${r.totals[i]}</div></div>`).join("")}</div>`});
+function resultCard(c){return `<span class="rescard ${"♥♦".includes(c.s)?"red":""}"><b>${c.r}</b><span>${c.s}</span></span>`}
+function resultPlayer(i,r){
+  const won=[],lost=[],ties=[];
+  r.matchups.forEach(m=>{if(m.result===i)won.push(r.names[m.a===i?m.b:m.a]);else if(m.result>=0 && (m.a===i||m.b===i))lost.push(r.names[m.result]);else if(m.result===-1 && (m.a===i||m.b===i))ties.push(r.names[m.a===i?m.b:m.a]);});
+  const set=r.sets[i];
+  return `<div class="resultPlayer"><div class="resultHead"><strong>${r.names[i]}</strong><span class="${r.delta[i]>=0?"plus":"minus"}">${r.delta[i]>=0?"+":""}${r.delta[i]} 分</span><span class="muted">總分 ${r.totals[i]}</span></div>
+  <div class="miniRow"><b>頭</b>${set.head.map(resultCard).join("")}</div>
+  <div class="miniRow"><b>中</b>${set.middle.map(resultCard).join("")}</div>
+  <div class="miniRow"><b>尾</b>${set.tail.map(resultCard).join("")}</div>
+  <div class="relations"><span class="win">贏：${won.length?won.join("、"):"—"}</span><span class="lose">輸：${lost.length?lost.join("、"):"—"}</span><span class="tie">平：${ties.length?ties.join("、"):"—"}</span></div></div>`;
+}
+socket.on("roundResult",r=>{
+  $("result").classList.remove("hidden");
+  $("result").innerHTML=`<strong>本局比牌結果</strong><div class="muted" style="margin:5px 0 10px">兩人對戰必須頭、中、尾三墩全部勝出才算贏，贏者 +100、輸者 -100；未三墩全勝則該對戰為平手 0 分。</div><div class="resultgrid">${r.names.map((n,i)=>resultPlayer(i,r)).join("")}</div>`;
+});
 $("start").onclick=()=>socket.emit("startGame",{code:roomCode});$("next").onclick=()=>{state.submitted=false;socket.emit("nextRound",{code:roomCode});};
 $("toHead").onclick=()=>move("head");$("toMiddle").onclick=()=>move("middle");$("toTail").onclick=()=>move("tail");$("back").onclick=back;
 $("sortSuit").onclick=()=>sortHand("suit");$("sortRank").onclick=()=>sortHand("rank");
