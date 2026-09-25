@@ -166,13 +166,21 @@ function setSubmittedUI(v){
 }
 socket.on("roomState",r=>{
   roomCode=r.code;phase=r.phase;host=r.players[0]?.id===socket.id;
+  // 進入新一局後，上一局的比牌結果必須立即隱藏，不能殘留在畫面。
+  $("result").classList.toggle("hidden",phase!=="result");
   $("phase").textContent=phase==="lobby"?"等待玩家加入":phase==="playing"?`進行中 · 已提交 ${r.submittedCount}/${r.players.length}`:"本局完成";
   $("players").innerHTML=r.players.map(p=>`<div class="p ${p.id===socket.id?"me":""}"><strong>${p.name}</strong><div class="score">${p.id===socket.id?"我":""}</div><div class="score">等待/提交：${p.submitted?"✓":"—"}</div></div>`).join("");
   $("start").classList.toggle("hidden",!(host&&phase==="lobby"));$("next").classList.toggle("hidden",!(host&&phase==="result"));$("playArea").classList.toggle("hidden",phase!=="playing");
   const me=r.players.find(p=>p.id===socket.id);
   if(me) setSubmittedUI(!!me.submitted);
 });
-socket.on("privateState",d=>{renderPrivate(d);$("playArea").classList.toggle("hidden",d.phase!=="playing");setSubmittedUI(!!d.submitted)});
+socket.on("privateState",d=>{
+  renderPrivate(d);
+  $("playArea").classList.toggle("hidden",d.phase!=="playing");
+  // 新一局開始時清除上一局的結果；只有收到本局 roundResult 才重新顯示。
+  if(d.phase==="playing") $("result").classList.add("hidden");
+  setSubmittedUI(!!d.submitted);
+});
 function resultCard(c){return `<span class="rescard ${"♥♦".includes(c.s)?"red":""}"><b>${c.r}</b><span>${c.s}</span></span>`}
 function resultPlayer(i,r){
   const won=[],lost=[],ties=[];
@@ -188,7 +196,13 @@ socket.on("roundResult",r=>{
   $("result").classList.remove("hidden");
   $("result").innerHTML=`<strong>本局比牌結果</strong><div class="muted" style="margin:5px 0 10px">兩人對戰必須頭、中、尾三墩全部勝出才算贏，贏者 +100、輸者 -100；未三墩全勝則該對戰為平手 0 分。</div><div class="resultgrid">${r.names.map((n,i)=>resultPlayer(i,r)).join("")}</div>`;
 });
-$("start").onclick=()=>socket.emit("startGame",{code:roomCode});$("next").onclick=()=>{state.submitted=false;socket.emit("nextRound",{code:roomCode});};
+$("start").onclick=()=>socket.emit("startGame",{code:roomCode});
+$("next").onclick=()=>{
+  state.submitted=false;
+  state.selected.clear();
+  $("result").classList.add("hidden");
+  socket.emit("nextRound",{code:roomCode});
+};
 $("toHead").onclick=()=>move("head");$("toMiddle").onclick=()=>move("middle");$("toTail").onclick=()=>move("tail");$("back").onclick=back;
 $("sortSuit").onclick=()=>sortHand("suit");$("sortRank").onclick=()=>sortHand("rank");
 $("submit").onclick=()=>{if(state.submitted)return;socket.emit("submitHand",{code:roomCode,z:{head:state.z.head.map(c=>c.id),middle:state.z.middle.map(c=>c.id),tail:state.z.tail.map(c=>c.id)}},r=>{if(r.ok){setSubmittedUI(true)}else showMsg(r.error,false)});};
