@@ -113,6 +113,19 @@ function scoreRound(sets){
   }
   return delta;
 }
+function buildMatchups(players){
+  const out=[];
+  for(let i=0;i<players.length;i++) for(let j=i+1;j<players.length;j++){
+    const c=comparePlayers(players[i].submitted,players[j].submitted);
+    const rows={};
+    for(const z of ["head","middle","tail"]){
+      const v=cmp(evalHand(players[i].submitted[z]),evalHand(players[j].submitted[z]));
+      rows[z]=v>0?players[i].name:v<0?players[j].name:"平手";
+    }
+    out.push({a:i,b:j,result:c>0?i:c<0?j:-1,rows});
+  }
+  return out;
+}
 function publicRoom(room){
   return {
     code:room.code,
@@ -206,11 +219,13 @@ io.on("connection", socket=>{
       const delta=scoreRound(room.players.map(x=>x.submitted));
       room.players.forEach((p,i)=>p.score+=delta[i]);
       room.phase="result";
+      const matchups=buildMatchups(room.players);
       io.to(room.code).emit("roundResult", {
         delta,
         totals:room.players.map(p=>p.score),
         names:room.players.map(p=>p.name),
-        sets:room.players.map(p=>p.submitted)
+        sets:room.players.map(p=>p.submitted),
+        matchups
       });
       broadcast(room);
     }
