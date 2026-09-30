@@ -39,6 +39,12 @@ http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(fs.readFileSync(path.join(__dirname, 'public', 'index.html')));
     }
+    if (req.method === 'GET' && /^\/cards\/[A-Za-z0-9_-]+\.jpg$/.test(u.pathname)) {
+      const f = path.join(__dirname, 'public', u.pathname);
+      if (!fs.existsSync(f)) { res.writeHead(404); return res.end('nf'); }
+      res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=86400' });
+      return res.end(fs.readFileSync(f));
+    }
     if (u.pathname === '/healthz') return send(res, 200, { ok: true, rooms: touched.size });
     if (req.method === 'GET' && u.pathname === '/events') {
       const cid = u.searchParams.get('cid') || 'x';
