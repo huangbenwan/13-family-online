@@ -66,6 +66,24 @@ button.duel{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800;bor
 .sm.hid.mine{cursor:pointer}.sm.hid.mine .c.back{animation:pulse 1.4s infinite}
 @keyframes pulse{50%{box-shadow:0 0 10px var(--acc)}}
 @keyframes flip{from{transform:rotateY(90deg)}}.sm.new .c{animation:flip .5s}
+#toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + 2px);left:8px;right:8px;z-index:97;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.tt{background:#c62828ee;color:#fff;font-weight:800;font-size:15px;padding:5px 14px;border-radius:16px;box-shadow:0 2px 8px #0005;animation:tin .3s,tout .5s 3.7s forwards;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt.ok{background:#1f6f4aee}
+@keyframes tin{from{transform:translateY(-30px);opacity:0}}@keyframes tout{to{opacity:0}}
+.rx{position:fixed;inset:0;z-index:98;pointer-events:none;overflow:hidden;animation:fadeo 3s forwards}
+.rx .lab{position:absolute;top:16%;left:0;right:0;text-align:center;font-size:clamp(26px,8vw,44px);font-weight:900;line-height:1.3;color:#fff;text-shadow:0 2px 0 #000,0 0 14px #000;animation:pop .5s}
+.rx.slipper{background:radial-gradient(circle,#ff000055,transparent 65%)}
+.rx .sl{position:absolute;right:-8%;top:32%;font-size:40vmin;animation:slap 1.8s forwards}
+@keyframes slap{0%{transform:translateX(75vw) rotate(70deg) scale(.6)}22%{transform:translateX(-14vw) rotate(-30deg) scale(1.15)}30%{transform:translateX(-6vw) rotate(-12deg) scale(1)}100%{transform:translateX(-6vw) rotate(-12deg)}}
+#app.shk{animation:shk .5s}@keyframes shk{20%{transform:translate(-14px,6px)}40%{transform:translate(12px,-6px)}60%{transform:translate(-8px,4px)}80%{transform:translate(5px,-2px)}}
+.rx.fart{background:radial-gradient(circle at 50% 100%,#9ccc3c77,transparent 70%)}
+.rx .pf{position:absolute;bottom:-10%;font-size:var(--s);opacity:0;animation:rise 2.6s var(--d) ease-out forwards}
+@keyframes rise{0%{transform:translateY(0) scale(.5);opacity:0}20%{opacity:.95}100%{transform:translateY(-90vh) translateX(24px) scale(1.7);opacity:0}}
+.rx .dr{position:absolute;top:-10%;font-size:var(--s);animation:fall 2.4s var(--d) ease-in forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(20deg)}}
+.rx .bl{position:absolute;width:var(--s);height:var(--s);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 30%,#fff,#dff3ff 55%,#a8d4f0aa);opacity:.9;animation:slid 2.6s var(--d) forwards}
+@keyframes slid{0%{transform:translateY(0) scale(.2)}25%{transform:translateY(0) scale(1)}100%{transform:translateY(38vh) scale(1);opacity:0}}
+@keyframes fadeo{0%,80%{opacity:1}100%{opacity:0}}
 </style></head><body>
 <div class="bar"><h1>♠ 五人十三支 Online</h1><span id="tot"></span></div>
 <div id="app"></div>
@@ -183,7 +201,7 @@ function finish(){
 function hiIds(c,k){const v=ev(c),cat=catOf(v);if(!spec(v,k))return new Set();
   if(cat==9){const n={};c.forEach(x=>n[x.r]=(n[x.r]||0)+1);return new Set(c.filter(x=>n[x.r]==4).map(x=>x.id))}
   return new Set(c.map(x=>x.id))}
-function summary(R,i){
+function summary0(R,i){
   const W=[],Lo=[],T=[];
   R.pairs.forEach(p=>{if(p.a!=i&&p.b!=i)return;const o=p.a==i?p.b:p.a,n=p.a==i?p.s:-p.s;(n>0?W:n<0?Lo:T).push([o,n])});
   const ch=(a,c,ic,sg)=>a.map(([o,n])=>`<span class="op ${c}"><i>${ic}</i>${NM[o]}${n?' '+sg+Math.abs(n):''}</span>`).join('')||'<span class="rule">—</span>';
@@ -220,7 +238,7 @@ function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBus
   d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="sp" style="--x:${Math.random()*100}%;--y:${Math.random()*100}%;--d:${Math.random()*.9}s;--s:${8+Math.random()*16}px"></i>`).join('')+
    `<div class="fxbox"><small>${NM[e.who]} · ${LN[e.k]}</small><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`;
   let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};
-  d.onclick=done;document.body.appendChild(d);try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(_){}setTimeout(done,2300)}
+  d.onclick=done;document.body.appendChild(d);try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(_){}setTimeout(done,7800)}
 const back5=()=>'<div class="c back"><b>A</b><span>♠</span></div>';
 function duelHTML(){const D=G.dv;
   return jpBanner()+'<div class="rule">⚔ 對決模式:點你自己的牌墩,自己決定攤牌順序(把最強的留到最後);電腦玩家也會各自決定順序。</div>'+
@@ -335,6 +353,8 @@ function onState(){
   if(G.round!==S.round){G.round=S.round;G.hands=[(S.hands&&S.hands[uid])?S.hands[uid].slice():[]];G.hand=G.hands[0].slice();G.lanes=[[],[],[]];G.sel=null;G.note='';G.fxQ=[];sortHand()}
   if(S.phase=='duel'&&G.me>=0)order.forEach((id,i)=>{const d=pd(id);if(!d||!d.sub)return;d.rev.forEach((v,k)=>{const key=S.round+':'+i+','+k;
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
+  if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
+  scanSigs();
   render();
   if(S.host==uid)hostTick();
 }
@@ -413,10 +433,39 @@ function render(){
   const mine=pd(uid);G.status=S.order.map(id=>pd(id)&&pd(id).sub?1:0);
   if(S.phase=='play'){
     if(mine&&mine.sub){app.innerHTML=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
-      mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>';return}
+      mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>'+(G.status.includes(0)?`<div class="pb"><div class="rule">催一下還沒完成的玩家:</div><div class="row">${URGE.map((t,k)=>`<button style="flex:1 1 30%;font-size:13px" ${G.urgeOff?'disabled':''} onclick="sendUrge(${k})">${t}</button>`).join('')}</div></div>`:'');return}
     G.phase='play';oldRender();return}
   if(S.phase=='duel'){G.phase='duel';oldRender();return}
   if(S.phase=='result'){G.phase='result';G.res=compute();oldRender()}
 }
+/* ===== 表情攻擊 & 催促 ===== */
+const URGE=['可以快點嗎？','全世界都在等你','我阿嬤都比你快'],sigSeen={};
+function toast(html,cls){let c=document.getElementById('toast');if(!c){c=document.createElement('div');c.id='toast';document.body.appendChild(c)}
+  const t=document.createElement('div');t.className='tt '+(cls||'');t.innerHTML=html;while(c.children.length>0)c.firstChild.remove();c.appendChild(t);setTimeout(()=>t.remove(),4200)}
+function reactFx(kind,nm){
+  const d=document.createElement('div'),r=(a,b)=>a+Math.random()*(b-a);d.className='rx '+kind;let h='';
+  if(kind=='slipper')h=`<div class="sl">🩴</div><div class="lab">${nm} 拍了你一拖鞋!<br>啪!</div>`;
+  else if(kind=='fart')h=Array.from({length:14},()=>`<i class="pf" style="left:${r(0,90)}%;--d:${r(0,1.2)}s;--s:${r(30,70)}px">💨</i>`).join('')+`<div class="lab">${nm} 對你放了一個屁<br>噗~~~</div>`;
+  else h=Array.from({length:10},()=>`<i class="dr" style="left:${r(0,92)}%;--d:${r(0,1)}s;--s:${r(28,60)}px">💦</i>`).join('')+Array.from({length:4},()=>`<b class="bl" style="left:${r(5,80)}%;top:${r(5,50)}%;--s:${r(60,120)}px;--d:${r(0,.6)}s"></b>`).join('')+`<div class="lab">${nm} 對你吐了口水<br>呸!</div>`;
+  d.innerHTML=h;document.body.appendChild(d);
+  if(kind=='slipper'){const a=document.getElementById('app');setTimeout(()=>{a.classList&&a.classList.add('shk');setTimeout(()=>a.classList&&a.classList.remove('shk'),500)},420)}
+  try{navigator.vibrate&&navigator.vibrate(kind=='slipper'?[30,60,120]:[60,40,60])}catch(_){}
+  setTimeout(()=>d.remove(),3000)}
+function handleSig(id,sg){const nm=esc((P[id]&&P[id].name)||'?');
+  if(sg.t=='react'&&sg.to==uid)reactFx(sg.k,nm);
+  else if(sg.t=='urge'&&S.phase=='play'&&G.me>=0&&!(pd(uid)&&pd(uid).sub))toast('⏰ '+nm+':'+URGE[sg.k]||'')}
+function scanSigs(){Object.keys(P).forEach(id=>{if(id==uid)return;const sg=P[id].sig,cur=sg?sg.n:0;
+  if(!(id in sigSeen)){sigSeen[id]=cur;return}
+  if(cur&&cur!==sigSeen[id]){sigSeen[id]=cur;handleSig(id,sg)}})}
+function sendReact(seat,kind){const id=S.order[seat];if(!id||Date.now()-(G.rxAt||0)<1500)return;G.rxAt=Date.now();
+  pdoc(uid).update({sig:{t:'react',k:kind,to:id,n:Date.now()+Math.random()}}).catch(()=>{});
+  toast('✓ 已對 '+NM[seat]+' 送出 '+({slipper:'🩴',fart:'💨',spit:'💦'})[kind],'ok')}
+function sendUrge(k){if(G.urgeOff)return;G.urgeOff=true;
+  pdoc(uid).update({sig:{t:'urge',k,to:'*',n:Date.now()+Math.random()}}).catch(()=>{});
+  toast('✓ 已通知所有還沒完成的玩家','ok');setTimeout(()=>{G.urgeOff=false;render()},5000);render()}
+function summary(R,i){let h=summary0(R,i);if(i==G.me||G.me<0||(P[S.order[i]]&&P[S.order[i]].bot))return h;
+  const p=R.pairs.find(p=>(p.a==G.me&&p.b==i)||(p.a==i&&p.b==G.me));if(!p||(p.a==G.me?p.s:-p.s)>=0)return h;
+  return h+`<div class="sum">😤 對 ${NM[i]} 表達不爽:</div><div class="row" style="margin:0 0 6px">${[['slipper','🩴 拖鞋'],['fart','💨 放屁'],['spit','💦 口水']].map(([k,t])=>`<button style="padding:6px;font-size:14px" onclick="sendReact(${i},'${k}')">${t}</button>`).join('')}</div>`}
+
 init();
 </script>
