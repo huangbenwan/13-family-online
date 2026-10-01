@@ -211,7 +211,7 @@ function quick(k){G.down=new Set();const r=shape(G.hands[0],QK[k]);
   if(!r){G.note='牌型不符:這手牌湊不成「'+k+'」';const id=G.round;setTimeout(()=>{if(G.round==id&&G.note){G.note='';render()}},3000);render();return}
   G.note='';G.lanes=r;G.hand=[];G.sel=null;render()}
 function clr(){G.lanes.flat().forEach(c=>G.hand.push(c));G.lanes=[[],[],[]];sortHand();render()}
-function hint(){G.down=new Set();const a=auto(G.hands[0]);G.lanes=a;G.hand=[];G.sel=null;render()}
+function hint(){if(!G.canAuto){toast('🔒 要等其他玩家都完成排牌,才能使用自動理牌');return}G.down=new Set();const a=auto(G.hands[0]);G.lanes=a;G.hand=[];G.sel=null;render()}
 function legal(){
   if(G.hand.length)return'還有 '+G.hand.length+' 張牌未放入三墩';
   for(let i=0;i<3;i++)if(G.lanes[i].length!=LS[i])return'各墩張數需為 3／5／5';
@@ -336,9 +336,9 @@ function oldRender(){
   <div class="row" style="margin:2px 0"><span class="rule" style="align-self:center">爛牌快捷:</span>${Object.keys(QK).map(k=>`<button onclick="quick('${k}')">${k}</button>`).join('')}</div>
   <div class="row" style="margin:2px 0"><button onclick="togglePeek()">🙈 瞇牌模式:${G.peek?'開':'關'}</button>${G.down&&G.down.size?`<button class="duel" onclick="openAll()">👀 一鍵全開(剩 ${G.down.size} 張)</button>`:''}</div>
   <div class="g7" ondragover="event.preventDefault()" ondrop="const id=+event.dataTransfer.getData('b');const l=G.lanes.findIndex(x=>x.some(c=>c.id==id));if(l>=0)back(l,id)">${G.hand.map(c=>G.down&&G.down.has(c.id)?`<div class="c cv" onclick="flip(${c.id})"><b>A</b><span>♠</span></div>`:chip(c,`draggable="true" ondrop="event.stopPropagation();moveBefore(+event.dataTransfer.getData('t'),${c.id})" ondragstart="event.dataTransfer.setData('t',${c.id});event.dataTransfer.setData('b',${c.id})" onclick="selCard(${c.id})"`).replace('class="c ','class="c '+(G.sel==c.id?'sel ':'')+(G.flipId==c.id?'fl ':''))).join('')}</div>
-  <div class="row"><button onclick="clr()">全部收回</button><button onclick="hint()">自動理牌</button><button class="p" ${ok?'':'disabled'} onclick="submit()">完成排牌</button></div>
+  <div class="row"><button onclick="clr()">全部收回</button><button ${G.canAuto?'':'disabled'} onclick="hint()">${G.canAuto?'自動理牌':'🔒 自動理牌'}</button><button class="p" ${ok?'':'disabled'} onclick="submit()">完成排牌</button></div>
   <div class="row"><button class="duel" ${hb?'':'disabled'} onclick="duelGo()">⚔ 對決模式${hb?'':'(需有衝三/鐵支/同花順/五雷/彩金)'}</button></div>
-  <p class="rule">點手牌選取(有✓標記),可用◀▶微調位置,或再點要放的墩;點已放的牌可收回,桌面也可拖曳。</p>`;
+  <p class="rule">點手牌選取(有✓標記),可用◀▶微調位置,或再點要放的墩;點已放的牌可收回,桌面也可拖曳。「自動理牌」要等其他玩家都完成排牌後才會解鎖。</p>`;
 }
 
 /* ===================== Online (db rooms) ===================== */
@@ -549,6 +549,8 @@ function render(){
   if(S.phase=='play'){
     if(mine&&mine.sub){if(document.activeElement&&document.activeElement.id=='utx')return;app.innerHTML=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
       mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>'+(G.status.includes(0)?`<div class="pb"><div class="rule">催一下還沒完成的玩家:</div><div class="row">${URGE.map((t,k)=>`<button style="flex:1 1 30%;font-size:13px" ${G.urgeOff?'disabled':''} onclick="sendUrge(${k})">${t}</button>`).join('')}</div><div class="row"><input id="utx" maxlength="30" placeholder="自己輸入想說的話(最多 30 字)" value="${esc(G.urgeTxt||'')}" oninput="G.urgeTxt=this.value" onkeydown="if(event.key==='Enter')sendUrgeText()" style="${INP};flex:3;margin:0"><button ${G.urgeOff?'disabled':''} onclick="sendUrgeText()">送出</button></div></div>`:'');return}
+    G.canAuto=S.order.every((id,i)=>i==G.me||(pd(id)&&!!pd(id).sub));
+    if(G.canAuto&&G.autoRd!==S.round){G.autoRd=S.round;toast('🔓 其他玩家都完成了,自動理牌已解鎖','ok')}
     G.phase='play';laneFxCheck();oldRender();return}
   if(S.phase=='duel'){G.phase='duel';oldRender();return}
   if(S.phase=='result'){G.phase='result';G.res=compute();oldRender()}
