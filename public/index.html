@@ -172,6 +172,20 @@ button:disabled{opacity:.42}
 .tt.ok{background:var(--ok)}
 .msg{color:var(--red);font-weight:700}
 input{font-family:inherit}
+
+/* ===== 銳利醒目的牌面 ===== */
+:root{--edge:#1f2638;--lane:#e3e7f1;--edge2:#c3c9da}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lane:#2a3350;--edge2:#4a5576}}
+.lane{background:var(--lane);border:2px solid var(--edge2);box-shadow:0 3px 0 var(--edge2)}
+.pb{border:2px solid var(--edge2);box-shadow:0 3px 0 var(--edge2)}
+.c,.slots .c,.lane .c{background:#fff;color:#111827;border:2px solid var(--edge);border-radius:10px;box-shadow:0 3px 0 var(--edge)}
+.c.r{color:#d93a1e}
+.c b{font-weight:900}
+.e{background:transparent;border:2px dashed #9aa3bb;border-radius:10px}
+.c.sel{outline:4px solid #e8622a;outline-offset:1px}
+.c.cv,.sm .c.back{border:2px solid var(--edge);box-shadow:0 3px 0 var(--edge)}
+.sm .c{border-width:1.5px;border-radius:6px;box-shadow:0 2px 0 var(--edge)}
+.lane .c.gold{border-color:#b8860b}
 </style></head><body>
 <div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
@@ -209,9 +223,10 @@ function auto(h){
 }
 function deck(){const d=[];let id=0;for(let s=0;s<4;s++)for(let k=0;k<(s==G.dbl?2:1);k++)for(let r=2;r<=14;r++)d.push({r,s,id:id++});
   for(let i=d.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}return d}
-const ACE=['cards/A-s-v2.jpg','cards/A-h-v2.jpg','cards/A-d-v2.jpg','cards/A-c-v2.jpg'],ACEBG=['#e4e9f5','#fbe6e6','#fcf0d2','#e7f1e0'],aceSt=c=>c.r==14?` style="background-image:url(${ACE[c.s]});background-color:${ACEBG[c.s]}"`:'';
-const chip=(c,x='')=>`<div class="c ${c.s==1||c.s==2?'r':''}${c.r==G.jr?" jk":""}${c.r==14?" ace":""}" ${x}${aceSt(c)}><b>${lb(c.r)}</b><span>${SU[c.s]}</span></div>`;
-const mini=(c,h)=>`<div class="c ${c.s==1||c.s==2?'r':''} ${h?'gold':''}${c.r==14?' ace':''}"${aceSt(c)}><b>${lb(c.r)}</b><span>${SU[c.s]}</span></div>`;
+const USE_ACE=false;
+const ACE=['cards/A-s-v2.jpg','cards/A-h-v2.jpg','cards/A-d-v2.jpg','cards/A-c-v2.jpg'],ACEBG=['#e4e9f5','#fbe6e6','#fcf0d2','#e7f1e0'],aceSt=c=>USE_ACE&&c.r==14?` style="background-image:url(${ACE[c.s]});background-color:${ACEBG[c.s]}"`:'';
+const chip=(c,x='')=>`<div class="c ${c.s==1||c.s==2?'r':''}${c.r==G.jr?" jk":""}${USE_ACE&&c.r==14?" ace":""}" ${x}${aceSt(c)}><b>${lb(c.r)}</b><span>${SU[c.s]}</span></div>`;
+const mini=(c,h)=>`<div class="c ${c.s==1||c.s==2?'r':''} ${h?'gold':''}${USE_ACE&&c.r==14?' ace':''}"${aceSt(c)}><b>${lb(c.r)}</b><span>${SU[c.s]}</span></div>`;
 
 let G={round:0,n:5,total:[],sortMode:'rank',asc:false,sel:null,dbl:0,jr:0};
 function sortHand(){const h=G.hand;if(G.sortMode=='manual')return;
@@ -442,7 +457,7 @@ ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
 async function init(){
   G.peek=ls('ss_peek')=='1';updSnd();{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
-  if(typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
+  if(USE_ACE&&typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
   G.fxQ=[];G.fxBusy=false;G.hands=[[]];G.hand=[];G.lanes=[[],[],[]];render();
   db=await connectDb()
