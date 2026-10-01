@@ -400,15 +400,17 @@ ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
   try{navigator.vibrate&&setTimeout(()=>navigator.vibrate([80,30,160]),1000)}catch(_){}
   setTimeout(done,10500)}
 async function init(){
-  G.peek=ls('ss_peek')=='1';updSnd();G.down=new Set();
+  G.peek=ls('ss_peek')=='1';updSnd();{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
+  G.down=new Set();
   if(typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
   G.fxQ=[];G.fxBusy=false;G.hands=[[]];G.hand=[];G.lanes=[[],[],[]];render();
   db=await connectDb()
   if(!db){err='連不上伺服器,請稍後重新整理(免費主機閒置後需 30~60 秒喚醒)。';return render()}
+  if(G.inv){ls('ss_code','');if(myName)await enter(G.inv);else render();return}
   const c=ls('ss_code');if(c)await enter(c);else render();
 }
-function entryHTML(){return `<div class="pb"><h3>五人十三支 Online</h3><p class="rule">輸入暱稱後建立房間,把 4 碼代碼告訴朋友(最多 5 人,不足可加電腦)。朋友只要打開同一個網址即可,不需要任何帳號。</p>
+function entryHTML(){if(G.inv)return inviteHTML();return `<div class="pb"><h3>五人十三支 Online</h3><p class="rule">輸入暱稱後建立房間,把 4 碼代碼告訴朋友(最多 5 人,不足可加電腦)。朋友只要打開同一個網址即可,不需要任何帳號。</p>
 <input id="nm" maxlength="8" placeholder="暱稱(最多 8 字)" value="${esc(myName)}" style="${INP}">
 <div class="row"><button class="p" onclick="createRoom()" ${db?'':'disabled'}>建立房間</button></div>
 <div class="row"><input id="cd" maxlength="4" placeholder="房間代碼" style="${INP};flex:2;text-transform:uppercase"><button onclick="joinRoom()" ${db?'':'disabled'}>加入</button></div>
@@ -424,7 +426,7 @@ async function enter(c){
     const ps=await db.collection('rooms/'+c+'/p').get(),mine=ps.docs.some(d=>d.id==uid);
     if(!mine&&ps.size>=5){code='';return say('房間已滿')}
     if(mine)await pdoc(uid).update({name:myName||'玩家'});else await pdoc(uid).set({name:myName||'玩家',t:Date.now(),round:-1,sub:null,want:0,rev:[0,0,0]});
-    ls('ss_code',c);watch()}catch(e){code='';say('加入失敗:'+(e.message||e.code))}
+    ls('ss_code',c);G.inv='';try{history.replaceState(null,'',location.pathname)}catch(_){}watch()}catch(e){code='';say('加入失敗:'+(e.message||e.code))}
 }
 function watch(){unsubs.forEach(f=>f());unsubs=[];
   unsubs.push(ctl().onSnapshot(s=>{S=s.exists?s.data():null;onState()},e=>say('連線錯誤:'+e.code)));
@@ -507,8 +509,21 @@ function duelHTML(){
       return `<div class="sm ${G.last==i+','+k?'new':''}">${l.map(x=>mini(x,hs.has(x.id))).join('')}${pad}<em class="${fxParts(l,k).length?'gl':''}">${LN[k]}<br>${CAT[catOf(ev(l))]}</em></div>`}
     const me=i==G.me;return `<div class="sm hid ${me?'mine':''}" ${me?`onclick="reveal(${i},${k})"`:''}>${l.map(back5).join('')}${pad}<em>${LN[k]}<br>${me?'點我攤牌'+(fxParts(l,k).length?' ✦':''):'未攤牌'}</em></div>`}).join('')+'</div>').join('')+
   (S.host==uid?'<div class="row"><button onclick="skipDuel()">全部攤開(房主)</button></div>':'')}
+function inviteHTML(){return `<div class="pb"><h3>🎉 你被邀請加入房間</h3><div style="font-size:36px;font-weight:900;letter-spacing:8px;text-align:center;margin:6px 0">${G.inv}</div>
+<input id="nm" maxlength="8" placeholder="輸入你的暱稱(最多 8 字)" value="${esc(myName)}" style="${INP}">
+<div class="row"><button class="p" onclick="joinInvite()" ${db?'':'disabled'}>加入房間</button></div>
+<div class="msg">${err||(db?'':'連線伺服器中…(免費主機喚醒可能需 30~60 秒)')}</div>
+<div class="row"><button onclick="G.inv='';err='';render()">我要自己建立房間</button></div></div>`}
+async function joinInvite(){if(!getName())return;await enter(G.inv)}
+const inviteLink=()=>location.origin+location.pathname+'?room='+code;
+const inviteText=()=>'來玩五人十三支!點連結直接加入房間 '+code+':'+inviteLink();
+async function shareInvite(){const url=inviteLink();
+  try{if(navigator.share){await navigator.share({title:'五人十三支',text:'來玩五人十三支!房間代碼 '+code,url});return}}catch(e){if(e&&e.name=='AbortError')return}
+  try{await navigator.clipboard.writeText(inviteText());toast('✓ 邀請連結已複製,貼到 LINE 就好','ok')}catch(e){const i=document.getElementById('lnk');if(i){i.select();try{document.execCommand('copy');toast('✓ 邀請連結已複製','ok')}catch(_){toast('請長按連結框手動複製','ok')}}}}
+function lineInvite(){location.href='https://line.me/R/msg/text/?'+encodeURIComponent(inviteText())}
 function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.host==uid;
   return `<div class="jp" style="justify-content:space-between"><span>房間代碼</span><b style="font-size:30px;letter-spacing:6px">${code}</b><small>朋友打開同一個網址後輸入代碼</small></div>
+<div class="pb"><div class="rule">邀請連結(朋友點開、輸入暱稱就能加入):</div><input id="lnk" readonly value="${inviteLink()}" onclick="this.select()" style="${INP};font-size:13px"><div class="row"><button class="p" onclick="lineInvite()">💬 傳到 LINE</button><button onclick="shareInvite()">📤 分享 / 複製</button></div></div>
 <div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(P[id].name)}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
 <div class="row"><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
