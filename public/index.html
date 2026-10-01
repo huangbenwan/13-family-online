@@ -98,6 +98,15 @@ button.duel{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800;bor
 .c.ace{background-size:contain;background-position:center;background-repeat:no-repeat;border-color:#d9a21b}
 .c.ace b,.c.ace span{visibility:hidden}
 .sm .c.ace{aspect-ratio:auto;height:58px;background-position:center}
+.tt.gold{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800}
+.lane.vip{border-color:#d9a21b;box-shadow:0 0 14px #f0c04077;animation:shine 2s infinite}
+.lane .c.gold{border-color:#d9a21b;animation:shine 2s infinite}
+.lane .c.gold:not(.ace){background:linear-gradient(180deg,#fff6cc,#f2cd60)}
+.lane .c.gold:not(.r):not(.ace){color:#3a2800}
+.c.cv{background:repeating-linear-gradient(45deg,#2a4d3a 0 5px,#356b50 5px 10px);border-color:#1f6f4a;cursor:pointer}
+.c.cv b,.c.cv span{visibility:hidden}
+.c.cv::after{content:"?";position:absolute;color:#cfe8d9;font-size:26px;font-weight:900}
+.c.fl{animation:flipin .45s}@keyframes flipin{from{transform:rotateY(90deg) scale(.9)}}
 </style></head><body>
 <div class="bar"><h1>♠ 五人十三支 Online</h1><span id="tot"></span></div>
 <div id="app"></div>
@@ -157,7 +166,8 @@ function place(l,id){const c=G.hand.find(x=>x.id==id);if(!c||G.lanes[l].length>=
 function back(l,id){const c=G.lanes[l].find(x=>x.id==id);G.lanes[l]=G.lanes[l].filter(x=>x.id!=id);G.hand.push(c);sortHand();render()}
 function selCard(id){G.sel=G.sel==id?null:id;render()}
 function laneClick(l){if(G.sel!=null)place(l,G.sel)}
-function setSort(m){if(G.sortMode==m&&m=='rank')G.asc=!G.asc;G.sortMode=m;sortHand();render()}
+function setSort(m){if(G.down&&G.down.size){toast('🙈 還有蓋著的牌,請先翻開或按「一鍵全開」');return}
+  if(G.sortMode==m&&m=='rank')G.asc=!G.asc;G.sortMode=m;sortHand();render()}
 function moveSel(d){const i=G.hand.findIndex(c=>c.id==G.sel),j=i+d;if(i<0||j<0||j>=G.hand.length)return;
   [G.hand[i],G.hand[j]]=[G.hand[j],G.hand[i]];G.sortMode='manual';render()}
 function moveBefore(id,tid){const c=G.hand.find(x=>x.id==id);if(!c||id==tid)return;
@@ -172,11 +182,11 @@ function shape(h,ok){
       if(!ok[0].includes(catOf(vf))||!(vt>vm&&vm>vf))continue;
       const s=vt+vm+vf*2;if(s>bs){bs=s;best=[fm,C5[b],C5[a]]}}}
   return best&&best.map(pick)}
-function quick(k){const r=shape(G.hands[0],QK[k]);
+function quick(k){G.down=new Set();const r=shape(G.hands[0],QK[k]);
   if(!r){G.note='牌型不符:這手牌湊不成「'+k+'」';const id=G.round;setTimeout(()=>{if(G.round==id&&G.note){G.note='';render()}},3000);render();return}
   G.note='';G.lanes=r;G.hand=[];G.sel=null;render()}
 function clr(){G.lanes.flat().forEach(c=>G.hand.push(c));G.lanes=[[],[],[]];sortHand();render()}
-function hint(){const a=auto(G.hands[0]);G.lanes=a;G.hand=[];G.sel=null;render()}
+function hint(){G.down=new Set();const a=auto(G.hands[0]);G.lanes=a;G.hand=[];G.sel=null;render()}
 function legal(){
   if(G.hand.length)return'還有 '+G.hand.length+' 張牌未放入三墩';
   for(let i=0;i<3;i++)if(G.lanes[i].length!=LS[i])return'各墩張數需為 3／5／5';
@@ -266,10 +276,12 @@ function duelHTML(){const D=G.dv;
 const tn=r=>r==1?'勝':r==-1?'負':'平';
 function laneHTML(i){
   const l=G.lanes[i],full=l.length==LS[i];
-  let cells=l.map(c=>chip(c,`onclick="event.stopPropagation();back(${i},${c.id})"`));
+  const fp=full?fxParts(l,i):[],hs=fp.length?hiIds(l,i):new Set();
+  if(fp.some(t=>t.startsWith('彩金')))l.forEach(x=>{if(x.r==G.jr)hs.add(x.id)});
+  let cells=l.map(c=>chip(c,`onclick="event.stopPropagation();back(${i},${c.id})"`).replace('class="c ','class="c '+(hs.has(c.id)?'gold ':'')));
   while(cells.length<LS[i])cells.push('<div class="e"></div>');
-  return `<div class="lane ${G.sel!=null&&!full?'tg':''}" onclick="laneClick(${i})" ondragover="event.preventDefault()" ondrop="place(${i},+event.dataTransfer.getData('t'))">
-  <div class="lh"><span>${LN[i]}(${LS[i]}張)</span><b>${full?CAT[catOf(ev(l))]:l.length+'/'+LS[i]}${G.sel!=null&&!full?' ← 點此放入':''}</b></div><div class="g5">${cells.join('')}</div></div>`}
+  return `<div class="lane ${G.sel!=null&&!full?'tg':''} ${fp.length?'vip':''}" onclick="laneClick(${i})" ondragover="event.preventDefault()" ondrop="place(${i},+event.dataTransfer.getData('t'))">
+  <div class="lh"><span>${LN[i]}(${LS[i]}張)</span><b>${full?CAT[catOf(ev(l))]:l.length+'/'+LS[i]}${G.sel!=null&&!full?' ← 點此放入':''}${fp.length?`<span class="badge">✦ ${fp.join(' ＋ ')}</span>`:''}</b></div><div class="g5">${cells.join('')}</div></div>`}
 function oldRender(){
   const app=document.getElementById('app'),T=document.getElementById('tot');
   if(!G.round){T.textContent='';app.innerHTML=`<p>選擇本局人數(你 + 電腦玩家)。每位玩家固定 13 張,65 張牌:黑桃 2 副、其餘花色各 1 副。</p>
@@ -297,7 +309,8 @@ function oldRender(){
   <div class="row" style="margin:2px 0"><button onclick="setSort('suit')">按花色</button><button onclick="setSort('rank')">按大小 ${G.sortMode=='rank'?(G.asc?'↑小→大':'↓大→小'):''}</button></div>
   ${G.sel!=null&&G.hand.some(c=>c.id==G.sel)?'<div class="row" style="margin:2px 0"><button onclick="moveSel(-1)">◀ 左移</button><button onclick="moveSel(1)">右移 ▶</button></div>':(G.sortMode=='manual'?'<div class="rule">目前為手動排序</div>':'')}
   <div class="row" style="margin:2px 0"><span class="rule" style="align-self:center">爛牌快捷:</span>${Object.keys(QK).map(k=>`<button onclick="quick('${k}')">${k}</button>`).join('')}</div>
-  <div class="g7" ondragover="event.preventDefault()" ondrop="const id=+event.dataTransfer.getData('b');const l=G.lanes.findIndex(x=>x.some(c=>c.id==id));if(l>=0)back(l,id)">${G.hand.map(c=>chip(c,`draggable="true" ondrop="event.stopPropagation();moveBefore(+event.dataTransfer.getData('t'),${c.id})" ondragstart="event.dataTransfer.setData('t',${c.id});event.dataTransfer.setData('b',${c.id})" onclick="selCard(${c.id})"`).replace('class="c ','class="c '+(G.sel==c.id?'sel ':''))).join('')}</div>
+  <div class="row" style="margin:2px 0"><button onclick="togglePeek()">🙈 瞇牌模式:${G.peek?'開':'關'}</button>${G.down&&G.down.size?`<button class="duel" onclick="openAll()">👀 一鍵全開(剩 ${G.down.size} 張)</button>`:''}</div>
+  <div class="g7" ondragover="event.preventDefault()" ondrop="const id=+event.dataTransfer.getData('b');const l=G.lanes.findIndex(x=>x.some(c=>c.id==id));if(l>=0)back(l,id)">${G.hand.map(c=>G.down&&G.down.has(c.id)?`<div class="c cv" onclick="flip(${c.id})"><b>A</b><span>♠</span></div>`:chip(c,`draggable="true" ondrop="event.stopPropagation();moveBefore(+event.dataTransfer.getData('t'),${c.id})" ondragstart="event.dataTransfer.setData('t',${c.id});event.dataTransfer.setData('b',${c.id})" onclick="selCard(${c.id})"`).replace('class="c ','class="c '+(G.sel==c.id?'sel ':'')+(G.flipId==c.id?'fl ':''))).join('')}</div>
   <div class="row"><button onclick="clr()">全部收回</button><button onclick="hint()">自動理牌</button><button class="p" ${ok?'':'disabled'} onclick="submit()">完成排牌</button></div>
   <div class="row"><button class="duel" ${hb?'':'disabled'} onclick="duelGo()">⚔ 對決模式${hb?'':'(需有衝三/鐵支/同花順/五雷/彩金)'}</button></div>
   <p class="rule">點手牌選取(有✓標記),可用◀▶微調位置,或再點要放的墩;點已放的牌可收回,桌面也可拖曳。</p>`;
@@ -331,7 +344,15 @@ function connectDb(){return new Promise(resolve=>{
     collection:path=>({path,get:()=>op('list',path).then(csnap),onSnapshot:(cb)=>sub('col',path,cb)})};
   setTimeout(()=>{if(!done){done=true;resolve(null)}},60000);
 })}
+function flip(id){if(!G.down.has(id))return;G.down.delete(id);G.flipId=id;try{navigator.vibrate&&navigator.vibrate(15)}catch(_){}render();G.flipId=null}
+function openAll(){G.down=new Set();G.sel=null;render()}
+function togglePeek(){G.peek=!G.peek;ls('ss_peek',G.peek?'1':'0');
+  if(G.peek){const pl=new Set(G.lanes.flat().map(c=>c.id));for(let i=G.hand.length-1;i>0;i--){const j=0|Math.random()*(i+1);[G.hand[i],G.hand[j]]=[G.hand[j],G.hand[i]]}
+    G.down=new Set(G.hand.filter(c=>!pl.has(c.id)).map(c=>c.id));G.sel=null;G.sortMode='manual';G.pkMan=true}else G.down=new Set();render()}
+function laneFxCheck(){G.lp=G.lp||['','',''];G.lanes.forEach((l,k)=>{const key=l.length==LS[k]?fxParts(l,k).join('＋'):'';
+  if(key&&key!==G.lp[k]){toast('✨ '+LN[k]+'成形:'+key+'!','gold');try{navigator.vibrate&&navigator.vibrate([40,30,80])}catch(_){}}G.lp[k]=key})}
 async function init(){
+  G.peek=ls('ss_peek')=='1';G.down=new Set();
   if(typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
   G.fxQ=[];G.fxBusy=false;G.hands=[[]];G.hand=[];G.lanes=[[],[],[]];render();
@@ -366,7 +387,9 @@ function onState(){
   const order=S.order||[];NM.length=0;order.forEach(id=>NM.push(esc((P[id]&&P[id].name)||'?')));
   G.jr=S.jr;G.dbl=S.dbl;G.n=order.length;G.me=order.indexOf(uid);G.idle=S.idle;
   G.total=order.map(id=>(S.total||{})[id]||0);G.swapUsed=!!S.swapUsed;G.swapMsg=S.swapMsg||'';
-  if(G.round!==S.round){G.round=S.round;G.hands=[(S.hands&&S.hands[uid])?S.hands[uid].slice():[]];G.hand=G.hands[0].slice();G.lanes=[[],[],[]];G.sel=null;G.note='';G.fxQ=[];sortHand()}
+  if(G.round!==S.round){G.round=S.round;G.hands=[(S.hands&&S.hands[uid])?S.hands[uid].slice():[]];G.hand=G.hands[0].slice();G.lanes=[[],[],[]];G.sel=null;G.note='';G.fxQ=[];G.lp=['','',''];G.down=G.peek?new Set(G.hand.map(c=>c.id)):new Set();
+    if(G.peek){G.sortMode='manual';G.pkMan=true}else if(G.pkMan){G.sortMode='rank';G.pkMan=false}
+    sortHand()}
   if(S.phase=='duel'&&G.me>=0)order.forEach((id,i)=>{const d=pd(id);if(!d||!d.sub)return;d.rev.forEach((v,k)=>{const key=S.round+':'+i+','+k;
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
   if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
@@ -450,7 +473,7 @@ function render(){
   if(S.phase=='play'){
     if(mine&&mine.sub){if(document.activeElement&&document.activeElement.id=='utx')return;app.innerHTML=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
       mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>'+(G.status.includes(0)?`<div class="pb"><div class="rule">催一下還沒完成的玩家:</div><div class="row">${URGE.map((t,k)=>`<button style="flex:1 1 30%;font-size:13px" ${G.urgeOff?'disabled':''} onclick="sendUrge(${k})">${t}</button>`).join('')}</div><div class="row"><input id="utx" maxlength="30" placeholder="自己輸入想說的話(最多 30 字)" value="${esc(G.urgeTxt||'')}" oninput="G.urgeTxt=this.value" onkeydown="if(event.key==='Enter')sendUrgeText()" style="${INP};flex:3;margin:0"><button ${G.urgeOff?'disabled':''} onclick="sendUrgeText()">送出</button></div></div>`:'');return}
-    G.phase='play';oldRender();return}
+    G.phase='play';laneFxCheck();oldRender();return}
   if(S.phase=='duel'){G.phase='duel';oldRender();return}
   if(S.phase=='result'){G.phase='result';G.res=compute();oldRender()}
 }
