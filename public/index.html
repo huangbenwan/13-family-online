@@ -133,7 +133,7 @@ button.duel{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800;bor
 @keyframes hbp{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:none}}
 .hr-tip{position:absolute;left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#fffa}
 </style></head><body>
-<div class="bar"><h1>♠ 五人十三支 Online</h1><span id="tot"></span></div>
+<div class="bar"><h1>♠ 五人十三支 Online</h1><span><span id="tot"></span> <button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
 <script>
 const SU=['♠','♥','♦','♣'],CAT=['散牌','一對','兩對','三條','順子','同花','同花對子','同花兩對子','葫蘆','四條','同花順','五雷'];
@@ -287,7 +287,7 @@ function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBus
   const d=document.createElement('div');d.className='fx'+(royal?' royal':'');
   d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="sp" style="--x:${Math.random()*100}%;--y:${Math.random()*100}%;--d:${Math.random()*.9}s;--s:${8+Math.random()*16}px"></i>`).join('')+
    `<div class="fxbox"><small>${NM[e.who]} · ${LN[e.k]}</small><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`;
-  let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};
+  let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};playSnd();
   d.onclick=done;document.body.appendChild(d);try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(_){}setTimeout(done,7800)}
 const back5=()=>'<div class="c back"><b>A</b><span>♠</span></div>';
 function duelHTML(){const D=G.dv;
@@ -376,6 +376,15 @@ function togglePeek(){G.peek=!G.peek;ls('ss_peek',G.peek?'1':'0');
     G.down=new Set(G.hand.filter(c=>!pl.has(c.id)).map(c=>c.id));G.sel=null;G.sortMode='manual';G.pkMan=true}else G.down=new Set();render()}
 function laneFxCheck(){G.lp=G.lp||['','',''];G.lanes.forEach((l,k)=>{const key=l.length==LS[k]?fxParts(l,k).join('＋'):'';
   if(key&&key!==G.lp[k]){toast('✨ '+LN[k]+'成形:'+key+'!','gold');try{navigator.vibrate&&navigator.vibrate([40,30,80])}catch(_){}}G.lp[k]=key})}
+const SFX=typeof Audio!='undefined'?new Audio('sfx/weee.mp3'):null;let sndOn=ls('ss_snd')!='0';
+if(SFX)SFX.preload='auto';
+function unlockSnd(){if(!SFX||SFX._u)return;SFX._u=1;SFX.muted=true;let p;try{p=SFX.play()}catch(_){}
+  const fin=()=>{try{SFX.pause();SFX.currentTime=0}catch(_){}SFX.muted=false};
+  if(p&&p.then)p.then(fin).catch(()=>{SFX._u=0;SFX.muted=false});else fin()}
+if(document.addEventListener)['pointerdown','touchend','click','keydown'].forEach(e=>document.addEventListener(e,unlockSnd,{passive:true}));
+function playSnd(){if(!SFX||!sndOn)return;try{SFX.currentTime=0;const p=SFX.play();p&&p.catch&&p.catch(()=>{})}catch(_){}}
+function updSnd(){const b=document.getElementById('snd');if(b)b.textContent=sndOn?'🔊':'🔇'}
+function toggleSnd(){sndOn=!sndOn;ls('ss_snd',sndOn?'1':'0');updSnd();if(sndOn)playSnd()}
 function hongFx(w){
   document.querySelectorAll&&document.querySelectorAll('.hr').forEach(e=>e.remove());
   const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-30,-60],[55,-70],[-45,-20],[60,-35],[10,-85]];
@@ -387,11 +396,11 @@ function hongFx(w){
 ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i%5][1]}vh;--r:${(i%2?1:-1)*(360+i*90)}deg;animation-delay:${1.05+i*.06}s">😵 ${n}</span>`).join('')}
 <div class="hr-bubble"><small>😎 ${nm}</small>我不是針對你，我是說在座的各位都是垃圾。</div>
 <div class="hr-crowd">🎉🥳📣🎊🥳🎉</div><div class="hr-tip">點一下關閉</div>`;
-  const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);
+  const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);
   try{navigator.vibrate&&setTimeout(()=>navigator.vibrate([80,30,160]),1000)}catch(_){}
   setTimeout(done,10500)}
 async function init(){
-  G.peek=ls('ss_peek')=='1';G.down=new Set();
+  G.peek=ls('ss_peek')=='1';updSnd();G.down=new Set();
   if(typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
   G.fxQ=[];G.fxBusy=false;G.hands=[[]];G.hand=[];G.lanes=[[],[],[]];render();
