@@ -453,7 +453,8 @@ function hostTick(){const order=S.order||[],r=S.round;
   if(S.phase=='play'&&order.length&&order.every(id=>pd(id)&&pd(id).sub)){
     if(flag('adv'+r))return;
     if(order.some(id=>pd(id).want)){ctl().update({phase:'duel'});startBots()}else finishRound()}
-  else if(S.phase=='duel'&&order.every(id=>pd(id)&&pd(id).sub&&pd(id).rev.every(x=>x))){if(flag('fin'+r))return;setTimeout(finishRound,2600)}}
+  else if(S.phase=='duel'&&order.every(id=>pd(id)&&pd(id).sub&&pd(id).rev.every(x=>x))){if(flag('fin'+r))return;setTimeout(finishRound,2600)}
+  else if(S.phase=='result'&&order.length&&order.every(id=>!P[id]||P[id].bot||P[id].nr===r)){if(flag('nx'+r))return;deal()}}
 function startBots(){const r=S.round,t=setInterval(()=>{if(!S||S.round!=r||S.phase!='duel')return clearInterval(t);
   const c=S.order.filter(id=>P[id]&&P[id].bot&&pd(id)&&pd(id).sub&&pd(id).rev.some(x=>!x));if(!c.length)return;
   const id=c[0|Math.random()*c.length],d=pd(id),rv=d.rev.slice(),un=[0,1,2].filter(k=>!rv[k]),
@@ -500,7 +501,18 @@ function swapPanel(){let h=G.swapMsg?`<div class="pb">${G.swapMsg}<br><span clas
   const mn=Math.min(...G.total);
   if(mn<0&&G.me>=0&&G.total[G.me]==mn&&!G.swapUsed)h+=`<div class="pb"><b>🔄 輸家要求換色</b><div class="rule">你目前總分最低,可把雙副花色改成別的花色(下一局生效)。目前:${compStr()}</div><div class="row">${[0,1,2,3].filter(x=>x!=G.dbl).map(x=>`<button onclick="doSwap(${x})">${SU[x]} 改為兩副</button>`).join('')}</div></div>`;
   return h}
-function nextBtn(){return (S.host==uid?'<div class="row"><button class="p" onclick="deal()">下一局</button>':'<p class="rule">等房主開始下一局…</p><div class="row">')+'<button onclick="leaveRoom()">離開房間</button></div>'}
+function nextBtn(){
+  const order=S.order,r=S.round,isB=id=>!!(P[id]&&P[id].bot),rdy=id=>!!(P[id]&&P[id].nr===r),hum=order.filter(id=>!isB(id)),n=hum.filter(rdy).length,me=rdy(uid);
+  return `<div class="pb"><div class="rule">每位玩家都按「準備」,才會開始下一局:</div>
+<div class="st" style="margin:6px 0">${order.map((id,i)=>isB(id)?'':`<i class="${rdy(id)?'ok':''}">${NM[i]}:${rdy(id)?'已準備':'看戰績中'}</i>`).join('')}</div>
+<div class="row"><button class="p" onclick="readyNext()">${me?`✓ 已準備(${n}/${hum.length}),點此取消`:'✅ 我看完了,準備下一局'}</button></div>
+${S.host==uid?'<div class="row"><button onclick="forceNext()">⏭ 不等了,直接開始(房主)</button></div>':''}
+<div class="row"><button onclick="leaveRoom()">離開房間</button></div></div>`}
+function readyNext(){if(!S||S.phase!='result')return;const me=P[uid]&&P[uid].nr===S.round;pdoc(uid).update({nr:me?-1:S.round}).catch(()=>{})}
+function forceNext(){if(S.host!=uid||S.phase!='result')return;
+  const miss=S.order.filter(id=>P[id]&&!P[id].bot&&P[id].nr!==S.round).length;
+  if(miss&&!confirm('還有 '+miss+' 位玩家沒按準備,確定直接開始下一局?'))return;
+  if(!flag('nx'+S.round))deal()}
 function duelHTML(){
   return jpBanner()+'<div class="rule">⚔ 對決模式:點你自己的牌墩,自己決定攤牌順序(把最強的留到最後)。</div>'+
   S.order.map((_,i)=>`<div class="pb"><h3><span>${NM[i]}${i==G.me?'(你)':''}</span><span class="rule">已攤 ${revOf(i).filter(Boolean).length}/3</span></h3>`+[0,1,2].map(k=>{
