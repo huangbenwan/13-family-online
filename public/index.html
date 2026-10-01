@@ -107,6 +107,31 @@ button.duel{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800;bor
 .c.cv b,.c.cv span{visibility:hidden}
 .c.cv::after{content:"?";position:absolute;color:#cfe8d9;font-size:26px;font-weight:900}
 .c.fl{animation:flipin .45s}@keyframes flipin{from{transform:rotateY(90deg) scale(.9)}}
+.hr{position:fixed;inset:0;z-index:100;overflow:hidden;animation:fxin .3s;cursor:pointer}
+.hr::after{content:"";position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:hflash .45s 1s}
+@keyframes hflash{0%{opacity:.95}100%{opacity:0}}
+.hr-sky{position:absolute;inset:0;background:linear-gradient(#0b1a3d,#2b5aa8 55%,#7fc4ff)}
+.hr-grass{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(#3aa24b,#1f6f2e);border-top:4px solid #2a8a3b}
+.hr-man{position:absolute;left:9%;bottom:22%;font-size:24vmin;line-height:1}
+.hr-bat{position:absolute;left:24%;bottom:36%;width:36vmin;transform-origin:3% 50%;transform:rotate(-105deg);animation:hready .25s infinite alternate,hswing .3s 1s forwards cubic-bezier(.3,0,.2,1)}
+@keyframes hready{from{transform:rotate(-112deg)}to{transform:rotate(-100deg)}}
+@keyframes hswing{0%{transform:rotate(-105deg)}70%{transform:rotate(12deg)}100%{transform:rotate(30deg)}}
+.hr-ball{position:absolute;left:100%;bottom:43%;font-size:9vmin;line-height:1;animation:hpitch 1s linear forwards,hhome 1.9s 1.05s ease-out forwards}
+@keyframes hpitch{0%{transform:translateX(0) scale(.4) rotate(0)}100%{transform:translateX(-62vw) scale(1.2) rotate(-720deg)}}
+@keyframes hhome{0%{transform:translate(-62vw,0) scale(1.2)}100%{transform:translate(-8vw,-105vh) scale(.12) rotate(1440deg)}}
+.hr-crack{position:absolute;left:28%;top:40%;font-size:17vmin;font-weight:900;color:#fff;-webkit-text-stroke:3px #e53935;opacity:0;animation:hcrack .8s 1s forwards}
+@keyframes hcrack{0%{opacity:0;transform:scale(.2) rotate(-15deg)}25%{opacity:1;transform:scale(1.3) rotate(8deg)}100%{opacity:0;transform:scale(1.1)}}
+.hr-fly{position:absolute;left:36%;top:50%;background:#fff;color:#c62828;font-weight:900;padding:3px 10px;border-radius:14px;font-size:4.6vmin;white-space:nowrap;opacity:0;animation:hfly 2.4s 1.05s ease-out forwards}
+@keyframes hfly{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+.hr-title{position:absolute;top:4%;left:0;right:0;text-align:center;font-size:clamp(34px,12vw,68px);font-weight:900;letter-spacing:3px;background:linear-gradient(180deg,#fff6c8,#f2c94c 55%,#b8860b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px #f0c040);opacity:0;animation:hpop .6s 1.6s forwards cubic-bezier(.2,1.6,.4,1)}
+@keyframes hpop{0%{opacity:0;transform:scale(.2) rotate(-8deg)}100%{opacity:1;transform:none}}
+.hr-crowd{position:absolute;left:0;right:0;bottom:3%;text-align:center;font-size:8vmin;opacity:0;animation:hcin .1s 1.5s forwards,hbnc .45s 1.5s infinite alternate}
+@keyframes hcin{to{opacity:1}}@keyframes hbnc{to{transform:translateY(-14px)}}
+.hr-bubble{position:absolute;left:6%;right:6%;top:19%;background:#fff;color:#222;border:4px solid #222;border-radius:20px;padding:10px 14px;font-weight:900;font-size:clamp(18px,5.4vw,30px);text-align:center;line-height:1.35;opacity:0;animation:hbp .5s 2.4s forwards cubic-bezier(.2,1.6,.4,1)}
+.hr-bubble small{display:block;color:#c62828;font-size:.6em;margin-bottom:2px}
+.hr-bubble::after{content:"";position:absolute;left:16%;top:100%;border:14px solid transparent;border-top-color:#222}
+@keyframes hbp{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:none}}
+.hr-tip{position:absolute;left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#fffa}
 </style></head><body>
 <div class="bar"><h1>♠ 五人十三支 Online</h1><span id="tot"></span></div>
 <div id="app"></div>
@@ -294,7 +319,7 @@ function oldRender(){
     app.innerHTML=jpBanner()+`<div class="rule">本局閒置 ${G.idle} 張,不參與比牌</div>`+
     R.L.map((l,i)=>[l,i]).sort((a,b)=>a[1]==G.me?-1:b[1]==G.me?1:a[1]-b[1]).map(([l,i])=>{
       const sp=R.V[i].map((v,k)=>spec(v,k)?LN[k]+spec(v,k).n:'').filter(Boolean),jt=R.JM[i].map((m,k)=>m?LN[k]+'彩金'+lb(R.jr)+(m>1?'×'+m:''):'').filter(Boolean),vip=sp.length||jt.length||R.hong[i];
-      return `<div class="pb ${vip?'vip':''}"><h3><span>${NM[i]}${i==G.me?'(你)':''}${R.hong[i]?'<span class="badge hot">🔥 紅不讓</span>':''}${sp.map(t=>`<span class="badge">✦ ${t}</span>`).join('')}${jt.map(t=>`<span class="badge">🎰 ${t}</span>`).join('')}</span><span class="${R.sc[i]>0?'pos':R.sc[i]<0?'neg':''}">本局 ${R.sc[i]>0?'+':''}${R.sc[i]} · 累計 ${G.total[i]}</span></h3>
+      return `<div class="pb ${vip?'vip':''}"><h3><span>${NM[i]}${i==G.me?'(你)':''}${R.hong[i]?'<span class="badge hot" onclick="hongFx(${i})" style="cursor:pointer">🔥 紅不讓 ⚾</span>':''}${sp.map(t=>`<span class="badge">✦ ${t}</span>`).join('')}${jt.map(t=>`<span class="badge">🎰 ${t}</span>`).join('')}</span><span class="${R.sc[i]>0?'pos':R.sc[i]<0?'neg':''}">本局 ${R.sc[i]>0?'+':''}${R.sc[i]} · 累計 ${G.total[i]}</span></h3>
       ${summary(R,i)}
       ${l.map((c,k)=>{const hs=hiIds(c,k),sk=spec(R.V[i][k],k)||R.JM[i][k];if(R.JM[i][k])c.forEach(x=>{if(x.r==R.jr)hs.add(x.id)});return `<div class="sm">${c.map(x=>mini(x,hs.has(x.id))).join('')}${'<span></span>'.repeat(5-c.length)}<em class="${sk?'gl':''}">${LN[k]}<br>${CAT[catOf(R.V[i][k])]}</em></div>`}).join('')}</div>`}).join('')+
     `<div class="pb"><h3>對戰明細(${R.pairs.length} 組)</h3>${R.pairs.map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line);font-size:13px"><div style="display:flex;justify-content:space-between"><b>${NM[p.a]} vs ${NM[p.b]}</b><b class="${p.s>0?'pos':p.s<0?'neg':''}">${NM[p.a]} ${p.s>0?'+':''}${p.s} / ${NM[p.b]} ${p.s>0?'−':p.s<0?'+':''}${Math.abs(p.s)}</b></div><div class="rule">頭${tn(p.r[0])} 中${tn(p.r[1])} 尾${tn(p.r[2])}${p.items.map(i=>`<br>${NM[i.w]} ${i.t} +${i.s}`).join('')||'<br>無得分'}</div></div>`).join('')}</div>
@@ -351,6 +376,20 @@ function togglePeek(){G.peek=!G.peek;ls('ss_peek',G.peek?'1':'0');
     G.down=new Set(G.hand.filter(c=>!pl.has(c.id)).map(c=>c.id));G.sel=null;G.sortMode='manual';G.pkMan=true}else G.down=new Set();render()}
 function laneFxCheck(){G.lp=G.lp||['','',''];G.lanes.forEach((l,k)=>{const key=l.length==LS[k]?fxParts(l,k).join('＋'):'';
   if(key&&key!==G.lp[k]){toast('✨ '+LN[k]+'成形:'+key+'!','gold');try{navigator.vibrate&&navigator.vibrate([40,30,80])}catch(_){}}G.lp[k]=key})}
+function hongFx(w){
+  document.querySelectorAll&&document.querySelectorAll('.hr').forEach(e=>e.remove());
+  const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-30,-60],[55,-70],[-45,-20],[60,-35],[10,-85]];
+  const d=document.createElement('div');d.className='hr';
+  d.innerHTML=`<div class="hr-sky"></div><div class="hr-grass"></div><div class="hr-title">⚾ 全壘打!! ⚾</div>
+<div class="hr-man">😎</div>
+<svg class="hr-bat" viewBox="0 0 125 20"><defs><linearGradient id="hbg" x1="0" x2="1"><stop offset="0" stop-color="#f0cf9a"/><stop offset="1" stop-color="#9a6a32"/></linearGradient></defs><rect x="0" y="7" width="50" height="6" rx="3" fill="#7b4f22"/><rect x="42" y="3" width="82" height="14" rx="7" fill="url(#hbg)"/></svg>
+<div class="hr-ball">⚾</div><div class="hr-crack">鏘!!</div>
+${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i%5][1]}vh;--r:${(i%2?1:-1)*(360+i*90)}deg;animation-delay:${1.05+i*.06}s">😵 ${n}</span>`).join('')}
+<div class="hr-bubble"><small>😎 ${nm}</small>我不是針對你，我是說在座的各位都是垃圾。</div>
+<div class="hr-crowd">🎉🥳📣🎊🥳🎉</div><div class="hr-tip">點一下關閉</div>`;
+  const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);
+  try{navigator.vibrate&&setTimeout(()=>navigator.vibrate([80,30,160]),1000)}catch(_){}
+  setTimeout(done,10500)}
 async function init(){
   G.peek=ls('ss_peek')=='1';G.down=new Set();
   if(typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
@@ -394,6 +433,7 @@ function onState(){
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
   if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
   scanSigs();
+  if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{compute().hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)})}catch(e){}}
   render();
   if(S.host==uid)hostTick();
 }
