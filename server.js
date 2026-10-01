@@ -45,6 +45,17 @@ http.createServer(async (req, res) => {
       res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=86400' });
       return res.end(fs.readFileSync(f));
     }
+    if (req.method === 'GET' && /^\/sfx\/[A-Za-z0-9_-]+\.mp3$/.test(u.pathname)) {
+      const f = path.join(__dirname, 'public', u.pathname);
+      if (!fs.existsSync(f)) { res.writeHead(404); return res.end('nf'); }
+      const buf = fs.readFileSync(f), total = buf.length, h = { 'Content-Type': 'audio/mpeg', 'Accept-Ranges': 'bytes', 'Cache-Control': 'public, max-age=86400' };
+      const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      if (m) { let s = m[1] === '' ? total - Number(m[2]) : Number(m[1]), e = m[1] !== '' && m[2] !== '' ? Number(m[2]) : total - 1;
+        s = Math.max(0, s); e = Math.min(e, total - 1);
+        if (s > e) { res.writeHead(416, { 'Content-Range': 'bytes */' + total }); return res.end(); }
+        res.writeHead(206, { ...h, 'Content-Range': `bytes ${s}-${e}/${total}`, 'Content-Length': e - s + 1 }); return res.end(buf.subarray(s, e + 1)); }
+      res.writeHead(200, { ...h, 'Content-Length': total }); return res.end(buf);
+    }
     if (u.pathname === '/healthz') return send(res, 200, { ok: true, rooms: touched.size });
     if (req.method === 'GET' && u.pathname === '/events') {
       const cid = u.searchParams.get('cid') || 'x';
