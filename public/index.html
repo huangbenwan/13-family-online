@@ -132,8 +132,48 @@ button.duel{background:linear-gradient(135deg,#f9dc7a,#d9a21b);color:#3a2800;bor
 .hr-bubble::after{content:"";position:absolute;left:16%;top:100%;border:14px solid transparent;border-top-color:#222}
 @keyframes hbp{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:none}}
 .hr-tip{position:absolute;left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#fffa}
+
+/* ===== 解謎風主題:橘 / 芥末黃 / 深藍 ===== */
+:root{--bg:#f1f2f7;--fg:#1f2638;--card:#fff;--line:#dfe2ec;--acc:#e8622a;--ok:#3fae8c;--red:#e0482f;--mut:#7c8396;--yel:#f0b33c;--navy:#1f2638;--empty:#e8e9ef}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171c2b;--fg:#eef0f6;--card:#242c42;--line:#39425c;--acc:#f07a3e;--ok:#52c4a0;--red:#ff7a6b;--mut:#98a1b8;--navy:#0e1220;--empty:#323b55}}
+html,body{background:var(--bg)}
+body{color:var(--fg);padding:12px 12px 24px}
+.bar{background:var(--navy);color:#fff;border-radius:20px;padding:10px 14px;margin-bottom:8px}
+.bar h1{color:#fff;font-size:18px;font-weight:800;letter-spacing:1px;margin:0;display:flex;align-items:center}
+.bar span{color:#ffffffcc}
+.bar button{background:#ffffff26;color:#fff;box-shadow:none;border-radius:999px}
+.dots{display:inline-flex;gap:3px;margin-right:8px}.dots i{width:9px;height:9px;border-radius:50%;display:block}
+body.wv{padding-bottom:130px}
+body.wv::after{content:"";position:fixed;left:0;right:0;bottom:0;height:110px;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C90 10 150 70 240 40 S360 20 400 35 V120 H0Z' fill='%231f2638'/%3E%3Cpath d='M0 70 C80 40 160 95 250 65 S370 55 400 68 V120 H0Z' fill='%23f0b33c'/%3E%3Cpath d='M0 92 C100 70 170 112 260 88 S365 82 400 92 V120 H0Z' fill='%23e8622a'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+.pb,.lane{border:0;border-radius:20px;box-shadow:0 3px 0 var(--line)}
+.lane.tg{outline:2px dashed var(--acc);outline-offset:-3px}
+.lh span{font-weight:800}
+.c{background:#fffdf9;color:#1f2638;border:0;border-radius:11px;box-shadow:0 3px 0 #d3d7e3}
+.c.r{color:#e0482f}
+.c.ace{box-shadow:0 0 0 2px #f0b33c,0 3px 0 #c8901f}
+.slots .c,.lane .c{background:#fffdf9}
+.e{background:var(--empty);border:0;border-radius:11px}
+.c.sel{outline:3px solid var(--acc);box-shadow:0 8px 14px #0003}
+.c.cv,.sm .c.back{background:repeating-linear-gradient(45deg,#e8622a 0 6px,#f0804d 6px 12px);border:0;box-shadow:0 3px 0 #b84a1c}
+.c.cv::after{color:#fff}
+.sm .c{border-radius:6px;box-shadow:0 2px 0 #d3d7e3}
+button{border:0;border-radius:999px;background:var(--card);color:var(--fg);font-weight:800;box-shadow:0 3px 0 var(--line);padding:12px 8px}
+button:active:not(:disabled){transform:translateY(2px);box-shadow:none}
+button.p{background:var(--acc);color:#fff;box-shadow:0 3px 0 #b84a1c}
+button.duel{background:var(--yel);color:#1f2638;box-shadow:0 3px 0 #c8901f}
+button:disabled{opacity:.42}
+.jp{background:var(--yel);color:#1f2638;border-radius:20px;box-shadow:0 3px 0 #c8901f}
+.jp b{color:#1f2638}
+.st i{border:0;border-radius:999px;background:var(--card);color:var(--mut);box-shadow:0 2px 0 var(--line);padding:3px 10px;font-weight:700}
+.st i.ok{background:var(--ok);color:#fff;box-shadow:0 2px 0 #2f8a6f}
+.pos{color:var(--ok)}
+.op.win{background:#3fae8c26;color:var(--ok)}.op.win i{background:var(--ok)}
+.op.lose{background:#e0482f22}
+.tt.ok{background:var(--ok)}
+.msg{color:var(--red);font-weight:700}
+input{font-family:inherit}
 </style></head><body>
-<div class="bar"><h1>♠ 五人十三支 Online</h1><span><span id="tot"></span> <button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
+<div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
 <script>
 const SU=['♠','♥','♦','♣'],CAT=['散牌','一對','兩對','三條','順子','同花','同花對子','同花兩對子','葫蘆','四條','同花順','五雷'];
@@ -540,6 +580,7 @@ function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
 <div class="row"><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
 function render(){
+  try{document.body.classList.toggle('wv',!S||S.phase=='lobby')}catch(_){}
   const app=document.getElementById('app'),T=document.getElementById('tot');
   if(!S){T.textContent='';app.innerHTML=entryHTML();return}
   T.textContent='房間 '+code+' · 第 '+S.round+' 局';
