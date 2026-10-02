@@ -579,9 +579,9 @@ html:root[data-style="sanjigen"] .cpn{background:#faf8f4;border:2px dashed #b565
 @keyframes s3sw{from{transform:rotateX(8deg) rotateY(-10deg)}to{transform:rotateX(4deg) rotateY(10deg)}}
 @keyframes s3spin{0%{opacity:0;transform:translateY(130px) rotateY(0) scale(.5)}60%{opacity:1}100%{opacity:1;transform:rotateX(8deg) rotateY(710deg)}}
 .fx[data-fs="sanjigen"] .sf{background:#faf8f4;border:1px solid #cfc5b7;border-radius:20px;padding:18px 14px 12px;text-align:center}
-.fx[data-fs="sanjigen"] .sw{font-size:clamp(18px,5.6vw,24px);color:#2a2622}
-.fx[data-fs="sanjigen"] .sp3{margin:6px 0;font-size:clamp(34px,11vw,54px);font-weight:700;color:#e9a574;letter-spacing:.04em}
-.fx[data-fs="sanjigen"][data-tier="6"] .sp3{background:linear-gradient(90deg,#f4c9a1,#e9c58f,#fff7e8,#e9c58f,#f4c9a1);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:s3shine 2.2s linear infinite}
+.fx[data-fs="sanjigen"] .sw3{font-size:clamp(18px,5.6vw,24px);color:#2a2622;font-weight:600}
+.fx[data-fs="sanjigen"] .sp3{margin:6px 0;font-size:clamp(34px,11vw,54px);font-weight:900;color:#fff3d6;letter-spacing:.04em;-webkit-text-stroke:2px #5a2f17;paint-order:stroke fill;text-rendering:geometricPrecision;-webkit-font-smoothing:antialiased}
+.fx[data-fs="sanjigen"][data-tier="6"] .sp3{color:#ffe7a8;animation:s3glow 1.4s ease-in-out infinite alternate}
 @keyframes s3shine{to{background-position:200% 0}}
 .fx[data-fs="sanjigen"] .sc{font-size:12px;letter-spacing:.3em;color:#8a8076}
 .fx[data-fs="sanjigen"] .bm{position:absolute;top:-8%;left:var(--x);width:22%;height:92%;background:linear-gradient(rgba(255,244,214,.85),transparent);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);transform-origin:50% 0;transform:rotate(var(--r));opacity:0;animation:bmin 1.2s var(--d) forwards}
@@ -648,6 +648,24 @@ html:root[data-style="sanjigen"] .cpn{background:#faf8f4;border:2px dashed #b565
 .hs-bubble{left:6%;right:6%;top:20%;background:#faf8f4;color:#2a2622;border:1px solid #cfc5b7;border-radius:18px;padding:12px 16px;font-weight:600;font-size:clamp(18px,5.4vw,30px);text-align:center;line-height:1.35;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9,3px 6px 0 #c6bdaf,4px 10px 14px rgba(60,40,20,.25);opacity:0;animation:hbp .5s 2.5s forwards cubic-bezier(.2,1.6,.4,1)}
 .hs-bubble small{display:block;color:#8a8076;font-size:.6em;margin-bottom:2px;letter-spacing:.1em}
 .hs-tip{left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#f1ede6aa}
+
+/* ===== 修正:標題列不重疊、動畫文字更清晰 ===== */
+.bar{flex-wrap:wrap;row-gap:6px}
+.bar .rt{flex:0 1 auto}
+html:root[data-style="sanjigen"] .bar #tot{font-size:14px;letter-spacing:0}
+html:root[data-style="sanjigen"] .jkc{font-size:12px;padding:3px 8px;margin-left:6px}
+html:root[data-style="sanjigen"] .jkc b{font-size:14px}
+html:root[data-style="sanjigen"] .bar .chip{padding:5px 8px}
+html:root[data-style="sanjigen"] .bar .rg{gap:5px}
+@keyframes s3glow{from{color:#ffd98a}to{color:#fff6dc}}
+.fx .rg,.fx .cf,.fx .bu{z-index:1}
+.fx .zp,.fx .xa,.fx .cl,.fx .s3{z-index:2}
+.fx .tg{z-index:3}
+.fx .fl{z-index:4}
+.fx[data-fs="sanjigen"] .stg{z-index:2}
+.fx[data-fs="sanjigen"] .or,.fx[data-fs="sanjigen"] .du,.fx[data-fs="sanjigen"] .bm{z-index:0}
+.fx[data-fs="sanjigen"] .or{opacity:.55}
+@keyframes s3sw{from{transform:rotateX(7deg) rotateY(-5deg)}to{transform:rotateX(5deg) rotateY(5deg)}}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
@@ -816,7 +834,7 @@ const zapFx=(e,t)=>{const w=NM[e.who],st=t==1?[w+' 攤開了牌墩']:[w+' 攤開
 const xaiFx=(e,t)=>`<div class="xa"><div class="xk">// SPECIAL HAND · TIER ${t}/6</div><div class="xw">${NM[e.who]} · ${LN[e.k]}</div><div class="xp">${e.parts.join(' ＋ ')}</div><div class="xs">${TIER_NAME[t]}</div><i class="xc a"></i><i class="xc b"></i><i class="xc c"></i><i class="xc d"></i>${t>=3?'<i class="xl"></i>':''}${t>=6?'<div class="xg">OVERRIDE</div>':''}</div>`;
 const sanFx=(e,t)=>{const dp=4+t*2,col=['#d9d0c3','#d3cabd','#cdc4b7','#c7beb1'],sh=Array.from({length:dp},(_,i)=>`${i+1}px ${i+1}px 0 ${col[i%4]}`).join(',')+`,${dp+3}px ${dp+8}px 16px rgba(60,40,20,.3)`,
     ts=Array.from({length:3+t},(_,i)=>`${i+1}px ${i+1}px 0 ${['#b5653a','#a85a31','#9b5029'][i%3]}`).join(','),bm=[1,2,3,4,5,7][t-1],ev=[40,120,210,290,340,377][t-1];
-  return `<div class="s3"><div class="se">(Elevation ${ev})</div>${Array.from({length:bm},(_,i)=>`<i class="bm" style="--x:${(8+i*(84/bm)).toFixed(0)}%;--r:${(-18+i*(36/Math.max(bm-1,1))).toFixed(0)}deg;--d:${(.1+i*.12).toFixed(2)}s"></i>`).join('')}<div class="stg"><div class="sf" style="box-shadow:${sh}"><div class="sw">${NM[e.who]} · ${LN[e.k]}</div><div class="sp3" style="text-shadow:${ts}">${e.parts.join(' ＋ ')}</div><div class="sc">(0${t}) ${TIER_NAME[t]}</div></div></div><div class="sls">${Array.from({length:t},(_,i)=>`<i class="sl" style="--i:${i};--d:${(.5+i*.15).toFixed(2)}s"></i>`).join('')}</div>${t>=5?'<i class="or o1"></i><i class="or o2"></i>':''}${Array.from({length:t*5},(_,i)=>`<b class="du" style="left:${(i*17+9)%96}%;--d:${((i%7)*.4).toFixed(1)}s"></b>`).join('')}</div>`};
+  return `<div class="s3"><div class="se">(Elevation ${ev})</div>${Array.from({length:bm},(_,i)=>`<i class="bm" style="--x:${(8+i*(84/bm)).toFixed(0)}%;--r:${(-18+i*(36/Math.max(bm-1,1))).toFixed(0)}deg;--d:${(.1+i*.12).toFixed(2)}s"></i>`).join('')}<div class="stg"><div class="sf" style="box-shadow:${sh}"><div class="sw3">${NM[e.who]} · ${LN[e.k]}</div><div class="sp3" style="text-shadow:${ts}">${e.parts.join(' ＋ ')}</div><div class="sc">(0${t}) ${TIER_NAME[t]}</div></div></div><div class="sls">${Array.from({length:t},(_,i)=>`<i class="sl" style="--i:${i};--d:${(.5+i*.15).toFixed(2)}s"></i>`).join('')}</div>${t>=5?'<i class="or o1"></i><i class="or o2"></i>':''}${Array.from({length:t*5},(_,i)=>`<b class="du" style="left:${(i*17+9)%96}%;--d:${((i%7)*.4).toFixed(1)}s"></b>`).join('')}</div>`};
 const FX_CORE={zapier:zapFx,xai:xaiFx,clay:clayFx,sanjigen:sanFx};
 function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBusy=true;
   const tier=tierOf(e.parts),fs=fxStyle(e.who),royal=tier>=5;
