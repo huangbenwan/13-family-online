@@ -676,6 +676,24 @@ html:root[data-style] .bar .chip{padding:5px 8px;font-size:13px;gap:4px}
 html:root[data-style] .jkc{font-size:12px;padding:3px 8px;margin-left:6px}
 html:root[data-style] .jkc b{font-size:14px}
 @media (max-width:375px){html:root[data-style] .bar #tot{font-size:13px}html:root[data-style] .bar .chip{padding:4px 6px;font-size:12px}html:root[data-style] .jkc{font-size:11px;padding:2px 6px;margin-left:4px}}
+
+/* ===== 常駐聊天室 ===== */
+#chat{position:fixed;left:0;right:0;bottom:0;z-index:90;padding:6px 10px calc(env(safe-area-inset-bottom,0px) + 8px);display:none;pointer-events:none}
+#chat>*{pointer-events:auto}
+#chat .cin{display:flex;gap:6px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 6px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#chat input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);font-size:16px;padding:8px 6px;outline:none;box-shadow:none;border-radius:0}
+#chat button{flex:none;padding:7px 12px;font-size:14px;border-radius:999px;margin:0}
+#ctog{position:relative}
+#cbd{position:absolute;top:-5px;right:-4px;background:#e0482f;color:#fff;border-radius:99px;font-size:10px;min-width:16px;height:16px;line-height:16px;text-align:center;display:none;font-style:normal}
+#chat .clog{max-height:36vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px;margin-bottom:6px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#chat .cq{display:none;gap:6px;overflow-x:auto;margin-bottom:6px;padding-bottom:2px}
+#chat .cq button{white-space:nowrap;font-size:13px;padding:6px 12px}
+.cm{margin:4px 0;font-size:14px;line-height:1.4}.cm b{font-weight:700;margin-right:6px;color:var(--mut)}
+.cm span{display:inline-block;background:var(--empty,#eee);border:1px solid var(--line);border-radius:12px;padding:4px 10px;max-width:85%;text-align:left;color:var(--fg)}
+.cm.me{text-align:right}.cm.me b{display:none}.cm.me span{background:var(--acc);color:#fff;border-color:var(--acc)}
+html:root[data-style="xai"] .cm.me span{background:#fff;color:#0a0a0a}
+body.hc{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+body.hc.wv{padding-bottom:calc(140px + env(safe-area-inset-bottom,0px))}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
@@ -1137,8 +1155,40 @@ function useCoupon(i){const b=document.getElementById('cpb'),v=PF.inv[i];if(!v||
   if(!b||!b.dataset.ok){if(b){b.dataset.ok='1';b.textContent='⚠ 再按一次確認(用掉無法復原)'}return}
   v.used=Date.now();saveProf();showCoupon(i);openShop()}
 function closeCoupon(){const d=document.getElementById('cpn');if(d)d.remove()}
+/* ===== 常駐聊天室(文字 + 語音):固定在畫面最下方 ===== */
+let chatOpen=false,unread=0;const chatSeen={},chatBase={};G.chatLog=[];
+const ttsOn=()=>ls('ss_tts')!='0';
+function chatBuild(){if(document.getElementById('chat'))return;const d=document.createElement('div');d.id='chat';
+  d.innerHTML=`<div id="clog" class="clog" style="display:none"></div><div id="cq" class="cq" style="display:none">${URGE.map(t=>`<button onclick="chatSend('${t}')">${t}</button>`).join('')}<button id="ctts" onclick="chatTts()"></button></div>
+<div class="cin"><button id="ctog" onclick="chatToggle()">💬<i id="cbd"></i></button><input id="ctx" maxlength="60" placeholder="輸入訊息,朋友會聽到…" enterkeyhint="send" onkeydown="if(event.key==='Enter'&&!event.isComposing)chatSend()"><button id="cmic" onclick="chatMic()">🎤</button><button class="p" onclick="chatSend()">送出</button></div>`;
+  document.body.appendChild(d);try{if(!(window.SpeechRecognition||window.webkitSpeechRecognition))document.getElementById('cmic').style.display='none'}catch(_){}chatTtsLabel()}
+function chatTtsLabel(){const b=document.getElementById('ctts');if(b)b.textContent='🗣 朗讀:'+(ttsOn()?'開':'關')}
+function chatTts(){ls('ss_tts',ttsOn()?'0':'1');chatTtsLabel()}
+function updChat(){try{const d=document.getElementById('chat');if(!d)return;const on=!!S;d.style.display=on?'block':'none';document.body.classList.toggle('hc',on)}catch(_){}}
+function chatToggle(){chatOpen=!chatOpen;unread=0;chatRender()}
+function chatRender(){try{const lg=document.getElementById('clog'),q=document.getElementById('cq'),b=document.getElementById('cbd');if(!lg)return;
+  lg.style.display=q.style.display=chatOpen?'block':'none';q.style.display=chatOpen?'flex':'none';
+  lg.innerHTML=G.chatLog.length?G.chatLog.map(m=>`<div class="cm ${m.me?'me':''}"><b>${m.nm}</b><span>${esc(m.t)}</span></div>`).join(''):'<div class="rule">還沒有訊息。打字或按 🎤 說話,朋友會聽到。</div>';
+  if(chatOpen)lg.scrollTop=lg.scrollHeight;
+  b.style.display=unread&&!chatOpen?'block':'none';b.textContent=unread>9?'9+':unread}catch(_){}}
+function chatAdd(nm,t,me){G.chatLog.push({nm,t,me});if(G.chatLog.length>60)G.chatLog.shift();if(!me&&!chatOpen)unread++;chatRender()}
+async function chatSend(txt){const el=document.getElementById('ctx'),t=String(txt!=null?txt:(el&&el.value)||'').trim().slice(0,60);
+  if(!t||!S||!db)return;if(Date.now()-(G.chatAt||0)<700)return;G.chatAt=Date.now();
+  const old=(P[uid]&&P[uid].chat)||[];if(el&&txt==null)el.value='';
+  chatAdd('我',t,true);
+  try{await pdoc(uid).update({chat:[...old.slice(-4),{n:Date.now()+'-'+Math.random().toString(36).slice(2,6),t}]})}catch(e){toast('訊息送出失敗')}}
+function scanChat(){Object.keys(P).forEach(id=>{if(id==uid)return;const arr=P[id].chat||[];
+  if(!(id in chatBase)){arr.forEach(m=>chatSeen[m.n]=1);chatBase[id]=1;return}
+  arr.forEach(m=>{if(chatSeen[m.n])return;chatSeen[m.n]=1;const nm=esc(P[id].name||'?'),t=String(m.t||'').slice(0,60);
+    chatAdd(nm,t,false);if(!chatOpen)toast('💬 '+nm+':'+esc(t));if(ttsOn())speak(t)})})}
+let micRec=null;
+function chatMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('這支瀏覽器不支援語音輸入');return}
+  const b=document.getElementById('cmic');if(micRec){try{micRec.stop()}catch(_){}return}
+  try{const r=new SR();r.lang='zh-TW';r.interimResults=false;r.maxAlternatives=1;micRec=r;b.textContent='🔴';
+    r.onresult=e=>{const t=e.results[0][0].transcript;const el=document.getElementById('ctx');if(el)el.value=t;chatSend()};
+    r.onerror=()=>{toast('沒有聽清楚,再說一次')};r.onend=()=>{micRec=null;b.textContent='🎤'};r.start()}catch(_){micRec=null;b.textContent='🎤'}}
 async function init(){
-  G.peek=ls('ss_peek')=='1';updSnd();try{speechSynthesis.getVoices()}catch(_){}applyStyle();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
+  G.peek=ls('ss_peek')=='1';updSnd();chatBuild();try{speechSynthesis.getVoices()}catch(_){}applyStyle();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
   if(USE_ACE&&typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
@@ -1182,7 +1232,7 @@ function onState(){
   if(S.phase=='duel'&&G.me>=0)order.forEach((id,i)=>{const d=pd(id);if(!d||!d.sub)return;d.rev.forEach((v,k)=>{const key=S.round+':'+i+','+k;
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
   if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
-  scanSigs();
+  scanSigs();scanChat();updChat();
   if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{const R0=compute();R0.hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)});if(G.me>=0&&xpEligible())awardRound(R0)}catch(e){}}
   render();
   if(S.host==uid)hostTick();
@@ -1296,7 +1346,7 @@ function render(){
   const mine=pd(uid);G.status=S.order.map(id=>pd(id)&&pd(id).sub?1:0);
   if(S.phase=='play'){
     if(mine&&mine.sub){if(document.activeElement&&document.activeElement.id=='utx')return;app.innerHTML=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
-      mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>'+(G.status.includes(0)?`<div class="pb"><div class="rule">催一下還沒完成的玩家:</div><div class="row">${URGE.map((t,k)=>`<button style="flex:1 1 30%;font-size:13px" ${G.urgeOff?'disabled':''} onclick="sendUrge(${k})">${t}</button>`).join('')}</div><div class="row"><input id="utx" maxlength="30" placeholder="自己輸入想說的話(最多 30 字)" value="${esc(G.urgeTxt||'')}" oninput="G.urgeTxt=this.value" onkeydown="if(event.key==='Enter')sendUrgeText()" style="${INP};flex:3;margin:0"><button ${G.urgeOff?'disabled':''} onclick="sendUrgeText()">送出</button></div></div>`:'');return}
+      mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>';return}
     G.canAuto=S.order.every((id,i)=>i==G.me||(pd(id)&&!!pd(id).sub));
     if(G.canAuto&&G.autoRd!==S.round){G.autoRd=S.round;toast('🔓 其他玩家都完成了,自動理牌已解鎖','ok')}
     G.phase='play';laneFxCheck();oldRender();return}
