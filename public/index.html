@@ -991,13 +991,14 @@ let BGM=null,AC=null,bgGain=null,bgOn=ls('ss_bgm')!='0',bgStarted=false,ttsTok=0
 function bgApply(soft){const v=bgOn?(bgHolds.size?BG_DUCK:BG_VOL):0;
   try{if(bgGain&&AC)bgGain.gain.setTargetAtTime(v,AC.currentTime,soft?.35:.12);else if(BGM)BGM.volume=v}catch(_){}}
 function bgHold(name,on){if(on)bgHolds.add(name);else bgHolds.delete(name);bgApply()}
+function acEnsure(){if(AC)return AC;try{const AX=window.AudioContext||window.webkitAudioContext;if(AX)AC=new AX()}catch(_){}return AC}
 function bgInit(){if(bgStarted||!bgOn)return;bgStarted=true;
   try{const AX=window.AudioContext||window.webkitAudioContext;BGM=new Audio('sfx/bgm.mp3');BGM.loop=true;BGM.preload='auto';
-    if(AX){AC=new AX();const src=AC.createMediaElementSource(BGM);bgGain=AC.createGain();bgGain.gain.value=0;src.connect(bgGain);bgGain.connect(AC.destination);AC.resume&&AC.resume()}
+    if(AX){acEnsure();const src=AC.createMediaElementSource(BGM);bgGain=AC.createGain();bgGain.gain.value=0;src.connect(bgGain);bgGain.connect(AC.destination);AC.resume&&AC.resume()}
     else BGM.volume=BG_VOL;
     const pr=BGM.play();bgApply(true);if(pr&&pr.catch)pr.catch(()=>{bgStarted=false})}
   catch(e){bgStarted=false}}
-function bgGesture(){if(!bgStarted){bgInit();return}if(AC&&AC.state&&AC.state!='running'&&AC.resume)AC.resume();if(BGM&&BGM.paused&&bgOn&&!document.hidden)BGM.play().catch(()=>{})}
+function bgGesture(){acEnsure();if(AC&&AC.state&&AC.state!='running'&&AC.resume)AC.resume();if(!bgStarted){bgInit();return}if(AC&&AC.state&&AC.state!='running'&&AC.resume)AC.resume();if(BGM&&BGM.paused&&bgOn&&!document.hidden)BGM.play().catch(()=>{})}
 function toggleBgm(){bgOn=!bgOn;ls('ss_bgm',bgOn?'1':'0');
   if(bgOn){if(!bgStarted)bgInit();else{try{AC&&AC.resume&&AC.resume();BGM&&BGM.play().catch(()=>{})}catch(_){}}bgApply(true)}
   else{bgApply();try{BGM&&setTimeout(()=>{if(!bgOn)BGM.pause()},600)}catch(_){}}}
@@ -1006,7 +1007,15 @@ if(document.addEventListener){['pointerdown','touchend','click','keydown'].forEa
 let spU=0;
 const unlockSp=()=>{if(spU)return;spU=1;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(_){}};
 if(document.addEventListener)['pointerdown','touchend','click','keydown'].forEach(e=>document.addEventListener(e,unlockSp,{passive:true}));
-function speak(t){if(!sndOn||typeof speechSynthesis=='undefined')return;
+let TTS_OK=null;
+async function cloudSpeak(t){if(TTS_OK===false||!AC)return false;
+  try{const r=await fetch('/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:String(t).slice(0,60)})});
+    if(!r.ok){if(r.status==503)TTS_OK=false;return false}
+    TTS_OK=true;const ab=await r.arrayBuffer(),buf=await new Promise((res,rej)=>AC.decodeAudioData(ab,res,rej));
+    const src=AC.createBufferSource();src.buffer=buf;src.connect(AC.destination);const tok=++ttsTok;bgHold('tts',1);setTimeout(()=>{if(tok==ttsTok)bgHold('tts',0)},20000);src.onended=()=>{if(tok==ttsTok)bgHold('tts',0)};
+    if(AC.state=='suspended')AC.resume();src.start();return true}catch(e){return false}}
+function speak(t){if(!sndOn)return;bgHold('tts',1);setTimeout(()=>bgHold('tts',0),400);cloudSpeak(t).then(ok=>{if(!ok)deviceSpeak(t)})}
+function deviceSpeak(t){if(typeof speechSynthesis=='undefined')return;
   try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t).slice(0,60)),vs=speechSynthesis.getVoices(),
     tw=vs.filter(v=>/^zh[-_](TW|Hant)/i.test(v.lang)),pick=tw.find(v=>/google/i.test(v.name))||tw[0]||vs.find(v=>/^zh/i.test(v.lang));
     if(pick){u.voice=pick;u.lang=pick.lang}else u.lang='zh-TW';const tok=++ttsTok;bgHold('tts',1);setTimeout(()=>{if(tok==ttsTok)bgHold('tts',0)},15000);u.onend=u.onerror=()=>{if(tok==ttsTok)bgHold('tts',0)};u.rate=1;u.pitch=1.1;speechSynthesis.speak(u)}catch(_){bgHold('tts',0)}}
@@ -1176,9 +1185,14 @@ function closeCoupon(){const d=document.getElementById('cpn');if(d)d.remove()}
 let chatOpen=false,unread=0;const chatSeen={},chatBase={};G.chatLog=[];
 const ttsOn=()=>ls('ss_tts')!='0';
 function chatBuild(){if(document.getElementById('chat'))return;const d=document.createElement('div');d.id='chat';
-  d.innerHTML=`<div id="clog" class="clog" style="display:none"></div><div id="cq" class="cq" style="display:none">${URGE.map(t=>`<button onclick="chatSend('${t}')">${t}</button>`).join('')}<button id="ctts" onclick="chatTts()"></button></div>
-<div class="cin"><button id="ctog" onclick="chatToggle()">💬<i id="cbd"></i></button><input id="ctx" maxlength="60" placeholder="輸入訊息,朋友會聽到…" enterkeyhint="send" onkeydown="if(event.key==='Enter'&&!event.isComposing)chatSend()"><button id="cmic" onclick="chatMic()">🎤</button><button class="p" onclick="chatSend()">送出</button></div>`;
+  d.innerHTML=`<div id="clog" class="clog" style="display:none"></div><div id="cq" class="cq" style="display:none">${URGE.map(t=>`<button class="qp" onclick="chatSend('${t}')">${t}</button>`).join('')}<button id="ctts" onclick="chatTts()"></button></div>
+<div class="cin"><button id="ctog" onclick="chatToggle()">💬<i id="cbd"></i></button><input id="ctx" maxlength="60" placeholder="輸入訊息,朋友會聽到…" enterkeyhint="send" onkeydown="if(event.key==='Enter'&&!event.isComposing)chatSend()"><button id="cmic" onclick="chatMic()">🎤</button><button class="p" id="csend" onclick="chatSend()">送出</button></div>`;
   document.body.appendChild(d);try{if(!(window.SpeechRecognition||window.webkitSpeechRecognition))document.getElementById('cmic').style.display='none'}catch(_){}chatTtsLabel()}
+const CHAT_CD=5000,chatCd=()=>{const l=Math.ceil((CHAT_CD-(Date.now()-(G.chatAt||0)))/1000);return l>0?l:0};
+function chatCdUi(){try{const b=document.getElementById('csend'),el=document.getElementById('ctx'),n=chatCd();
+  if(b){b.disabled=n>0;b.textContent=n>0?'⏳ '+n:'送出'}if(el)el.placeholder=n>0?n+' 秒後才能再傳…':'輸入訊息,朋友會聽到…';
+  document.querySelectorAll&&document.querySelectorAll('#cq .qp').forEach(x=>x.disabled=n>0)}catch(_){}}
+function chatCdStart(){chatCdUi();clearInterval(G.cdIv);G.cdIv=setInterval(()=>{chatCdUi();if(!chatCd()){clearInterval(G.cdIv);G.cdIv=0}},250)}
 function chatTtsLabel(){const b=document.getElementById('ctts');if(b)b.textContent='🗣 朗讀:'+(ttsOn()?'開':'關')}
 function chatTts(){ls('ss_tts',ttsOn()?'0':'1');chatTtsLabel()}
 function updChat(){try{const d=document.getElementById('chat');if(!d)return;const on=!!S;d.style.display=on?'block':'none';document.body.classList.toggle('hc',on)}catch(_){}}
@@ -1190,7 +1204,7 @@ function chatRender(){try{const lg=document.getElementById('clog'),q=document.ge
   b.style.display=unread&&!chatOpen?'block':'none';b.textContent=unread>9?'9+':unread}catch(_){}}
 function chatAdd(nm,t,me){G.chatLog.push({nm,t,me});if(G.chatLog.length>60)G.chatLog.shift();if(!me&&!chatOpen)unread++;chatRender()}
 async function chatSend(txt){const el=document.getElementById('ctx'),t=String(txt!=null?txt:(el&&el.value)||'').trim().slice(0,60);
-  if(!t||!S||!db)return;if(Date.now()-(G.chatAt||0)<700)return;G.chatAt=Date.now();
+  if(!t||!S||!db)return;if(chatCd()>0){toast('⏳ 請等 '+chatCd()+' 秒再傳下一則');return}G.chatAt=Date.now();chatCdStart();
   const old=(P[uid]&&P[uid].chat)||[];if(el&&txt==null)el.value='';
   chatAdd('我',t,true);
   try{await pdoc(uid).update({chat:[...old.slice(-4),{n:Date.now()+'-'+Math.random().toString(36).slice(2,6),t}]})}catch(e){toast('訊息送出失敗')}}
@@ -1198,12 +1212,15 @@ function scanChat(){Object.keys(P).forEach(id=>{if(id==uid)return;const arr=P[id
   if(!(id in chatBase)){arr.forEach(m=>chatSeen[m.n]=1);chatBase[id]=1;return}
   arr.forEach(m=>{if(chatSeen[m.n])return;chatSeen[m.n]=1;const nm=esc(P[id].name||'?'),t=String(m.t||'').slice(0,60);
     const mt=++msgTok;bgHold('msg',1);setTimeout(()=>{if(mt==msgTok)bgHold('msg',0)},2500);chatAdd(nm,t,false);if(!chatOpen)toast('💬 '+nm+':'+esc(t));if(ttsOn())speak(t)})})}
-let micRec=null;
+let micRec=null,micTo=0;
+function micStop(){clearTimeout(micTo);const r=micRec;micRec=null;try{const b=document.getElementById('cmic');if(b)b.textContent='🎤'}catch(_){}bgHold('mic',0);
+  if(r){try{r.onresult=r.onerror=r.onend=r.onspeechend=null}catch(_){}try{r.abort()}catch(_){try{r.stop()}catch(_){}}}}
 function chatMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('這支瀏覽器不支援語音輸入');return}
-  const b=document.getElementById('cmic');if(micRec){try{micRec.stop()}catch(_){}return}
-  try{const r=new SR();r.lang='zh-TW';r.interimResults=false;r.maxAlternatives=1;micRec=r;b.textContent='🔴';bgHold('mic',1);
-    r.onresult=e=>{const t=e.results[0][0].transcript;const el=document.getElementById('ctx');if(el)el.value=t;chatSend()};
-    r.onerror=()=>{toast('沒有聽清楚,再說一次')};r.onend=()=>{micRec=null;b.textContent='🎤';bgHold('mic',0)};r.start()}catch(_){micRec=null;b.textContent='🎤';bgHold('mic',0)}}
+  if(micRec){micStop();return}
+  try{const r=new SR(),b=document.getElementById('cmic');r.lang='zh-TW';r.interimResults=false;r.continuous=false;r.maxAlternatives=1;micRec=r;b.textContent='🔴';bgHold('mic',1);
+    r.onresult=e=>{const t=(e.results&&e.results[0]&&e.results[0][0]&&e.results[0][0].transcript)||'';micStop();const el=document.getElementById('ctx');if(el)el.value=t;if(!t)return;if(chatCd()>0)toast('⏳ 已轉成文字,等 '+chatCd()+' 秒後再按送出');else chatSend()};
+    r.onerror=()=>{micStop();toast('沒有聽清楚,再說一次')};r.onend=()=>micStop();r.onspeechend=()=>{try{r.stop()}catch(_){}};
+    micTo=setTimeout(micStop,12000);r.start()}catch(_){micStop()}}
 async function init(){
   G.peek=ls('ss_peek')=='1';updSnd();chatBuild();try{speechSynthesis.getVoices()}catch(_){}applyStyle();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
