@@ -418,7 +418,7 @@ function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBus
   const royal=e.parts.length>1||e.parts.some(t=>t=='五雷'||/×[23]/.test(t));
   const d=document.createElement('div');d.className='fx'+(royal?' royal':'');
   d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="sp" style="--x:${Math.random()*100}%;--y:${Math.random()*100}%;--d:${Math.random()*.9}s;--s:${8+Math.random()*16}px"></i>`).join('')+
-   `<div class="fxbox"><small>${NM[e.who]} · ${LN[e.k]}</small><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`;
+   `<div class="fxbox"><h2>${NM[e.who]} · ${LN[e.k]}</h2><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`;
   let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};playSnd();
   d.onclick=done;document.body.appendChild(d);try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(_){}setTimeout(done,7800)}
 const back5=()=>'<div class="c back"><b>A</b><span>♠</span></div>';
@@ -536,6 +536,13 @@ function unlockSnd(){if(!SFX||SFX._u)return;SFX._u=1;SFX.muted=true;let p;try{p=
   const fin=()=>{try{SFX.pause();SFX.currentTime=0}catch(_){}SFX.muted=false};
   if(p&&p.then)p.then(fin).catch(()=>{SFX._u=0;SFX.muted=false});else fin()}
 if(document.addEventListener)['pointerdown','touchend','click','keydown'].forEach(e=>document.addEventListener(e,unlockSnd,{passive:true}));
+let spU=0;
+const unlockSp=()=>{if(spU)return;spU=1;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(_){}};
+if(document.addEventListener)['pointerdown','touchend','click','keydown'].forEach(e=>document.addEventListener(e,unlockSp,{passive:true}));
+function speak(t){if(!sndOn||typeof speechSynthesis=='undefined')return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t).slice(0,60)),vs=speechSynthesis.getVoices(),
+    tw=vs.filter(v=>/^zh[-_](TW|Hant)/i.test(v.lang)),pick=tw.find(v=>/google/i.test(v.name))||tw[0]||vs.find(v=>/^zh/i.test(v.lang));
+    if(pick){u.voice=pick;u.lang=pick.lang}else u.lang='zh-TW';u.rate=1;u.pitch=1.1;speechSynthesis.speak(u)}catch(_){}}
 function playSnd(){if(!SFX||!sndOn)return;try{SFX.currentTime=0;const p=SFX.play();p&&p.catch&&p.catch(()=>{})}catch(_){}}
 function updSnd(){const b=document.getElementById('snd');if(b)b.textContent=sndOn?'🔊':'🔇'}
 function toggleSnd(){sndOn=!sndOn;ls('ss_snd',sndOn?'1':'0');updSnd();if(sndOn)playSnd()}
@@ -625,7 +632,7 @@ function openProf(){let d=document.getElementById('prof');if(!d){d=document.crea
 <h4>名字外框</h4><div class="rws">${chips(FRAMES,'fr',x=>`<span class="nmf fr-${x.id}">${esc(myName||'名字')}</span>`)}</div>
 <h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<button class="rw ${okAt(x)?'':'lk'}" onclick="previewRw('it','${x.k}')">${x.e}<small>${x.n}${okAt(x)?' ▶預覽':' 🔒Lv.'+x.lv+' ▶預覽'}</small></button>`).join('')}</div>
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
-<h4>設定</h4><div class="rws"><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
+<h4>設定</h4><div class="rws"><button class="rw" onclick="speak('全世界都在等你')">🗣<small>試聽催促語音</small></button><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
 <h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
@@ -666,7 +673,7 @@ function useCoupon(i){const b=document.getElementById('cpb'),v=PF.inv[i];if(!v||
   v.used=Date.now();saveProf();showCoupon(i);openShop()}
 function closeCoupon(){const d=document.getElementById('cpn');if(d)d.remove()}
 async function init(){
-  G.peek=ls('ss_peek')=='1';updSnd();applyProf();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
+  G.peek=ls('ss_peek')=='1';updSnd();try{speechSynthesis.getVoices()}catch(_){}applyProf();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
   if(USE_ACE&&typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
@@ -845,7 +852,7 @@ function sendUrgeText(){const t=(G.urgeTxt||'').trim().slice(0,30);if(!t||G.urge
   toast('✓ 已通知所有還沒完成的玩家','ok');setTimeout(()=>{G.urgeOff=false;render()},5000);render()}
 function handleSig(id,sg){const nm=esc((P[id]&&P[id].name)||'?');
   if(sg.t=='react'&&sg.to==uid)reactFx(sg.k,nm);
-  else if(sg.t=='urge'&&S.phase=='play'&&G.me>=0&&!(pd(uid)&&pd(uid).sub))toast('⏰ '+nm+':'+esc(sg.k>=0?(URGE[sg.k]||''):String(sg.txt||'').slice(0,30)))}
+  else if(sg.t=='urge'&&S.phase=='play'&&G.me>=0&&!(pd(uid)&&pd(uid).sub)){const tx=sg.k>=0?(URGE[sg.k]||''):String(sg.txt||'').slice(0,30);toast('⏰ '+nm+':'+esc(tx));speak(tx)}}
 function scanSigs(){Object.keys(P).forEach(id=>{if(id==uid)return;const sg=P[id].sig,cur=sg?sg.n:0;
   if(!(id in sigSeen)){sigSeen[id]=cur;return}
   if(cur&&cur!==sigSeen[id]){sigSeen[id]=cur;handleSig(id,sg)}})}
