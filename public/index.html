@@ -666,6 +666,16 @@ html:root[data-style="sanjigen"] .bar .rg{gap:5px}
 .fx[data-fs="sanjigen"] .or,.fx[data-fs="sanjigen"] .du,.fx[data-fs="sanjigen"] .bm{z-index:0}
 .fx[data-fs="sanjigen"] .or{opacity:.55}
 @keyframes s3sw{from{transform:rotateX(7deg) rotateY(-5deg)}to{transform:rotateX(5deg) rotateY(5deg)}}
+
+/* ===== 標題列一律壓成同一行(所有風格):縮小按鈕內距與字級 ===== */
+html:root[data-style] .bar{padding-left:10px;padding-right:10px;flex-wrap:nowrap}
+html:root[data-style] .bar .rt{min-width:0}
+html:root[data-style] .bar #tot{font-size:14px;letter-spacing:0}
+html:root[data-style] .bar .rg{gap:5px;flex:none}
+html:root[data-style] .bar .chip{padding:5px 8px;font-size:13px;gap:4px}
+html:root[data-style] .jkc{font-size:12px;padding:3px 8px;margin-left:6px}
+html:root[data-style] .jkc b{font-size:14px}
+@media (max-width:375px){html:root[data-style] .bar #tot{font-size:13px}html:root[data-style] .bar .chip{padding:4px 6px;font-size:12px}html:root[data-style] .jkc{font-size:11px;padding:2px 6px;margin-left:4px}}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
