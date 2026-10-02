@@ -501,7 +501,7 @@ ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
   setTimeout(done,10500)}
 /* ===== 等級 / 成就 / 解鎖(存在這支手機 localStorage) ===== */
 const LV_MAX=12,TITLES=['','牌桌路人甲','十三支學徒','倒水常客','蟑螂殺手','拖鞋大師','打槍小能手','彩金獵人','鐵支收割機','同花順之神','全壘打打者','紅不讓大魔王','牌桌傳說'];
-const need=lv=>140+20*(lv-1);
+const need=lv=>750+50*(lv-1);
 function levelOf(xp){let lv=1,r=xp;while(lv<LV_MAX&&r>=need(lv)){r-=need(lv);lv++}const mx=lv>=LV_MAX;return{lv,rem:mx?0:r,need:mx?1:need(lv),max:mx}}
 const BACKS=[{id:'or',n:'橘色斜紋',lv:1,css:'repeating-linear-gradient(45deg,#e8622a 0 6px,#f0804d 6px 12px)'},
  {id:'nv',n:'星空深藍',lv:2,css:'radial-gradient(circle,#fff 0 1.5px,transparent 2px) 0 0/14px 14px,#1f2f66'},
@@ -520,9 +520,9 @@ const BADGES=[{id:'hong1',e:'⚾',n:'全壘打初體驗',d:'第一次達成紅�
  {id:'five1',e:'⚡',n:'五雷轟頂',d:'第一次湊出五雷',ok:t=>t.five>=1},{id:'trips10',e:'🎯',n:'衝三狂人',d:'累計衝三 10 次',ok:t=>t.trips>=10},
  {id:'lose5',e:'☁️',n:'非洲人',d:'連輸 5 局',ok:t=>t.bestLose>=5},{id:'rounds50',e:'🏆',n:'牌桌肝帝',d:'累計玩 50 局',ok:t=>t.rounds>=50},
  {id:'sent10',e:'🩴',n:'道具大師',d:'累計送出 10 次不爽道具',ok:t=>t.sent>=10}];
-let PF=(()=>{try{const o=JSON.parse(ls('ss_prof')||'null');if(o&&typeof o=='object')return o}catch(e){}return null})()||{};
+let PF=(()=>{try{const o=JSON.parse(ls('ss_prof2')||'null');if(o&&typeof o=='object')return o}catch(e){}return null})()||{};
 PF.xp=PF.xp||0;PF.st=PF.st||{};PF.bd=PF.bd||{};PF.sel=PF.sel||{bk:'or',sk:'def',fr:'none'};
-const saveProf=()=>ls('ss_prof',JSON.stringify(PF)),myLv=()=>levelOf(PF.xp).lv,okAt=x=>x.lv<=myLv();
+const saveProf=()=>ls('ss_prof2',JSON.stringify(PF)),myLv=()=>levelOf(PF.xp).lv,okAt=x=>x.lv<=myLv();
 const byId=(arr,id)=>arr.find(x=>x.id==id)||arr[0],backCss=id=>byId(BACKS,id).css;
 const reactList=()=>ITEMS.filter(okAt).map(x=>[x.k,x.e+' '+x.n]);
 function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textContent='Lv.'+myLv()}catch(_){}}
@@ -537,6 +537,7 @@ function applyProf(){const L=myLv();
 function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv(),fr:PF.sel.fr,bk:PF.sel.bk}).catch(()=>{})}
 const nmTagDoc=(name,d)=>{const lv=Math.max(1,Math.min(LV_MAX,Math.floor((d&&d.lv)||1)));return `<span class="nmf fr-${byId(FRAMES,d&&d.fr).id}">${name}</span><small class="lvt">Lv.${lv} ${TITLES[lv]}</small>`};
 const nmTag=i=>nmTagDoc(NM[i],P[S.order[i]]);
+const xpEligible=()=>!!S&&(S.order||[]).length==5&&S.order.every(id=>!(P[id]&&P[id].bot));
 function awardRound(R){const me=G.me;if(me<0)return;const t=PF.st,sc=R.sc[me];let xp=10+(sc>0?10:sc<0?5:0);
   t.rounds=(t.rounds||0)+1;
   if(sc>0){t.wins=(t.wins||0)+1;t.streak=(t.streak||0)+1;t.loseStreak=0;t.bestStreak=Math.max(t.bestStreak||0,t.streak)}
@@ -556,7 +557,7 @@ function lvUp(a,b){const un=[BACKS,SKINS,FRAMES,ITEMS].flatMap((arr,i)=>arr.filt
    `<div class="lvbox"><small>LEVEL UP!</small><h2>Lv.${b}</h2><div class="lvt2">${TITLES[b]}</div>${un.length?`<div class="lvun">🎁 新解鎖<br>${un.join('<br>')}</div>`:''}<small>點一下關閉</small></div>`;
   d.onclick=()=>d.remove();document.body.appendChild(d);playSnd();setTimeout(()=>d.remove(),9000)}
 function xpHTML(){const L=levelOf(PF.xp),g=G.lastXp;
-  return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div></div>`}
+  return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div>${xpEligible()?'':'<div class="rule" style="color:var(--red);font-weight:700">⚠ 本局有電腦或不足 5 位真人玩家,不計經驗值</div>'}</div>`}
 function openProf(){let d=document.getElementById('prof');if(!d){d=document.createElement('div');d.id='prof';document.body.appendChild(d)}
   const keep=d.scrollTop,L=levelOf(PF.xp),sel=PF.sel,t=PF.st,nb=BADGES.filter(b=>PF.bd[b.id]).length;
   const chips=(arr,key,fn)=>arr.map(x=>{const on=okAt(x),cur=sel[key]==x.id;return `<button class="rw ${cur?'cur':''}" ${on?`onclick="pickRw('${key}','${x.id}')"`:'disabled'}>${fn(x)}<small>${on?(cur?'使用中':x.n):'🔒 Lv.'+x.lv}</small></button>`}).join('');
@@ -618,7 +619,7 @@ function onState(){
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
   if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
   scanSigs();
-  if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{const R0=compute();R0.hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)});if(G.me>=0)awardRound(R0)}catch(e){}}
+  if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{const R0=compute();R0.hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)});if(G.me>=0&&xpEligible())awardRound(R0)}catch(e){}}
   render();
   if(S.host==uid)hostTick();
 }
