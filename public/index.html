@@ -259,8 +259,12 @@ html .c.cv,html .sm .c.back{background:var(--back)}
 .bar .rg{display:flex;gap:6px;align-items:center}
 .bar .chip{flex:none;border:0;border-radius:999px;background:#ffffff26;color:#fff;box-shadow:none;padding:5px 11px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:5px;margin:0}
 .coin{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23b8860b'/%3E%3Ccircle cx='12' cy='12' r='9.5' fill='%23f5c518'/%3E%3Ccircle cx='12' cy='12' r='7' fill='none' stroke='%23d99a00' stroke-width='1.4'/%3E%3Cpath d='M12 7.2l1.5 3 3.3.5-2.4 2.3.6 3.3L12 14.7 9 16.3l.6-3.3-2.4-2.3 3.3-.5z' fill='%23fff1a8' stroke='%23d99a00' stroke-width='.6'/%3E%3C/svg%3E") center/contain no-repeat}
+.rt{display:flex;align-items:center;min-width:0;white-space:nowrap}
+.jkc{margin-left:8px;background:var(--yel);color:#1f2638;border-radius:999px;padding:3px 10px;font-weight:900;font-size:13px;box-shadow:0 2px 0 color-mix(in srgb,var(--yel) 72%,#000)}
+.jkc b{font-size:15px;margin-left:2px}.jkc:empty{display:none}
+.jpb{display:none!important}
 </style></head><body>
-<div class="bar"><span id="tot" class="rt">五人十三支</span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
+<div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
 <script>
 const SU=['♠','♥','♦','♣'],CAT=['散牌','一對','兩對','三條','順子','同花','同花對子','同花兩對子','葫蘆','四條','同花順','五雷'];
@@ -385,7 +389,7 @@ function summary0(R,i){
   const ch=(a,c,ic,sg)=>a.map(([o,n])=>`<span class="op ${c}"><i>${ic}</i>${NM[o]}${n?' '+sg+Math.abs(n):''}</span>`).join('')||'<span class="rule">—</span>';
   return `<div class="sum"><div>🏆 贏 ${ch(W,'win','▲','+')}</div><div>💔 輸 ${ch(Lo,'lose','▼','−')}</div>${T.length?`<div>🤝 平 ${ch(T,'tie','–','')}</div>`:''}</div>`}
 function compStr(){return SU.map((x,i)=>x+(i==G.dbl?2:1)).join(' ')}
-function jpBanner(){return `<div class="jp">🎰 本局彩金:<b>${lb(G.jr)}</b><span>同墩 3/4/5 張彩金牌 = 每位對手付 ×1/×2/×3 底注</span><small>本局牌組 ${compStr()}</small></div>`}
+function jpBanner(){return `<div class="jp jpb">🎰 本局彩金:<b>${lb(G.jr)}</b><span>同墩 3/4/5 張彩金牌 = 每位對手付 ×1/×2/×3 底注</span><small>本局牌組 ${compStr()}</small></div>`}
 function doSwap(s){G.dbl=s;G.swapUsed=true;G.swapMsg='🔄 你(總分最低)要求換色:'+SU[s]+' 改為 2 副,下一局生效';render()}
 function swapPanel(){
   let h=G.swapMsg?`<div class="pb">${G.swapMsg}<br><span class="rule">下一局牌組 ${compStr()}</span></div>`:'';
@@ -801,8 +805,10 @@ function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.
 <div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${nmTagDoc(esc(P[id].name),P[id])}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
 <div class="row"><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
+function updJk(){try{const e=document.getElementById('jkc');if(!e)return;e.innerHTML=(S&&S.phase!='lobby'&&G.jr)?'🎰 彩金 <b>'+lb(G.jr)+'</b>':''}catch(_){}}
 function render(){
   try{document.getElementById('app').className=''}catch(_){}
+  updJk();
   try{document.body.classList.toggle('wv',!S||S.phase=='lobby')}catch(_){}
   const app=document.getElementById('app'),T=document.getElementById('tot');
   if(!S){T.textContent='五人十三支';app.innerHTML=entryHTML();return}
