@@ -249,8 +249,8 @@ html .c.cv,html .sm .c.back{background:var(--back)}
 .arr .c.sel{transform:translateY(-4px)}
 .qrow{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:5px;margin:5px 0}
 .qrow button,.qk6 button{padding:9px 2px;font-size:13px}
-.qk6{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:5px 0}
-.qk6 button{padding:8px 0;font-size:12.5px}.qk6 button.pat{border:2px dashed var(--edge2);box-shadow:none}
+.qk6{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:5px 0}
+.qk6 button{padding:9px 0;font-size:14px}.qk6 button.pat{border:2px dashed var(--edge2);box-shadow:none}
 </style></head><body>
 <div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="lvb" onclick="openProf()" style="flex:none;padding:2px 10px;font-size:13px;margin-left:4px">Lv.1</button><button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
@@ -456,8 +456,8 @@ function oldRender(){
   ${(G.note||(G.hand.length==0&&err))?`<div class="msg">${G.note||err}</div>`:''}
   <div class="qrow"><button onclick="clr()">全部收回</button><button ${G.canAuto?'':'disabled'} onclick="hint()">${G.canAuto?'自動理牌':'🔒自動理牌'}</button><button class="p" ${ok?'':'disabled'} onclick="submit()">完成排牌</button><button class="duel" ${hb?'':'disabled'} onclick="duelGo()">⚔ 對決</button></div>
   <div class="qrow"><button onclick="setSort('suit')">按花色</button><button onclick="setSort('rank')">按大小${G.sortMode=='rank'?(G.asc?'↑':'↓'):''}</button><button onclick="togglePeek()">🙈瞇牌:${G.peek?'開':'關'}</button>${G.down&&G.down.size?`<button class="duel" onclick="openAll()">👀全開(${G.down.size})</button>`:''}</div>
-  <div class="qk6">${[['一對',1],['兩對',1],['三輪',0],['四輪',0],['五輪',0],['三條',1],['順子',1],['同花',1],['雙色',0],['葫蘆',1],['四條',1]].map(([k,t])=>`<button class="${t?'':'pat'}" onclick="${t?'typeQuick':'quick'}('${k}')">${k}</button>`).join('')}<button class="p" onclick="restAll()">⬇剩餘</button></div>
-  <p class="rule" style="margin:4px 0">點牌選取→再點牌墩放入;點已放的牌可收回。虛線=整手牌自動排;「剩餘」=剩下的牌全放進最後一墩;對決模式需有加成牌;自動理牌要等其他人都完成。</p>`;
+  <div class="qk6">${['一對','兩對','三條','順子','同花','葫蘆','四條'].map(k=>`<button onclick="typeQuick('${k}')">${k}</button>`).join('')}<button class="p" onclick="restAll()">⬇ 剩餘</button></div>
+  <p class="rule" style="margin:4px 0">點牌選取→再點牌墩放入;點已放的牌可收回。「剩餘」=剩下的牌全放進最後一墩;對決模式需有加成牌;自動理牌要等其他人都完成。</p>`;
 }
 
 /* ===================== Online (db rooms) ===================== */
