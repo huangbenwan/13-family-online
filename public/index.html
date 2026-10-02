@@ -231,6 +231,8 @@ html .c.cv,html .sm .c.back{background:var(--back)}
 .rx.tofu,.rx.sock{background:radial-gradient(circle,#7cb34277,transparent 72%)}
 .rx .tf{position:absolute;left:0;right:0;top:36%;text-align:center;font-style:normal;font-size:30vmin;animation:wob .5s infinite alternate}
 @keyframes wob{from{transform:rotate(-8deg) scale(1)}to{transform:rotate(8deg) scale(1.1)}}
+.pvw{position:sticky;top:6px;z-index:2;background:var(--card);border:2px dashed var(--acc);border-radius:16px;padding:8px;margin:10px 0;min-height:56px;text-align:center}
+.pvr{display:flex;gap:6px;justify-content:center;padding:6px 0}.pvr .c{width:50px}
 </style></head><body>
 <div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="lvb" onclick="openProf()" style="flex:none;padding:2px 10px;font-size:13px;margin-left:4px">Lv.1</button><button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
@@ -560,18 +562,26 @@ function xpHTML(){const L=levelOf(PF.xp),g=G.lastXp;
   return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div>${xpEligible()?'':'<div class="rule" style="color:var(--red);font-weight:700">⚠ 本局有電腦或不足 5 位真人玩家,不計經驗值</div>'}</div>`}
 function openProf(){let d=document.getElementById('prof');if(!d){d=document.createElement('div');d.id='prof';document.body.appendChild(d)}
   const keep=d.scrollTop,L=levelOf(PF.xp),sel=PF.sel,t=PF.st,nb=BADGES.filter(b=>PF.bd[b.id]).length;
-  const chips=(arr,key,fn)=>arr.map(x=>{const on=okAt(x),cur=sel[key]==x.id;return `<button class="rw ${cur?'cur':''}" ${on?`onclick="pickRw('${key}','${x.id}')"`:'disabled'}>${fn(x)}<small>${on?(cur?'使用中':x.n):'🔒 Lv.'+x.lv}</small></button>`}).join('');
+  const chips=(arr,key,fn)=>arr.map(x=>{const on=okAt(x),cur=sel[key]==x.id;return `<button class="rw ${cur?'cur':''} ${on?'':'lk'}" onclick="${on?`pickRw('${key}','${x.id}')`:`previewRw('${key}','${x.id}')`}">${fn(x)}<small>${on?(cur?'使用中':x.n):'🔒 Lv.'+x.lv+' 點我預覽'}</small></button>`}).join('');
   d.className='prof';
   d.innerHTML=`<div class="pbox"><div class="ph"><b style="font-size:18px">我的檔案</b><button onclick="closeProf()">✕ 關閉</button></div>
 <div class="pt"><div class="pl">Lv.${L.lv}</div><div style="flex:1"><div class="pn">${TITLES[L.lv]}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div style="font-size:12px;opacity:.85">XP ${PF.xp} · ${L.max?'已達最高等級':'距離下一級還差 '+(L.need-L.rem)}</div></div></div>
+<div id="pvw" class="pvw"><div class="rule">👀 點任何獎勵(包含 🔒 還沒解鎖的)都可以在這裡預覽</div></div>
 <h4>牌背(瞇牌、對決蓋牌時使用)</h4><div class="rws">${chips(BACKS,'bk',x=>`<span class="sw" style="background:${x.css}"></span>`)}</div>
 <h4>牌桌配色</h4><div class="rws">${chips(SKINS,'sk',x=>`<span class="sw" style="background:linear-gradient(90deg,${x.c[0]} 33%,${x.c[1]} 33% 66%,${x.c[2]} 66%)"></span>`)}</div>
 <h4>名字外框</h4><div class="rws">${chips(FRAMES,'fr',x=>`<span class="nmf fr-${x.id}">${esc(myName||'名字')}</span>`)}</div>
-<h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<span class="rw ${okAt(x)?'':'lk'}" style="cursor:default">${x.e}<small>${x.n}${okAt(x)?'':' 🔒Lv.'+x.lv}</small></span>`).join('')}</div>
+<h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<button class="rw ${okAt(x)?'':'lk'}" onclick="previewRw('it','${x.k}')">${x.e}<small>${x.n}${okAt(x)?' ▶預覽':' 🔒Lv.'+x.lv+' ▶預覽'}</small></button>`).join('')}</div>
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
+<h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
   d.scrollTop=keep}
+function previewRw(key,id){const el=document.getElementById('pvw');if(!el)return;let h='';
+  if(key=='bk'){const x=byId(BACKS,id);h=`<div class="rule">牌背:${x.n}(Lv.${x.lv} 解鎖)</div><div class="pvr" style="--back:${x.css}"><div class="c cv"><b>A</b><span>♠</span></div><div class="c cv"><b>A</b><span>♠</span></div>${chip({r:12,s:1,id:-1})}${chip({r:7,s:0,id:-2})}</div>`}
+  else if(key=='sk'){const x=byId(SKINS,id),[a,y,n]=x.c;h=`<div class="rule">配色:${x.n}(Lv.${x.lv} 解鎖)</div><div style="border-radius:14px;overflow:hidden;text-align:left"><div style="background:${n};color:#fff;padding:7px 12px;font-weight:800">五人十三支 · 配色預覽</div><div style="background:${y};color:#1f2638;padding:7px 12px;font-weight:800">🎰 本局彩金:K</div><div style="display:flex;gap:6px;padding:8px;background:#f1f2f7;flex-wrap:wrap"><span style="background:${a};color:#fff;border-radius:99px;padding:6px 14px;font-weight:800">完成排牌</span><span style="background:${y};color:#1f2638;border-radius:99px;padding:6px 14px;font-weight:800">⚔ 對決模式</span><span style="border:2px solid ${n};color:${n};border-radius:99px;padding:4px 12px;font-weight:800">按花色</span></div></div>`}
+  else if(key=='fr'){const x=byId(FRAMES,id);h=`<div class="rule">名字框:${x.n}(Lv.${x.lv} 解鎖)</div><div style="padding:8px"><span class="nmf fr-${x.id}" style="font-size:20px">${esc(myName||'你的名字')}</span><small class="lvt">Lv.${x.lv} ${TITLES[x.lv]}</small></div>`}
+  else if(key=='it'){const x=ITEMS.find(i=>i.k==id);h=`<div class="rule">${x.e} ${x.n}(Lv.${x.lv} 解鎖)特效播放中…</div><div style="font-size:40px">${x.e}</div>`;reactFx(id,'朋友')}
+  el.innerHTML=h}
 function closeProf(){const d=document.getElementById('prof');if(d)d.remove()}
 function pickRw(k,id){PF.sel[k]=id;saveProf();applyProf();syncProf();openProf()}
 async function init(){
