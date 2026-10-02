@@ -186,8 +186,53 @@ input{font-family:inherit}
 .c.cv,.sm .c.back{border:2px solid var(--edge);box-shadow:0 3px 0 var(--edge)}
 .sm .c{border-width:1.5px;border-radius:6px;box-shadow:0 2px 0 var(--edge)}
 .lane .c.gold{border-color:#b8860b}
+
+/* ===== 等級系統 / 道具特效 ===== */
+button.p{box-shadow:0 3px 0 color-mix(in srgb,var(--acc) 68%,#000)}
+button.duel,.jp{box-shadow:0 3px 0 color-mix(in srgb,var(--yel) 72%,#000)}
+html .c.cv,html .sm .c.back{background:var(--back)}
+.nmf{display:inline-block;padding:1px 10px;border-radius:999px;border:2px solid transparent;font-weight:800}
+.lvt{display:inline-block;margin-left:6px;font-size:11px;color:var(--mut);font-weight:700;white-space:nowrap}
+.fr-br{border-color:#b87333;background:#b8733322}.fr-sv{border-color:#a9b1c4;background:#a9b1c433}
+.fr-gd{border-color:#d4a017;background:#f0b33c33;box-shadow:0 0 6px #f0b33c}
+.fr-rb{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcf7f,#4d96ff,#c77dff) border-box}
+.fr-fr{border-color:#ff5a1f;background:#ff5a1f22;animation:flm 1.2s infinite alternate}
+@keyframes flm{from{box-shadow:0 0 4px #ff5a1f}to{box-shadow:0 0 14px #ffb300}}
+.fr-cr{border-color:#d4a017;background:#f0b33c44;box-shadow:0 0 10px #f0b33c}.fr-cr::before{content:"👑 "}
+.xpl{display:flex;justify-content:space-between;align-items:center}.xpg{color:var(--ok);font-weight:900}
+.xpbar{height:10px;border-radius:99px;background:#ffffff33;overflow:hidden;margin:5px 0}
+.pb .xpbar{background:var(--empty)}.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--yel),var(--acc))}
+.prof{position:fixed;inset:0;z-index:96;background:#000a;overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 10px) 10px 30px}
+.pbox{max-width:560px;margin:0 auto;background:var(--bg);border-radius:22px;padding:14px;border:2px solid var(--edge2)}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.ph button{flex:none;padding:5px 14px}
+.pt{display:flex;gap:12px;align-items:center;background:var(--navy);color:#fff;border-radius:18px;padding:12px}
+.pl{background:var(--yel);color:#1f2638;font-weight:900;font-size:22px;border-radius:14px;padding:8px 12px}.pn{font-weight:900;font-size:18px}
+.pbox h4{margin:14px 0 6px;font-size:14px}
+.rws{display:flex;flex-wrap:wrap;gap:6px}
+.rw{flex:1 1 28%;min-width:84px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:18px;padding:8px 6px;border-radius:14px;background:var(--card);border:2px solid var(--edge2);box-shadow:none;color:var(--fg)}
+.rw small{font-size:11px;color:var(--mut);font-weight:700}.rw.cur{border-color:var(--acc)}.rw.lk{opacity:.5}
+.sw{display:block;width:46px;height:30px;border-radius:8px;border:2px solid var(--edge)}
+.bds{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.bd{background:var(--card);border:2px solid var(--edge2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.bd span{font-size:22px}.bd small{color:var(--mut)}.bd.lk{opacity:.5}
+.lvup{position:fixed;inset:0;z-index:101;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#000a 30%,#000e);animation:fxin .3s;cursor:pointer;overflow:hidden}
+.lvbox{position:relative;text-align:center;color:#fff;animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+.lvbox small{display:block;letter-spacing:4px;color:#f7d774;font-weight:800}
+.lvbox h2{margin:4px 0;font-size:clamp(52px,18vw,96px);background:linear-gradient(180deg,#fff6c8,#f2c94c 55%,#b8860b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px #f0c040)}
+.lvt2{font-size:clamp(22px,7vw,34px);font-weight:900;margin-bottom:10px}
+.lvun{background:#ffffff1f;border-radius:16px;padding:10px 16px;margin:8px 0;font-weight:700;line-height:1.6}
+.cf{position:absolute;top:-8%;left:var(--x);font-size:var(--s);font-style:normal;animation:cfall 3.2s var(--d) linear infinite}
+@keyframes cfall{to{transform:translateY(115vh) rotate(540deg)}}
+.rx.banana{background:radial-gradient(circle at 50% 70%,#f0e06a55,transparent 70%)}
+.rx .bn{position:absolute;left:46%;top:60%;font-size:15vmin;font-style:normal;opacity:0;animation:bdrop .5s forwards}
+@keyframes bdrop{0%{opacity:0;transform:translateY(-70vh) rotate(-200deg)}100%{opacity:1;transform:rotate(15deg)}}
+.rx .rn{position:absolute;left:-22%;top:50%;font-size:17vmin;font-style:normal;animation:brun 2s .5s linear forwards}
+@keyframes brun{0%{transform:translateX(0)}50%{transform:translateX(70vw)}70%{transform:translateX(78vw) translateY(-28vh) rotate(-220deg)}100%{transform:translateX(110vw) translateY(60vh) rotate(-540deg);opacity:0}}
+.rx.tofu,.rx.sock{background:radial-gradient(circle,#7cb34277,transparent 72%)}
+.rx .tf{position:absolute;left:0;right:0;top:36%;text-align:center;font-style:normal;font-size:30vmin;animation:wob .5s infinite alternate}
+@keyframes wob{from{transform:rotate(-8deg) scale(1)}to{transform:rotate(8deg) scale(1.1)}}
 </style></head><body>
-<div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
+<div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="lvb" onclick="openProf()" style="flex:none;padding:2px 10px;font-size:13px;margin-left:4px">Lv.1</button><button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
 <div id="app"></div>
 <script>
 const SU=['♠','♥','♦','♣'],CAT=['散牌','一對','兩對','三條','順子','同花','同花對子','同花兩對子','葫蘆','四條','同花順','五雷'];
@@ -374,7 +419,7 @@ function oldRender(){
     app.innerHTML=jpBanner()+`<div class="rule">本局閒置 ${G.idle} 張,不參與比牌</div>`+
     R.L.map((l,i)=>[l,i]).sort((a,b)=>a[1]==G.me?-1:b[1]==G.me?1:a[1]-b[1]).map(([l,i])=>{
       const sp=R.V[i].map((v,k)=>spec(v,k)?LN[k]+spec(v,k).n:'').filter(Boolean),jt=R.JM[i].map((m,k)=>m?LN[k]+'彩金'+lb(R.jr)+(m>1?'×'+m:''):'').filter(Boolean),vip=sp.length||jt.length||R.hong[i];
-      return `<div class="pb ${vip?'vip':''}"><h3><span>${NM[i]}${i==G.me?'(你)':''}${R.hong[i]?'<span class="badge hot" onclick="hongFx(${i})" style="cursor:pointer">🔥 紅不讓 ⚾</span>':''}${sp.map(t=>`<span class="badge">✦ ${t}</span>`).join('')}${jt.map(t=>`<span class="badge">🎰 ${t}</span>`).join('')}</span><span class="${R.sc[i]>0?'pos':R.sc[i]<0?'neg':''}">本局 ${R.sc[i]>0?'+':''}${R.sc[i]} · 累計 ${G.total[i]}</span></h3>
+      return `<div class="pb ${vip?'vip':''}"><h3><span>${nmTag(i)}${i==G.me?'(你)':''}${R.hong[i]?'<span class="badge hot" onclick="hongFx(${i})" style="cursor:pointer">🔥 紅不讓 ⚾</span>':''}${sp.map(t=>`<span class="badge">✦ ${t}</span>`).join('')}${jt.map(t=>`<span class="badge">🎰 ${t}</span>`).join('')}</span><span class="${R.sc[i]>0?'pos':R.sc[i]<0?'neg':''}">本局 ${R.sc[i]>0?'+':''}${R.sc[i]} · 累計 ${G.total[i]}</span></h3>
       ${summary(R,i)}
       ${l.map((c,k)=>{const hs=hiIds(c,k),sk=spec(R.V[i][k],k)||R.JM[i][k];if(R.JM[i][k])c.forEach(x=>{if(x.r==R.jr)hs.add(x.id)});return `<div class="sm">${c.map(x=>mini(x,hs.has(x.id))).join('')}${'<span></span>'.repeat(5-c.length)}<em class="${sk?'gl':''}">${LN[k]}<br>${CAT[catOf(R.V[i][k])]}</em></div>`}).join('')}</div>`}).join('')+
     `<div class="pb"><h3>對戰明細(${R.pairs.length} 組)</h3>${R.pairs.map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line);font-size:13px"><div style="display:flex;justify-content:space-between"><b>${NM[p.a]} vs ${NM[p.b]}</b><b class="${p.s>0?'pos':p.s<0?'neg':''}">${NM[p.a]} ${p.s>0?'+':''}${p.s} / ${NM[p.b]} ${p.s>0?'−':p.s<0?'+':''}${Math.abs(p.s)}</b></div><div class="rule">頭${tn(p.r[0])} 中${tn(p.r[1])} 尾${tn(p.r[2])}${p.items.map(i=>`<br>${NM[i.w]} ${i.t} +${i.s}`).join('')||'<br>無得分'}</div></div>`).join('')}</div>
@@ -454,8 +499,82 @@ ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
   const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);
   try{navigator.vibrate&&setTimeout(()=>navigator.vibrate([80,30,160]),1000)}catch(_){}
   setTimeout(done,10500)}
+/* ===== 等級 / 成就 / 解鎖(存在這支手機 localStorage) ===== */
+const LV_MAX=12,TITLES=['','牌桌路人甲','十三支學徒','倒水常客','蟑螂殺手','拖鞋大師','打槍小能手','彩金獵人','鐵支收割機','同花順之神','全壘打打者','紅不讓大魔王','牌桌傳說'];
+const need=lv=>140+20*(lv-1);
+function levelOf(xp){let lv=1,r=xp;while(lv<LV_MAX&&r>=need(lv)){r-=need(lv);lv++}const mx=lv>=LV_MAX;return{lv,rem:mx?0:r,need:mx?1:need(lv),max:mx}}
+const BACKS=[{id:'or',n:'橘色斜紋',lv:1,css:'repeating-linear-gradient(45deg,#e8622a 0 6px,#f0804d 6px 12px)'},
+ {id:'nv',n:'星空深藍',lv:2,css:'radial-gradient(circle,#fff 0 1.5px,transparent 2px) 0 0/14px 14px,#1f2f66'},
+ {id:'mt',n:'薄荷格紋',lv:4,css:'repeating-conic-gradient(#7fd3b8 0 25%,#a9e6d3 0 50%) 0 0/16px 16px'},
+ {id:'pk',n:'粉紅圓點',lv:6,css:'radial-gradient(circle,#fff 0 2.5px,transparent 3px) 0 0/12px 12px,#f48fb1'},
+ {id:'gd',n:'金色斜紋',lv:9,css:'repeating-linear-gradient(45deg,#f0b33c 0 6px,#ffd978 6px 12px)'},
+ {id:'rb',n:'彩虹',lv:11,css:'linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcf7f,#4d96ff,#c77dff)'}];
+const SKINS=[{id:'def',n:'橘黃經典',lv:1,c:['#e8622a','#f0b33c','#1f2638']},{id:'sea',n:'海洋藍',lv:3,c:['#1e88e5','#4dd0e1','#12304f']},
+ {id:'for',n:'森林綠',lv:5,c:['#2e9e5b','#c6d84a','#16352a']},{id:'sak',n:'櫻花粉',lv:7,c:['#e8588c','#ffb3c8','#4a1f35']},{id:'blk',n:'暗夜黑金',lv:10,c:['#d4a017','#f5d76e','#0b0b10']}];
+const FRAMES=[{id:'none',n:'無框',lv:1},{id:'br',n:'銅框',lv:2},{id:'sv',n:'銀框',lv:4},{id:'gd',n:'金框',lv:6},{id:'rb',n:'彩虹框',lv:8},{id:'fr',n:'火焰框',lv:10},{id:'cr',n:'王冠框',lv:12}];
+const ITEMS=[{k:'slipper',e:'🩴',n:'拖鞋',lv:1},{k:'fart',e:'💨',n:'放屁',lv:1},{k:'spit',e:'💦',n:'口水',lv:1},
+ {k:'banana',e:'🍌',n:'香蕉皮',lv:5},{k:'tofu',e:'🧀',n:'臭豆腐',lv:8},{k:'sock',e:'🧦',n:'臭襪子',lv:11}];
+const BADGES=[{id:'hong1',e:'⚾',n:'全壘打初體驗',d:'第一次達成紅不讓',ok:t=>t.hong>=1},{id:'win3',e:'🔥',n:'三連勝小霸王',d:'連贏 3 局',ok:t=>t.bestStreak>=3},
+ {id:'beaten10',e:'🥲',n:'受氣包',d:'累計被打槍 10 次',ok:t=>t.beaten>=10},{id:'jack5',e:'🎰',n:'彩金大戶',d:'累計湊出彩金 5 次',ok:t=>t.jack>=5},
+ {id:'quad1',e:'💪',n:'鐵支首秀',d:'第一次湊出鐵支',ok:t=>t.quad>=1},{id:'sf1',e:'🌈',n:'同花順仙人',d:'第一次湊出同花順',ok:t=>t.sf>=1},
+ {id:'five1',e:'⚡',n:'五雷轟頂',d:'第一次湊出五雷',ok:t=>t.five>=1},{id:'trips10',e:'🎯',n:'衝三狂人',d:'累計衝三 10 次',ok:t=>t.trips>=10},
+ {id:'lose5',e:'☁️',n:'非洲人',d:'連輸 5 局',ok:t=>t.bestLose>=5},{id:'rounds50',e:'🏆',n:'牌桌肝帝',d:'累計玩 50 局',ok:t=>t.rounds>=50},
+ {id:'sent10',e:'🩴',n:'道具大師',d:'累計送出 10 次不爽道具',ok:t=>t.sent>=10}];
+let PF=(()=>{try{const o=JSON.parse(ls('ss_prof')||'null');if(o&&typeof o=='object')return o}catch(e){}return null})()||{};
+PF.xp=PF.xp||0;PF.st=PF.st||{};PF.bd=PF.bd||{};PF.sel=PF.sel||{bk:'or',sk:'def',fr:'none'};
+const saveProf=()=>ls('ss_prof',JSON.stringify(PF)),myLv=()=>levelOf(PF.xp).lv,okAt=x=>x.lv<=myLv();
+const byId=(arr,id)=>arr.find(x=>x.id==id)||arr[0],backCss=id=>byId(BACKS,id).css;
+const reactList=()=>ITEMS.filter(okAt).map(x=>[x.k,x.e+' '+x.n]);
+function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textContent='Lv.'+myLv()}catch(_){}}
+function applyProf(){const L=myLv();
+  [['bk',BACKS],['sk',SKINS],['fr',FRAMES]].forEach(([k,arr])=>{if(byId(arr,PF.sel[k]).lv>L)PF.sel[k]=arr[0].id});
+  try{const r=document.documentElement.style,[a,y,n]=byId(SKINS,PF.sel.sk).c;
+    r.setProperty('--acc',a);r.setProperty('--yel',y);r.setProperty('--navy',n);r.setProperty('--back',backCss(PF.sel.bk));
+    let st=document.getElementById('skinw');if(!st){st=document.createElement('style');st.id='skinw';document.head.appendChild(st)}
+    const e=c=>c.replace('#','%23');
+    st.textContent=`body.wv::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C90 10 150 70 240 40 S360 20 400 35 V120 H0Z' fill='${e(n)}'/%3E%3Cpath d='M0 70 C80 40 160 95 250 65 S370 55 400 68 V120 H0Z' fill='${e(y)}'/%3E%3Cpath d='M0 92 C100 70 170 112 260 88 S365 82 400 92 V120 H0Z' fill='${e(a)}'/%3E%3C/svg%3E")!important}`}catch(_){}
+  refreshLvb()}
+function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv(),fr:PF.sel.fr,bk:PF.sel.bk}).catch(()=>{})}
+const nmTagDoc=(name,d)=>{const lv=Math.max(1,Math.min(LV_MAX,Math.floor((d&&d.lv)||1)));return `<span class="nmf fr-${byId(FRAMES,d&&d.fr).id}">${name}</span><small class="lvt">Lv.${lv} ${TITLES[lv]}</small>`};
+const nmTag=i=>nmTagDoc(NM[i],P[S.order[i]]);
+function awardRound(R){const me=G.me;if(me<0)return;const t=PF.st,sc=R.sc[me];let xp=10+(sc>0?10:sc<0?5:0);
+  t.rounds=(t.rounds||0)+1;
+  if(sc>0){t.wins=(t.wins||0)+1;t.streak=(t.streak||0)+1;t.loseStreak=0;t.bestStreak=Math.max(t.bestStreak||0,t.streak)}
+  else if(sc<0){t.streak=0;t.loseStreak=(t.loseStreak||0)+1;t.bestLose=Math.max(t.bestLose||0,t.loseStreak)}
+  R.V[me].forEach((v,k)=>{const sp=spec(v,k);if(sp){if(sp.n=='衝三'){xp+=8;t.trips=(t.trips||0)+1}else if(sp.n=='鐵支'){xp+=10;t.quad=(t.quad||0)+1}
+    else if(sp.n=='同花順'){xp+=15;t.sf=(t.sf||0)+1}else if(sp.n=='五雷'){xp+=40;t.five=(t.five||0)+1}}
+    if(R.JM[me][k]){xp+=10;t.jack=(t.jack||0)+1}});
+  if(R.hong[me]){xp+=30;t.hong=(t.hong||0)+1}else if(R.hong.some((h,i)=>h&&i!=me))xp+=8;
+  R.pairs.forEach(p=>{if(p.a!=me&&p.b!=me)return;const r=p.a==me?p.r:p.r.map(x=>-x);if(r.every(x=>x==-1))t.beaten=(t.beaten||0)+1});
+  const a=levelOf(PF.xp).lv;PF.xp+=xp;const b=levelOf(PF.xp).lv;G.lastXp={xp,r:S.round};saveProf();applyProf();syncProf();
+  setTimeout(()=>{if(b>a)lvUp(a,b);checkBadges()},R.hong.some(Boolean)?11000:1800);render()}
+function checkBadges(){const nw=BADGES.filter(b=>!PF.bd[b.id]&&b.ok(PF.st));if(!nw.length)return;nw.forEach(b=>PF.bd[b.id]=Date.now());saveProf();
+  nw.forEach((b,i)=>setTimeout(()=>toast('🏅 解鎖成就:'+b.e+' '+b.n,'gold'),i*2600))}
+function lvUp(a,b){const un=[BACKS,SKINS,FRAMES,ITEMS].flatMap((arr,i)=>arr.filter(x=>x.lv>a&&x.lv<=b).map(x=>['牌背','配色','名字框','道具'][i]+':'+x.n));
+  const d=document.createElement('div');d.className='lvup';const r=(x,y)=>x+Math.random()*(y-x);
+  d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="cf" style="--x:${r(0,95)}%;--s:${r(16,34)}px;--d:${r(0,3)}s">${['🎉','🎊','⭐','✨'][0|r(0,4)]}</i>`).join('')+
+   `<div class="lvbox"><small>LEVEL UP!</small><h2>Lv.${b}</h2><div class="lvt2">${TITLES[b]}</div>${un.length?`<div class="lvun">🎁 新解鎖<br>${un.join('<br>')}</div>`:''}<small>點一下關閉</small></div>`;
+  d.onclick=()=>d.remove();document.body.appendChild(d);playSnd();setTimeout(()=>d.remove(),9000)}
+function xpHTML(){const L=levelOf(PF.xp),g=G.lastXp;
+  return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div></div>`}
+function openProf(){let d=document.getElementById('prof');if(!d){d=document.createElement('div');d.id='prof';document.body.appendChild(d)}
+  const keep=d.scrollTop,L=levelOf(PF.xp),sel=PF.sel,t=PF.st,nb=BADGES.filter(b=>PF.bd[b.id]).length;
+  const chips=(arr,key,fn)=>arr.map(x=>{const on=okAt(x),cur=sel[key]==x.id;return `<button class="rw ${cur?'cur':''}" ${on?`onclick="pickRw('${key}','${x.id}')"`:'disabled'}>${fn(x)}<small>${on?(cur?'使用中':x.n):'🔒 Lv.'+x.lv}</small></button>`}).join('');
+  d.className='prof';
+  d.innerHTML=`<div class="pbox"><div class="ph"><b style="font-size:18px">我的檔案</b><button onclick="closeProf()">✕ 關閉</button></div>
+<div class="pt"><div class="pl">Lv.${L.lv}</div><div style="flex:1"><div class="pn">${TITLES[L.lv]}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div style="font-size:12px;opacity:.85">XP ${PF.xp} · ${L.max?'已達最高等級':'距離下一級還差 '+(L.need-L.rem)}</div></div></div>
+<h4>牌背(瞇牌、對決蓋牌時使用)</h4><div class="rws">${chips(BACKS,'bk',x=>`<span class="sw" style="background:${x.css}"></span>`)}</div>
+<h4>牌桌配色</h4><div class="rws">${chips(SKINS,'sk',x=>`<span class="sw" style="background:linear-gradient(90deg,${x.c[0]} 33%,${x.c[1]} 33% 66%,${x.c[2]} 66%)"></span>`)}</div>
+<h4>名字外框</h4><div class="rws">${chips(FRAMES,'fr',x=>`<span class="nmf fr-${x.id}">${esc(myName||'名字')}</span>`)}</div>
+<h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<span class="rw ${okAt(x)?'':'lk'}" style="cursor:default">${x.e}<small>${x.n}${okAt(x)?'':' 🔒Lv.'+x.lv}</small></span>`).join('')}</div>
+<h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
+<h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
+<div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
+  d.scrollTop=keep}
+function closeProf(){const d=document.getElementById('prof');if(d)d.remove()}
+function pickRw(k,id){PF.sel[k]=id;saveProf();applyProf();syncProf();openProf()}
 async function init(){
-  G.peek=ls('ss_peek')=='1';updSnd();{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
+  G.peek=ls('ss_peek')=='1';updSnd();applyProf();{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
   if(USE_ACE&&typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
@@ -481,7 +600,7 @@ async function enter(c){
     const ps=await db.collection('rooms/'+c+'/p').get(),mine=ps.docs.some(d=>d.id==uid);
     if(!mine&&ps.size>=5){code='';return say('房間已滿')}
     if(mine)await pdoc(uid).update({name:myName||'玩家'});else await pdoc(uid).set({name:myName||'玩家',t:Date.now(),round:-1,sub:null,want:0,rev:[0,0,0]});
-    ls('ss_code',c);G.inv='';try{history.replaceState(null,'',location.pathname)}catch(_){}watch()}catch(e){code='';say('加入失敗:'+(e.message||e.code))}
+    ls('ss_code',c);G.inv='';try{history.replaceState(null,'',location.pathname)}catch(_){}watch();syncProf()}catch(e){code='';say('加入失敗:'+(e.message||e.code))}
 }
 function watch(){unsubs.forEach(f=>f());unsubs=[];
   unsubs.push(ctl().onSnapshot(s=>{S=s.exists?s.data():null;onState()},e=>say('連線錯誤:'+e.code)));
@@ -499,7 +618,7 @@ function onState(){
     if(v&&!fxSeen[key]){fxSeen[key]=1;G.last=i+','+k;const p=fxParts(d.sub[k],k);if(p.length)fx(i,k,p)}})});
   if(S.phase=='result'&&G.fxQ.length)G.fxQ=[];
   scanSigs();
-  if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{compute().hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)})}catch(e){}}
+  if(S.phase=='result'&&!fxSeen['h'+S.round]){fxSeen['h'+S.round]=1;try{const R0=compute();R0.hong.forEach((h,i)=>{if(h)setTimeout(()=>hongFx(i),700)});if(G.me>=0)awardRound(R0)}catch(e){}}
   render();
   if(S.host==uid)hostTick();
 }
@@ -558,7 +677,7 @@ function swapPanel(){let h=G.swapMsg?`<div class="pb">${G.swapMsg}<br><span clas
   return h}
 function nextBtn(){
   const order=S.order,r=S.round,isB=id=>!!(P[id]&&P[id].bot),rdy=id=>!!(P[id]&&P[id].nr===r),hum=order.filter(id=>!isB(id)),n=hum.filter(rdy).length,me=rdy(uid);
-  return `<div class="pb"><div class="rule">每位玩家都按「準備」,才會開始下一局:</div>
+  return xpHTML()+`<div class="pb"><div class="rule">每位玩家都按「準備」,才會開始下一局:</div>
 <div class="st" style="margin:6px 0">${order.map((id,i)=>isB(id)?'':`<i class="${rdy(id)?'ok':''}">${NM[i]}:${rdy(id)?'已準備':'看戰績中'}</i>`).join('')}</div>
 <div class="row"><button class="p" onclick="readyNext()">${me?`✓ 已準備(${n}/${hum.length}),點此取消`:'✅ 我看完了,準備下一局'}</button></div>
 ${S.host==uid?'<div class="row"><button onclick="forceNext()">⏭ 不等了,直接開始(房主)</button></div>':''}
@@ -574,7 +693,7 @@ function duelHTML(){
     const l=subOf(i)[k],r=revOf(i)[k],pad='<span></span>'.repeat(5-l.length);
     if(r){const hs=hiIds(l,k);if(fxParts(l,k).some(t=>t.startsWith('彩金')))l.forEach(x=>{if(x.r==G.jr)hs.add(x.id)});
       return `<div class="sm ${G.last==i+','+k?'new':''}">${l.map(x=>mini(x,hs.has(x.id))).join('')}${pad}<em class="${fxParts(l,k).length?'gl':''}">${LN[k]}<br>${CAT[catOf(ev(l))]}</em></div>`}
-    const me=i==G.me;return `<div class="sm hid ${me?'mine':''}" ${me?`onclick="reveal(${i},${k})"`:''}>${l.map(back5).join('')}${pad}<em>${LN[k]}<br>${me?'點我攤牌'+(fxParts(l,k).length?' ✦':''):'未攤牌'}</em></div>`}).join('')+'</div>').join('')+
+    const me=i==G.me;return `<div class="sm hid ${me?'mine':''}" style="--back:${backCss(P[S.order[i]]&&P[S.order[i]].bk)}" ${me?`onclick="reveal(${i},${k})"`:''}>${l.map(back5).join('')}${pad}<em>${LN[k]}<br>${me?'點我攤牌'+(fxParts(l,k).length?' ✦':''):'未攤牌'}</em></div>`}).join('')+'</div>').join('')+
   (S.host==uid?'<div class="row"><button onclick="skipDuel()">全部攤開(房主)</button></div>':'')}
 function inviteHTML(){return `<div class="pb"><h3>🎉 你被邀請加入房間</h3><div style="font-size:36px;font-weight:900;letter-spacing:8px;text-align:center;margin:6px 0">${G.inv}</div>
 <input id="nm" maxlength="8" placeholder="輸入你的暱稱(最多 8 字)" value="${esc(myName)}" style="${INP}">
@@ -591,7 +710,7 @@ function lineInvite(){location.href='https://line.me/R/msg/text/?'+encodeURIComp
 function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.host==uid;
   return `<div class="jp" style="justify-content:space-between"><span>房間代碼</span><b style="font-size:30px;letter-spacing:6px">${code}</b><small>朋友打開同一個網址後輸入代碼</small></div>
 <div class="pb"><div class="rule">邀請連結(朋友點開、輸入暱稱就能加入):</div><input id="lnk" readonly value="${inviteLink()}" onclick="this.select()" style="${INP};font-size:13px"><div class="row"><button class="p" onclick="lineInvite()">💬 傳到 LINE</button><button onclick="shareInvite()">📤 分享 / 複製</button></div></div>
-<div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(P[id].name)}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
+<div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${nmTagDoc(esc(P[id].name),P[id])}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
 <div class="row"><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
 function render(){
@@ -619,11 +738,13 @@ function reactFx(kind,nm){
   const d=document.createElement('div'),r=(a,b)=>a+Math.random()*(b-a);d.className='rx '+kind;let h='';
   if(kind=='slipper')h=[[24,48,.9],[62,60,1.7],[40,72,2.5]].map(([x,y,t])=>`<i class="ck" style="left:${x}%;top:${y}%;--t:${t}s">🪳</i><i class="slp" style="left:${x}%;top:${y}%;--t:${t-.28}s">🩴</i><i class="bm" style="left:${x}%;top:${y}%;--t:${t}s">💥</i><b class="sq" style="left:${x}%;top:${y}%;--t:${t}s"></b>`).join('')+`<div class="lab">${nm} 拿拖鞋打蟑螂!<br>啪!啪!啪!</div>`;
   else if(kind=='fart')h=Array.from({length:14},()=>`<i class="pf" style="left:${r(0,90)}%;--d:${r(0,1.2)}s;--s:${r(30,70)}px">💨</i>`).join('')+`<div class="lab">${nm} 對你放了一個屁<br>噗~~~</div>`;
+  else if(kind=='banana')h=`<i class="bn">🍌</i><i class="rn">🏃</i><div class="lab">${nm} 丟了香蕉皮給你<br>滑倒!!</div>`;
+  else if(kind=='tofu'||kind=='sock')h=Array.from({length:12},()=>`<i class="pf" style="left:${r(0,90)}%;--d:${r(0,1.4)}s;--s:${r(26,56)}px">${r(0,1)<.5?'🤢':'💨'}</i>`).join('')+`<i class="tf">${kind=='tofu'?'🧀':'🧦'}</i><div class="lab">${nm} ${kind=='tofu'?'請你吃臭豆腐':'脫了臭襪子給你'}<br>臭!!!</div>`;
   else h=Array.from({length:10},()=>`<i class="dr" style="left:${r(0,92)}%;--d:${r(0,1)}s;--s:${r(28,60)}px">💦</i>`).join('')+Array.from({length:4},()=>`<b class="bl" style="left:${r(5,80)}%;top:${r(5,50)}%;--s:${r(60,120)}px;--d:${r(0,.6)}s"></b>`).join('')+`<div class="lab">${nm} 對你吐了口水<br>呸!</div>`;
   d.innerHTML=h;document.body.appendChild(d);
   if(kind=='slipper'){const a=document.getElementById('app');[900,1700,2500].forEach(T=>setTimeout(()=>{a.classList&&a.classList.add('shk');setTimeout(()=>a.classList&&a.classList.remove('shk'),450)},T))}
   try{navigator.vibrate&&navigator.vibrate(kind=='slipper'?[1,899,60,740,60,740,60]:[60,40,60])}catch(_){}
-  setTimeout(()=>d.remove(),kind=='slipper'?3900:3000)}
+  setTimeout(()=>d.remove(),3900)}
 function sendUrgeText(){const t=(G.urgeTxt||'').trim().slice(0,30);if(!t||G.urgeOff)return;G.urgeOff=true;G.urgeTxt='';
   pdoc(uid).update({sig:{t:'urge',k:-1,txt:t,to:'*',n:Date.now()+Math.random()}}).catch(()=>{});
   toast('✓ 已通知所有還沒完成的玩家','ok');setTimeout(()=>{G.urgeOff=false;render()},5000);render()}
@@ -633,15 +754,15 @@ function handleSig(id,sg){const nm=esc((P[id]&&P[id].name)||'?');
 function scanSigs(){Object.keys(P).forEach(id=>{if(id==uid)return;const sg=P[id].sig,cur=sg?sg.n:0;
   if(!(id in sigSeen)){sigSeen[id]=cur;return}
   if(cur&&cur!==sigSeen[id]){sigSeen[id]=cur;handleSig(id,sg)}})}
-function sendReact(seat,kind){const id=S.order[seat];if(!id||Date.now()-(G.rxAt||0)<1500)return;G.rxAt=Date.now();
+function sendReact(seat,kind){const id=S.order[seat];if(!reactList().some(([k])=>k==kind))return;if(!id||Date.now()-(G.rxAt||0)<1500)return;G.rxAt=Date.now();
   pdoc(uid).update({sig:{t:'react',k:kind,to:id,n:Date.now()+Math.random()}}).catch(()=>{});
-  toast('✓ 已對 '+NM[seat]+' 送出 '+({slipper:'🩴',fart:'💨',spit:'💦'})[kind],'ok')}
+  toast('✓ 已對 '+NM[seat]+' 送出 '+(ITEMS.find(x=>x.k==kind)||{e:''}).e,'ok');PF.st.sent=(PF.st.sent||0)+1;saveProf();checkBadges()}
 function sendUrge(k){if(G.urgeOff)return;G.urgeOff=true;
   pdoc(uid).update({sig:{t:'urge',k,to:'*',n:Date.now()+Math.random()}}).catch(()=>{});
   toast('✓ 已通知所有還沒完成的玩家','ok');setTimeout(()=>{G.urgeOff=false;render()},5000);render()}
 function summary(R,i){let h=summary0(R,i);if(i==G.me||G.me<0||(P[S.order[i]]&&P[S.order[i]].bot))return h;
   const p=R.pairs.find(p=>(p.a==G.me&&p.b==i)||(p.a==i&&p.b==G.me));if(!p||(p.a==G.me?p.s:-p.s)>=0)return h;
-  return h+`<div class="sum">😤 對 ${NM[i]} 表達不爽:</div><div class="row" style="margin:0 0 6px">${[['slipper','🩴 拖鞋'],['fart','💨 放屁'],['spit','💦 口水']].map(([k,t])=>`<button style="padding:6px;font-size:14px" onclick="sendReact(${i},'${k}')">${t}</button>`).join('')}</div>`}
+  return h+`<div class="sum">😤 對 ${NM[i]} 表達不爽:</div><div class="row" style="margin:0 0 6px">${reactList().map(([k,t])=>`<button style="padding:6px;font-size:14px" onclick="sendReact(${i},'${k}')">${t}</button>`).join('')}</div>`}
 
 init();
 </script>
