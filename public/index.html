@@ -371,6 +371,95 @@ html:root[data-style="zapier"] .zs.s3{animation:zstep .4s 1.45s forwards,zpulse 
 @keyframes zpulse{50%{transform:scale(1.04)}}
 html:root[data-style="zapier"] .zb{position:absolute;bottom:0;left:var(--x);font-style:normal;font-size:22px;opacity:0;animation:zfly 1.8s var(--d) ease-out forwards}
 @keyframes zfly{0%{opacity:0;transform:translateY(0) rotate(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-190px) rotate(40deg)}}
+
+.fx .cl{display:none}
+/* ===== Clay 風格:暖奶油底、燕麥色邊框、大圓角、虛線實線並用、多層柔陰影、水果色票 ===== */
+html:root[data-style="clay"]{--bg:#faf9f7;--fg:#000;--card:#fff;--line:#dad4c8;--edge2:#dad4c8;--edge:#dad4c8;--mut:#6b655a;--acc:#078a52;--yel:#fbbd41;--navy:#000;--ok:#078a52;--red:#e5484d;--empty:#eee9df;--lane:#f3efe7}
+html:root[data-style="clay"] body{background:#faf9f7;color:#000;font-family:Inter,system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif}
+html:root[data-style="clay"] b,html:root[data-style="clay"] strong,html:root[data-style="clay"] h3,html:root[data-style="clay"] h4{font-weight:600}
+html:root[data-style="clay"] .bar{background:#fff;color:#000;border:1px solid #dad4c8;border-radius:28px;padding:8px 14px;box-shadow:rgba(0,0,0,.08) 0 1px 1px,rgba(0,0,0,.04) 0 -1px 1px inset,rgba(0,0,0,.05) 0 -.5px .5px inset}
+html:root[data-style="clay"] .bar .rt,html:root[data-style="clay"] .bar #tot{color:#000}
+html:root[data-style="clay"] .bar .chip{background:#eee9df;color:#000;border:1px solid #dad4c8;border-radius:999px;font-weight:600;box-shadow:inset 0 1px 0 #fff9}
+html:root[data-style="clay"] .jkc{background:#fc7981;color:#000;border-radius:999px;box-shadow:none}
+html:root[data-style="clay"] button{border-radius:999px;background:#fff;color:#000;border:1px solid #dad4c8;font-weight:500;box-shadow:rgba(0,0,0,.1) 0 1px 1px,rgba(0,0,0,.05) 0 -2px 1px inset}
+html:root[data-style="clay"] button.p{background:#078a52;color:#fff;border-color:#078a52}
+html:root[data-style="clay"] button.duel{background:#c1b0ff;color:#000;border-color:#c1b0ff}
+html:root[data-style="clay"] button:active:not(:disabled){transform:translateY(1px) scale(.98);box-shadow:none}
+html:root[data-style="clay"] button:disabled{opacity:.45}
+html:root[data-style="clay"] .pb,html:root[data-style="clay"] .pbox,html:root[data-style="clay"] .pvw{background:#fff;border:1px solid #dad4c8;border-radius:28px;box-shadow:rgba(0,0,0,.07) 0 1px 1px,rgba(0,0,0,.03) 0 -1px 1px inset}
+html:root[data-style="clay"] .rw,html:root[data-style="clay"] .bd{background:#fff;border:1px solid #dad4c8;border-radius:22px;box-shadow:rgba(0,0,0,.06) 0 1px 1px}
+html:root[data-style="clay"] .pvw{border:2px dashed #dad4c8}
+html:root[data-style="clay"] .lane{background:#f3efe7;border:2px dashed #dad4c8;border-radius:26px;box-shadow:none}
+html:root[data-style="clay"] .rw.cur{border:2px solid #078a52}
+html:root[data-style="clay"] .pb.vip,html:root[data-style="clay"] .lane.vip{border:2px solid #fbbd41;box-shadow:0 0 0 4px #fbbd4140;animation:none}
+html:root[data-style="clay"] .lane.tg{outline:3px dashed #078a52;outline-offset:-4px}
+html:root[data-style="clay"] .e{background:#eee9df;border:2px dashed #dad4c8;border-radius:14px}
+html:root[data-style="clay"] .c,html:root[data-style="clay"] .slots .c,html:root[data-style="clay"] .lane .c{background:#fff;color:#000;border:1px solid #dad4c8;border-radius:14px;box-shadow:rgba(0,0,0,.1) 0 2px 2px,rgba(0,0,0,.05) 0 -2px 2px inset}
+html:root[data-style="clay"] .c.r{color:#e5484d}
+html:root[data-style="clay"] .c.sel{outline:3px solid #078a52;box-shadow:0 8px 12px #0003}
+html:root[data-style="clay"] .c.cv,html:root[data-style="clay"] .sm .c.back{background:linear-gradient(135deg,#c1b0ff,#fc7981 55%,#fbbd41)!important;border:1px solid #dad4c8;box-shadow:rgba(0,0,0,.1) 0 2px 2px}
+html:root[data-style="clay"] .c.cv::after{color:#fff}
+html:root[data-style="clay"] .sm .c{border-radius:8px;border:1px solid #dad4c8;box-shadow:rgba(0,0,0,.08) 0 1px 1px}
+html:root[data-style="clay"] .lane .c.gold,html:root[data-style="clay"] .sm .c.gold{background:#fff4d6;border:2px solid #fbbd41;box-shadow:none;animation:none}
+html:root[data-style="clay"] .st i{background:#fff;border:1px solid #dad4c8;color:#6b655a;box-shadow:none}
+html:root[data-style="clay"] .st i.ok{background:#84e7a5;border-color:#84e7a5;color:#000}
+html:root[data-style="clay"] .jp{background:#fff;color:#000;border:1px solid #dad4c8;box-shadow:none}
+html:root[data-style="clay"] .xpbar{background:#eee9df}html:root[data-style="clay"] .xpbar i{background:linear-gradient(90deg,#c1b0ff,#fc7981,#fbbd41)}
+html:root[data-style="clay"] .pt{background:#000;color:#fff;border-radius:28px}html:root[data-style="clay"] .pl{background:#fbbd41;color:#000}
+html:root[data-style="clay"] .badge,html:root[data-style="clay"] .badge.hot{background:#fbbd41;color:#000;box-shadow:none}html:root[data-style="clay"] .badge.hot{background:#fc7981}
+html:root[data-style="clay"] .tt,html:root[data-style="clay"] .tt.ok{background:#000;color:#fff;box-shadow:none}html:root[data-style="clay"] .tt.gold{background:#fbbd41;color:#000}
+html:root[data-style="clay"] .pos{color:#078a52}html:root[data-style="clay"] .neg{color:#e5484d}
+html:root[data-style="clay"] .op.win{background:#84e7a540;color:#078a52}html:root[data-style="clay"] .op.win i{background:#078a52}
+html:root[data-style="clay"] .op.lose{background:#fc797933;color:#e5484d}html:root[data-style="clay"] .op.lose i{background:#e5484d}
+html:root[data-style="clay"] body.wv::after{background:radial-gradient(60% 95% at 12% 105%,#c1b0ff 0 56%,transparent 57%),radial-gradient(50% 85% at 52% 112%,#fbbd41 0 56%,transparent 57%),radial-gradient(58% 95% at 92% 105%,#84e7a5 0 56%,transparent 57%)!important}
+html:root[data-style="clay"] input,html:root[data-style="clay"] select{background:#fff;border:1px solid #dad4c8;color:#000;border-radius:999px}
+html:root[data-style="clay"] .prof{background:#0006}
+html:root[data-style="clay"] .cpn{background:#fff;border:2px dashed #078a52;border-radius:28px}
+/* Clay 特殊牌型動畫:軟軟的黏土色塊「啵」地彈出 */
+html:root[data-style="clay"] .fx{background:#faf9f7ee;animation:fxin .25s}
+html:root[data-style="clay"] .fx .rays,html:root[data-style="clay"] .fx .sp,html:root[data-style="clay"] .fx .fxbox,html:root[data-style="clay"] .fx .zp{display:none}
+html:root[data-style="clay"] .fx .cl{display:block;position:relative;width:min(88vw,380px);height:min(88vw,380px)}
+html:root[data-style="clay"] .cl .bl{position:absolute;border-radius:58% 42% 55% 45%/50% 60% 40% 50%;opacity:.9;animation:clpop .9s cubic-bezier(.2,1.7,.4,1) var(--d) both,clmorph 5s ease-in-out infinite;box-shadow:inset -8px -10px 0 #0002,inset 6px 6px 0 #fff6}
+@keyframes clpop{from{transform:scale(0)}}
+@keyframes clmorph{50%{border-radius:42% 58% 46% 54%/58% 42% 58% 42%}}
+html:root[data-style="clay"] .cl .cc{position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #dad4c8;border-radius:36px;padding:18px 14px;text-align:center;box-shadow:rgba(0,0,0,.14) 0 6px 14px,rgba(0,0,0,.06) 0 -3px 3px inset;animation:clsq .9s cubic-bezier(.3,1.5,.5,1) .15s both}
+@keyframes clsq{0%{transform:translateY(-50%) scale(.2)}40%{transform:translateY(-50%) scale(1.14,.86)}60%{transform:translateY(-50%) scale(.94,1.07)}80%{transform:translateY(-50%) scale(1.03,.98)}100%{transform:translateY(-50%) scale(1)}}
+html:root[data-style="clay"] .cl .cw{font-size:clamp(20px,6vw,28px);font-weight:600}
+html:root[data-style="clay"] .cl .cp{display:inline-block;margin:8px 0;padding:6px 18px;border-radius:999px;background:#fbbd41;font-size:clamp(30px,9.5vw,46px);font-weight:700;box-shadow:inset 0 -4px 0 #0002,inset 0 3px 0 #fff7}
+html:root[data-style="clay"] .cl .cc.royal .cp{background:linear-gradient(90deg,#fc7981,#c1b0ff)}
+html:root[data-style="clay"] .cl .cs{font-size:14px;letter-spacing:3px;color:#6b655a;font-weight:600}
+html:root[data-style="clay"] .cl .ck{position:absolute;top:-6%;width:14px;height:22px;border-radius:7px;font-style:normal;animation:clfall 2.6s var(--d) ease-in infinite}
+@keyframes clfall{to{transform:translateY(125vh) rotate(540deg)}}
+/* Clay 版紅不讓(全壘打) */
+.hrc{position:fixed;inset:0;z-index:100;overflow:hidden;cursor:pointer;animation:fxin .3s}
+.hrc>*{position:absolute}
+.hc-sky{inset:0;background:linear-gradient(#faf9f7,#bfeefc 70%)}
+.hc-cloud{background:#fff;border-radius:999px;height:7vh;box-shadow:inset 0 -6px 0 #0000000f;animation:hcdrift 8s linear infinite alternate}
+.hc-cloud.c1{width:30vw;left:8%;top:22%}.hc-cloud.c2{width:24vw;right:6%;top:34%;animation-delay:-3s}
+@keyframes hcdrift{to{transform:translateX(18px)}}
+.hc-ground{left:-10%;right:-10%;bottom:-8%;height:36%;background:#84e7a5;border-radius:50% 50% 0 0/40% 40% 0 0;box-shadow:inset 0 10px 0 #fff4,inset 0 -14px 0 #0000001a}
+.hc-man{left:9%;bottom:22%;width:23vmin;height:27vmin;background:#c1b0ff;border-radius:50% 50% 46% 46%/60% 60% 40% 40%;box-shadow:inset -8px -10px 0 #0002,inset 6px 6px 0 #fff6;animation:hcsq .55s ease-in-out infinite alternate}
+@keyframes hcsq{from{transform:scale(1,1)}to{transform:scale(1.06,.94)}}
+.hc-man i{position:absolute;background:#000;border-radius:50%}
+.hc-man .e1,.hc-man .e2{width:12%;height:12%;top:32%}.hc-man .e1{left:28%}.hc-man .e2{right:28%}
+.hc-man .mo{left:34%;width:32%;height:14%;top:54%;background:transparent;border-bottom:4px solid #000;border-radius:0 0 50% 50%}
+.hc-bat{left:26%;bottom:38%;width:36vmin;height:6.5vmin;background:linear-gradient(#ffd56a,#fbbd41);border-radius:99px;box-shadow:inset 0 -5px 0 #0002;transform-origin:5% 50%;transform:rotate(-105deg);animation:hcready .25s infinite alternate,hcswing .3s 1s forwards cubic-bezier(.3,0,.2,1)}
+@keyframes hcready{from{transform:rotate(-112deg)}to{transform:rotate(-100deg)}}
+@keyframes hcswing{0%{transform:rotate(-105deg)}70%{transform:rotate(12deg)}100%{transform:rotate(30deg)}}
+.hc-ball{left:100%;bottom:43%;width:10vmin;height:10vmin;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd1d5,#fc7981 55%,#d24a56);box-shadow:inset -6px -8px 0 #0002;animation:hcpitch 1s linear forwards,hchome 1.9s 1.05s ease-out forwards}
+@keyframes hcpitch{0%{transform:translateX(0) scale(.4)}100%{transform:translateX(-62vw) scale(1.2)}}
+@keyframes hchome{0%{transform:translate(-62vw,0) scale(1.2)}100%{transform:translate(-8vw,-105vh) scale(.12) rotate(720deg)}}
+.hc-pow{left:26%;top:32%;width:38vmin;height:38vmin;display:flex;align-items:center;justify-content:center;background:#fbbd41;clip-path:polygon(50% 0,61% 22%,85% 12%,78% 36%,100% 50%,78% 62%,85% 88%,61% 78%,50% 100%,39% 78%,15% 88%,22% 62%,0 50%,22% 36%,15% 12%,39% 22%);font-weight:900;font-size:9vmin;color:#000;opacity:0;animation:hcpow .8s 1s forwards}
+@keyframes hcpow{0%{opacity:0;transform:scale(.2) rotate(-20deg)}30%{opacity:1;transform:scale(1.2) rotate(6deg)}100%{opacity:0;transform:scale(1.05)}}
+.hc-fly{left:36%;top:50%;color:#000;font-weight:700;padding:4px 12px;border-radius:99px;font-size:4.6vmin;white-space:nowrap;opacity:0;box-shadow:inset 0 -4px 0 #0002;animation:hfly 2.4s 1.05s ease-out forwards}
+.hc-title{top:4%;left:0;right:0;text-align:center;font-size:clamp(38px,13vw,72px);font-weight:900;letter-spacing:2px}
+.hc-title span{display:inline-block;opacity:0;text-shadow:0 5px 0 #0002;animation:hcl .55s forwards cubic-bezier(.2,1.7,.4,1)}
+@keyframes hcl{0%{opacity:0;transform:translateY(30px) scale(.3)}100%{opacity:1;transform:none}}
+.hc-ck{top:-6%;width:12px;height:20px;border-radius:6px;animation:clfall 2.8s var(--d) ease-in infinite}
+.hc-bubble{left:6%;right:6%;top:19%;background:#fff;color:#000;border:2px dashed #dad4c8;border-radius:30px;padding:12px 16px;font-weight:700;font-size:clamp(18px,5.4vw,30px);text-align:center;line-height:1.35;box-shadow:rgba(0,0,0,.12) 0 6px 12px;opacity:0;animation:hbp .5s 2.4s forwards cubic-bezier(.2,1.6,.4,1)}
+.hc-bubble small{display:block;color:#e5484d;font-size:.6em;margin-bottom:2px}
+.hc-bubble::after{content:"";position:absolute;left:16%;top:100%;border:14px solid transparent;border-top-color:#dad4c8}
+.hc-tip{left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#0008}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
@@ -522,12 +611,14 @@ function afterReveal(){const D=G.dv;if(D.fin||!D.rev.every(r=>r.every(x=>x)))ret
   const t=()=>{if(G.phase!='duel')return;if(G.fxBusy||G.fxQ.length)return setTimeout(t,500);finish();render()};setTimeout(t,1200)}
 function skipDuel(){if(G.phase!='duel')return;clearInterval(G.dvTimer);G.fxQ=[];const o=document.querySelector('.fx');if(o)o.remove();G.fxBusy=false;finish();render()}
 function fx(who,k,parts){G.fxQ.push({who,k,parts});runFx()}
+const CLC=['#c1b0ff','#fc7981','#fbbd41','#84e7a5','#3bd3fd'];
+const clayFx=(e,royal)=>`<div class="cl">${[[4,6,36],[60,2,30],[0,56,28],[66,58,38],[38,76,24]].map(([x,y,sz],i)=>`<i class="bl" style="left:${x}%;top:${y}%;width:${sz}%;height:${sz}%;background:${CLC[i]};--d:${i*.12}s"></i>`).join('')}<div class="cc ${royal?'royal':''}"><div class="cw">${NM[e.who]} · ${LN[e.k]}</div><div class="cp">${e.parts.join(' ＋ ')}</div><div class="cs">${royal?'👑 尊爵不凡 👑':'✦ 尊爵不凡 ✦'}</div></div>${Array.from({length:18},(_,i)=>`<b class="ck" style="left:${(i*37+5)%98}%;background:${CLC[i%5]};--d:${(i%6)*.25}s"></b>`).join('')}</div>`;
 const zapFx=(e,royal)=>`<div class="zp"><div class="zk">ZAP · 特殊牌型達成</div><div class="zs s1"><i>✓</i><span>${NM[e.who]} 攤開了牌墩</span></div><div class="zs s2"><i>✓</i><span>${LN[e.k]}</span></div><div class="zs s3 ${royal?'royal':''}"><i>⚡</i><span>${e.parts.join(' ＋ ')}</span></div>${Array.from({length:9},(_,i)=>`<b class="zb" style="--x:${(i*11+6)%96}%;--d:${1.6+i*.13}s">⚡</b>`).join('')}</div>`;
 function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBusy=true;
   const royal=e.parts.length>1||e.parts.some(t=>t=='五雷'||/×[23]/.test(t));
   const d=document.createElement('div');d.className='fx'+(royal?' royal':'');
   d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="sp" style="--x:${Math.random()*100}%;--y:${Math.random()*100}%;--d:${Math.random()*.9}s;--s:${8+Math.random()*16}px"></i>`).join('')+
-   `<div class="fxbox"><h2>${NM[e.who]} · ${LN[e.k]}</h2><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`+zapFx(e,royal);
+   `<div class="fxbox"><h2>${NM[e.who]} · ${LN[e.k]}</h2><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`+zapFx(e,royal)+clayFx(e,royal);
   let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};playSnd();
   d.onclick=done;document.body.appendChild(d);try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(_){}setTimeout(done,7800)}
 const back5=()=>'<div class="c back"><b>A</b><span>♠</span></div>';
@@ -655,7 +746,19 @@ function speak(t){if(!sndOn||typeof speechSynthesis=='undefined')return;
 function playSnd(){if(!SFX||!sndOn)return;try{SFX.currentTime=0;const p=SFX.play();p&&p.catch&&p.catch(()=>{})}catch(_){}}
 function updSnd(){const b=document.getElementById('snd');if(b)b.textContent=sndOn?'🔊':'🔇'}
 function toggleSnd(){sndOn=!sndOn;ls('ss_snd',sndOn?'1':'0');updSnd();if(sndOn)playSnd()}
-function hongFx(w){
+function hongClay(w){
+  document.querySelectorAll&&document.querySelectorAll('.hrc').forEach(e=>e.remove());
+  const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-28,-58],[52,-68],[-44,-18],[58,-32],[8,-80]],col=['#fc7981','#fbbd41','#078a52','#7c5cff'];
+  const d=document.createElement('div');d.className='hrc';
+  d.innerHTML=`<div class="hc-sky"></div><i class="hc-cloud c1"></i><i class="hc-cloud c2"></i><div class="hc-ground"></div>
+<div class="hc-man"><i class="e1"></i><i class="e2"></i><i class="mo"></i></div><div class="hc-bat"></div>
+<div class="hc-ball"></div><div class="hc-pow">POW!</div>
+${los.map((n,i)=>`<span class="hc-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i%5][1]}vh;--r:${(i%2?1:-1)*(300+i*80)}deg;animation-delay:${1.05+i*.07}s;background:${CLC[i%5]}">😵 ${n}</span>`).join('')}
+<div class="hc-title">${'全壘打!!'.split('').map((c,i)=>`<span style="color:${col[i%4]};animation-delay:${1.6+i*.09}s">${c}</span>`).join('')}</div>
+${Array.from({length:22},(_,i)=>`<b class="hc-ck" style="left:${(i*29+7)%98}%;background:${CLC[i%5]};--d:${1.2+(i%7)*.3}s"></b>`).join('')}
+<div class="hc-bubble"><small>${nm}</small>我不是針對你，我是說在座的各位都是垃圾。</div><div class="hc-tip">點一下關閉</div>`;
+  const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);setTimeout(done,10500)}
+function hongFx(w){if(curStyle()=='clay')return hongClay(w);
   document.querySelectorAll&&document.querySelectorAll('.hr').forEach(e=>e.remove());
   const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-30,-60],[55,-70],[-45,-20],[60,-35],[10,-85]];
   const d=document.createElement('div');d.className='hr';
@@ -674,7 +777,7 @@ const COIN='<i class="coin"></i>';
 const LV_MAX=12,TITLES=['','牌桌路人甲','十三支學徒','倒水常客','蟑螂殺手','拖鞋大師','打槍小能手','彩金獵人','鐵支收割機','同花順之神','全壘打打者','紅不讓大魔王','牌桌傳說'];
 const need=lv=>750+50*(lv-1);
 function levelOf(xp){let lv=1,r=xp;while(lv<LV_MAX&&r>=need(lv)){r-=need(lv);lv++}const mx=lv>=LV_MAX;return{lv,rem:mx?0:r,need:mx?1:need(lv),max:mx}}
-const STYLE_LIST=[{id:'zapier',n:'Zapier 風格',lv:1},{id:'xai',n:'XAI 風格',lv:2}];
+const STYLE_LIST=[{id:'zapier',n:'Zapier 風格',lv:1},{id:'xai',n:'XAI 風格',lv:2},{id:'clay',n:'Clay 風格',lv:3}];
 const ITEMS=[{k:'slipper',e:'🩴',n:'拖鞋',lv:1},{k:'fart',e:'💨',n:'放屁',lv:1},{k:'spit',e:'💦',n:'口水',lv:1},
  {k:'banana',e:'🍌',n:'香蕉皮',lv:5},{k:'tofu',e:'🧀',n:'臭豆腐',lv:8},{k:'sock',e:'🧦',n:'臭襪子',lv:11}];
 const BADGES=[{id:'hong1',e:'⚾',n:'全壘打初體驗',d:'第一次達成紅不讓',ok:t=>t.hong>=1},{id:'win3',e:'🔥',n:'三連勝小霸王',d:'連贏 3 局',ok:t=>t.bestStreak>=3},
@@ -689,11 +792,12 @@ const saveProf=()=>ls('ss_prof2',JSON.stringify(PF)),myLv=()=>levelOf(PF.xp).lv,
 const byId=(arr,id)=>arr.find(x=>x.id==id)||arr[0];
 const reactList=()=>ITEMS.filter(okAt).map(x=>[x.k,x.e+' '+x.n]);
 function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textContent='Lv.'+myLv();const c=document.getElementById('coinb');if(c)c.innerHTML=COIN+PF.coins}catch(_){}}
-const curStyle=()=>{const x=STYLE_LIST.find(t=>t.id==ls('ss_style'));return x&&okAt(x)?x.id:'zapier'};
+const okSt=x=>x.lv<=myLv()||ls('ss_dev')=='1';
+const curStyle=()=>{const x=STYLE_LIST.find(t=>t.id==ls('ss_style'));return x&&okSt(x)?x.id:'zapier'};
 const styleName=()=>byId(STYLE_LIST,curStyle()).n.replace(' 風格','');
 function applyStyle(){try{document.documentElement.setAttribute('data-style',curStyle())}catch(_){}refreshLvb()}
 const applyProf=()=>applyStyle();
-function toggleStyle(){const av=STYLE_LIST.filter(okAt);if(av.length<2){toast('🔒 XAI 風格要升到 Lv.2 才解鎖(點右上角「Lv」可以預覽)');return}
+function toggleStyle(){const av=STYLE_LIST.filter(okSt);if(av.length<2){const nx=STYLE_LIST.find(t=>!okSt(t));toast('🔒 '+nx.n+' 要升到 Lv.'+nx.lv+' 才解鎖(點右上角「Lv」可以預覽)');return}
   const i=av.findIndex(t=>t.id==curStyle());ls('ss_style',av[(i+1)%av.length].id);applyStyle();render()}
 function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv()}).catch(()=>{})}
 const nmTagDoc=(name,d)=>{const lv=Math.max(1,Math.min(LV_MAX,Math.floor((d&&d.lv)||1)));return `<span class="nmf">${name}</span><small class="lvt">Lv.${lv} ${TITLES[lv]}</small>`};
@@ -725,21 +829,25 @@ function openProf(){let d=document.getElementById('prof');if(!d){d=document.crea
   d.innerHTML=`<div class="pbox"><div class="ph"><b style="font-size:18px">我的檔案</b><button onclick="closeProf()">✕ 關閉</button></div>
 <div class="pt"><div class="pl">Lv.${L.lv}</div><div style="flex:1"><div class="pn">${TITLES[L.lv]}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div style="font-size:12px;opacity:.85">XP ${PF.xp} · ${L.max?'已達最高等級':'距離下一級還差 '+(L.need-L.rem)}</div></div></div>
 <div id="pvw" class="pvw"><div class="rule">👀 點任何獎勵(包含 🔒 還沒解鎖的)都可以在這裡預覽</div></div>
-<h4>介面風格</h4><div class="rws">${STYLE_LIST.map(x=>{const on=okAt(x);return `<button class="rw ${cur==x.id?'cur':''} ${on?'':'lk'}" onclick="${on?`pickRw('st','${x.id}')`:`previewRw('st','${x.id}')`}">🎨<small>${x.n}</small><small>${on?(cur==x.id?'使用中':'點擊切換'):'🔒 Lv.'+x.lv+' 點我預覽'}</small></button>`}).join('')}</div>
+<h4>介面風格</h4><div class="rws">${STYLE_LIST.map(x=>{const on=okSt(x);return `<button class="rw ${cur==x.id?'cur':''} ${on?'':'lk'}" onclick="${on?`pickRw('st','${x.id}')`:`previewRw('st','${x.id}')`}">🎨<small>${x.n}</small><small>${on?(cur==x.id?'使用中':'點擊切換'):'🔒 Lv.'+x.lv+' 點我預覽'}</small></button>`}).join('')}</div>
 <h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<button class="rw ${okAt(x)?'':'lk'}" onclick="previewRw('it','${x.k}')">${x.e}<small>${x.n}${okAt(x)?' ▶預覽':' 🔒Lv.'+x.lv+' ▶預覽'}</small></button>`).join('')}</div>
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
 <h4>設定</h4><div class="rws"><button class="rw" onclick="speak('全世界都在等你')">🗣<small>試聽催促語音</small></button><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
 <h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
-${ls('ss_dev')=='1'?'<h4>🛠 測試(網址加 ?dev=0 可關閉)</h4><div class="rws"><button class="rw" onclick="devXp(100)">+100 XP</button><button class="rw" onclick="devLevel()">升 1 級</button><button class="rw" onclick="devReset()">經驗歸零</button></div>':''}
+${ls('ss_dev')=='1'?'<h4>🛠 測試(網址加 ?dev=0 可關閉)</h4><div class="rws"><button class="rw" onclick="devXp(100)">+100 XP</button><button class="rw" onclick="devLevel()">升 1 級</button><button class="rw" onclick="devReset()">經驗歸零</button></div><h4>🛠 動畫測試(目前風格:'+styleName()+')</h4><div class="rws">'+[['chong','衝三'],['quad','鐵支'],['sf','同花順'],['five','五雷'],['jack','彩金'],['royal','鐵支＋彩金×2'],['hong','紅不讓']].map(([k,n])=>'<button class="rw" onclick="devFx(\''+k+'\')">'+n+'</button>').join('')+'</div><div class="rule">看完動畫點一下畫面關閉;要看別的風格,先到上面「介面風格」切換(測試模式下全部風格都開放)。</div>':''}
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
   d.scrollTop=keep}
-const mockUI=id=>id=='xai'?`<div style="background:#0a0a0a;color:#fff;border:1px solid #2a2d33;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:1px solid #2a2d33;padding-bottom:6px;margin-bottom:8px;font-family:ui-monospace,Menlo,monospace">第 3 / 10 局 · 彩金 K</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 12px">完成排牌</span><span style="border:1px solid #ff7a17;border-radius:999px;padding:5px 12px">對決</span><span style="background:#fff;color:#0a0a0a;border-radius:999px;padding:5px 12px">剩餘</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;color:#0a0a0a;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fff;color:#e8432b;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="border:1px dashed rgba(255,255,255,.3);border-radius:6px;padding:8px 14px">　</span></div></div>`
+const mockUI=id=>id=='clay'?`<div style="background:#faf9f7;color:#000;border:1px solid #dad4c8;border-radius:24px;padding:10px;text-align:left"><div style="background:#fff;border:1px solid #dad4c8;border-radius:22px;padding:6px 12px;margin-bottom:8px;font-weight:600">第 3 / 10 局 <span style="background:#fc7981;border-radius:99px;padding:2px 10px;margin-left:6px">彩金 K</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="background:#078a52;color:#fff;border-radius:99px;padding:5px 14px">完成排牌</span><span style="background:#c1b0ff;border-radius:99px;padding:5px 14px">對決</span><span style="background:#84e7a5;border-radius:99px;padding:5px 14px">已完成</span><span style="background:#fbbd41;border-radius:99px;padding:5px 14px">排牌中</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;border:1px solid #dad4c8;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">A♠</span><span style="background:#fff;border:1px solid #dad4c8;color:#e5484d;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">K♥</span><span style="background:linear-gradient(135deg,#c1b0ff,#fc7981,#fbbd41);border-radius:12px;padding:8px 14px">　</span></div></div>`:id=='xai'?`<div style="background:#0a0a0a;color:#fff;border:1px solid #2a2d33;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:1px solid #2a2d33;padding-bottom:6px;margin-bottom:8px;font-family:ui-monospace,Menlo,monospace">第 3 / 10 局 · 彩金 K</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 12px">完成排牌</span><span style="border:1px solid #ff7a17;border-radius:999px;padding:5px 12px">對決</span><span style="background:#fff;color:#0a0a0a;border-radius:999px;padding:5px 12px">剩餘</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;color:#0a0a0a;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fff;color:#e8432b;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="border:1px dashed rgba(255,255,255,.3);border-radius:6px;padding:8px 14px">　</span></div></div>`
  :`<div style="background:#fffefb;color:#201515;border:1px solid #c5c0b1;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:2px solid #201515;padding-bottom:6px;margin-bottom:8px;font-weight:700">第 3 / 10 局 <span style="background:#ff4f00;color:#fffefb;border-radius:6px;padding:2px 8px;margin-left:6px">彩金 K</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid #c5c0b1;border-radius:8px;padding:5px 12px;font-weight:600">全部收回</span><span style="background:#ff4f00;color:#fffefb;border-radius:8px;padding:5px 12px;font-weight:600">完成排牌</span><span style="background:#201515;color:#fffefb;border-radius:8px;padding:5px 12px;font-weight:600">對決</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fffefb;border:1.5px solid #201515;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fffefb;border:1.5px solid #201515;color:#d93a1e;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="background:#ff4f00;border:1.5px solid #201515;border-radius:6px;padding:8px 14px">　</span></div></div>`;
 function previewRw(key,id){const el=document.getElementById('pvw');if(!el)return;let h='';
   if(key=='st'){const x=byId(STYLE_LIST,id);h=`<div class="rule">${x.n}(Lv.${x.lv} 解鎖)</div>${mockUI(id)}`}
   else if(key=='it'){const x=ITEMS.find(i=>i.k==id);h=`<div class="rule">${x.e} ${x.n}(Lv.${x.lv} 解鎖)特效播放中…</div><div style="font-size:40px">${x.e}</div>`;reactFx(id,'朋友')}
   el.innerHTML=h}
+function devNM(){if(!NM.length)['你','電腦1','電腦2','電腦3','電腦4'].forEach(n=>NM.push(n))}
+function devFx(kind){devNM();const w=G.me>=0?G.me:0;
+  if(kind=='hong'){hongFx(w);return}
+  const T={chong:[0,['衝三']],quad:[2,['鐵支']],sf:[1,['同花順']],five:[2,['五雷']],jack:[1,['彩金K']],royal:[2,['鐵支','彩金9×2']]}[kind];fx(w,T[0],T[1])}
 function devXp(n){const a=levelOf(PF.xp).lv;PF.xp+=n;saveProf();applyStyle();syncProf();const b=levelOf(PF.xp).lv;if(b>a)lvUp(a,b);openProf()}
 function devLevel(){const L=levelOf(PF.xp);if(L.max)return;devXp(L.need-L.rem)}
 function devReset(){PF.xp=0;saveProf();applyStyle();syncProf();openProf()}
