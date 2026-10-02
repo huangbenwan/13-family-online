@@ -52,3 +52,9 @@ node server.js
 2. JS:寫一個 `xxxFx(e, tier)` 回傳該風格的核心畫面,登錄到 `FX_CORE`。
 3. CSS:用 `.fx[data-fs="風格id"][data-tier="1~6"]` 讓核心畫面一級比一級華麗。
 動畫風格由「觸發的玩家」的風格決定,全房間看到的一樣。可用 `?dev=1` 的測試模式,在「Lv」檔案頁逐級播放驗證。
+
+## 雲端 AI 語音(選用)
+聊天訊息預設用手機內建的語音朗讀。想換成更自然的 AI 聲音:在 Render 的 Environment 新增 `OPENAI_API_KEY`(你的 OpenAI 金鑰),重新部署即可。
+- 可選設定:`TTS_VOICE`(預設 `nova`)、`TTS_MODEL`(預設 `gpt-4o-mini-tts`)。
+- 沒設定金鑰、或雲端失敗時,會自動退回手機內建語音,不影響聊天。
+- 伺服器有每分鐘 60 次上限與快取,避免意外花費。

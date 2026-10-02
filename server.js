@@ -31,6 +31,25 @@ function doOp(m) {
   else return { ok: false, code: 'invalid_argument', error: 'bad op' };
   bump(p); notify(p); return { ok: true };
 }
+// ---- 選用:雲端 AI 語音(需在 Render 設定環境變數 OPENAI_API_KEY;沒設定就自動退回手機內建語音) ----
+const ttsCache = new Map(); let ttsWin = { t: 0, n: 0 };
+async function ttsProxy(text) {
+  const key = process.env.OPENAI_API_KEY; if (!key) return { status: 503 };
+  text = String(text || '').trim().slice(0, 60); if (!text) return { status: 400 };
+  if (ttsCache.has(text)) return { status: 200, buf: ttsCache.get(text) };
+  const now = Date.now(); if (now - ttsWin.t > 60000) ttsWin = { t: now, n: 0 };
+  if (++ttsWin.n > 60) return { status: 429 };
+  const model = process.env.TTS_MODEL || 'gpt-4o-mini-tts', voice = process.env.TTS_VOICE || 'nova';
+  const body = { model, voice, input: text, response_format: 'mp3' };
+  if (model.startsWith('gpt-4o')) body.instructions = '用自然、清楚、親切的台灣國語說話,語速稍快。';
+  try {
+    const r = await fetch('https://api.openai.com/v1/audio/speech', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (!r.ok) return { status: 502 };
+    const buf = Buffer.from(await r.arrayBuffer());
+    if (ttsCache.size > 200) ttsCache.delete(ttsCache.keys().next().value);
+    ttsCache.set(text, buf); return { status: 200, buf };
+  } catch (e) { return { status: 502 }; }
+}
 const send = (res, code, obj) => { res.writeHead(code, { 'Content-Type': 'application/json' }); res.end(JSON.stringify(obj)); };
 http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x');
@@ -69,6 +88,11 @@ http.createServer(async (req, res) => {
     if (req.method === 'POST') {
       const m = await readBody(req);
       if (u.pathname === '/op') return send(res, 200, doOp(m));
+      if (u.pathname === '/tts') {
+        const r = await ttsProxy(m.text);
+        if (r.status !== 200) { res.writeHead(r.status); return res.end(); }
+        res.writeHead(200, { 'Content-Type': 'audio/mpeg', 'Content-Length': r.buf.length }); return res.end(r.buf);
+      }
       const c = clients.get(m.cid);
       if (!c) return send(res, 200, { ok: false, code: 'unavailable', error: 'no stream' });
       if (u.pathname === '/sub') {
