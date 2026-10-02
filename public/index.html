@@ -730,6 +730,7 @@ function openProf(){let d=document.getElementById('prof');if(!d){d=document.crea
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
 <h4>設定</h4><div class="rws"><button class="rw" onclick="speak('全世界都在等你')">🗣<small>試聽催促語音</small></button><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
 <h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
+${ls('ss_dev')=='1'?'<h4>🛠 測試(網址加 ?dev=0 可關閉)</h4><div class="rws"><button class="rw" onclick="devXp(100)">+100 XP</button><button class="rw" onclick="devLevel()">升 1 級</button><button class="rw" onclick="devReset()">經驗歸零</button></div>':''}
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
   d.scrollTop=keep}
@@ -739,6 +740,9 @@ function previewRw(key,id){const el=document.getElementById('pvw');if(!el)return
   if(key=='st'){const x=byId(STYLE_LIST,id);h=`<div class="rule">${x.n}(Lv.${x.lv} 解鎖)</div>${mockUI(id)}`}
   else if(key=='it'){const x=ITEMS.find(i=>i.k==id);h=`<div class="rule">${x.e} ${x.n}(Lv.${x.lv} 解鎖)特效播放中…</div><div style="font-size:40px">${x.e}</div>`;reactFx(id,'朋友')}
   el.innerHTML=h}
+function devXp(n){const a=levelOf(PF.xp).lv;PF.xp+=n;saveProf();applyStyle();syncProf();const b=levelOf(PF.xp).lv;if(b>a)lvUp(a,b);openProf()}
+function devLevel(){const L=levelOf(PF.xp);if(L.max)return;devXp(L.need-L.rem)}
+function devReset(){PF.xp=0;saveProf();applyStyle();syncProf();openProf()}
 function closeProf(){const d=document.getElementById('prof');if(d)d.remove()}
 function pickRw(k,id){if(k=='st'){ls('ss_style',id);applyStyle();render()}openProf()}
 /* ===== 金幣與商店 ===== */
