@@ -263,6 +263,49 @@ html .c.cv,html .sm .c.back{background:var(--back)}
 .jkc{margin-left:8px;background:var(--yel);color:#1f2638;border-radius:999px;padding:3px 10px;font-weight:900;font-size:13px;box-shadow:0 2px 0 color-mix(in srgb,var(--yel) 72%,#000)}
 .jkc b{font-size:15px;margin-left:2px}.jkc:empty{display:none}
 .jpb{display:none!important}
+
+/* ===== XAI 風格:近黑畫布、白色外框膠囊、無陰影、等寬細字 ===== */
+html:root[data-style="xai"]{--bg:#0a0a0a;--fg:#fff;--card:#0a0a0a;--line:#2a2d33;--edge2:#2e3138;--edge:#fff;--mut:rgba(255,255,255,.55);--acc:#fff;--yel:#fff;--navy:#0a0a0a;--ok:#9be8b8;--red:#ff8a6b;--empty:transparent;--lane:rgba(255,255,255,.04)}
+html:root[data-style="xai"] body{background:#0a0a0a;color:#fff;letter-spacing:-.01em}
+html:root[data-style="xai"] body,html:root[data-style="xai"] button,html:root[data-style="xai"] input,html:root[data-style="xai"] select{font-weight:400}
+html:root[data-style="xai"] b,html:root[data-style="xai"] strong,html:root[data-style="xai"] h1,html:root[data-style="xai"] h2,html:root[data-style="xai"] h3,html:root[data-style="xai"] h4{font-weight:500}
+html:root[data-style="xai"] .bar{background:transparent;border-radius:0;border-bottom:1px solid #2a2d33;padding:8px 2px;box-shadow:none}
+html:root[data-style="xai"] .bar .chip{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;font-weight:400}
+html:root[data-style="xai"] .jkc{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;box-shadow:none}
+html:root[data-style="xai"] button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);box-shadow:none;border-radius:999px;letter-spacing:.04em}
+html:root[data-style="xai"] button.p{background:#fff;color:#0a0a0a;border-color:#fff;box-shadow:none}
+html:root[data-style="xai"] button.duel{background:transparent;color:#fff;border:1px solid #ff7a17;box-shadow:none}
+html:root[data-style="xai"] button:active:not(:disabled){transform:none;background:rgba(255,255,255,.12)}
+html:root[data-style="xai"] button:disabled{opacity:.3}
+html:root[data-style="xai"] .pb,html:root[data-style="xai"] .lane,html:root[data-style="xai"] .pbox,html:root[data-style="xai"] .rw,html:root[data-style="xai"] .bd,html:root[data-style="xai"] .pvw{background:rgba(255,255,255,.03);border:1px solid #2a2d33;box-shadow:none;border-radius:12px}
+html:root[data-style="xai"] .pvw{border:1px dashed rgba(255,255,255,.35)}
+html:root[data-style="xai"] .pb.vip,html:root[data-style="xai"] .lane.vip{border-color:#ff7a17;box-shadow:none;animation:none}
+html:root[data-style="xai"] .lane.tg{outline:1px dashed #fff}
+html:root[data-style="xai"] .e{border:1px dashed rgba(255,255,255,.28);background:transparent;border-radius:8px}
+html:root[data-style="xai"] .c,html:root[data-style="xai"] .slots .c,html:root[data-style="xai"] .lane .c{background:#fff;color:#0a0a0a;border:1px solid #fff;box-shadow:none;border-radius:8px}
+html:root[data-style="xai"] .c.r{color:#e8432b}
+html:root[data-style="xai"] .c.sel{outline:2px solid #ff7a17;box-shadow:none}
+html:root[data-style="xai"] .c.cv,html:root[data-style="xai"] .sm .c.back{background:#0a0a0a!important;border:1px solid rgba(255,255,255,.4);box-shadow:none}
+html:root[data-style="xai"] .c.cv::after{color:rgba(255,255,255,.6)}
+html:root[data-style="xai"] .sm .c{box-shadow:none;border:1px solid #fff;border-radius:5px}
+html:root[data-style="xai"] .lane .c.gold,html:root[data-style="xai"] .sm .c.gold{background:#fff;border:2px solid #ff7a17;box-shadow:none;animation:none}
+html:root[data-style="xai"] .st i{background:transparent;border:1px solid #2e3138;color:rgba(255,255,255,.55);box-shadow:none;font-weight:400}
+html:root[data-style="xai"] .st i.ok{border-color:#fff;color:#fff;background:transparent}
+html:root[data-style="xai"] .jp{background:transparent;color:#fff;border:1px solid #2e3138;box-shadow:none}
+html:root[data-style="xai"] .xpbar{background:#2a2d33}html:root[data-style="xai"] .xpbar i{background:#fff}
+html:root[data-style="xai"] .pt{background:#111;border:1px solid #2a2d33;color:#fff}html:root[data-style="xai"] .pl{background:#fff;color:#0a0a0a}
+html:root[data-style="xai"] .pos{color:#9be8b8}html:root[data-style="xai"] .neg{color:#ff8a6b}
+html:root[data-style="xai"] .op.win{background:transparent;border:1px solid #9be8b8;color:#9be8b8}html:root[data-style="xai"] .op.win i{background:#9be8b8;color:#0a0a0a}
+html:root[data-style="xai"] .op.lose{background:transparent;border:1px solid #ff8a6b;color:#ff8a6b}html:root[data-style="xai"] .op.lose i{background:#ff8a6b;color:#0a0a0a}
+html:root[data-style="xai"] .op.tie{background:transparent;border:1px solid #555;color:#aaa}html:root[data-style="xai"] .op.tie i{background:#555}
+html:root[data-style="xai"] .tt,html:root[data-style="xai"] .tt.ok,html:root[data-style="xai"] .tt.gold{background:#0a0a0a;color:#fff;border:1px solid rgba(255,255,255,.45);box-shadow:none}
+html:root[data-style="xai"] .badge,html:root[data-style="xai"] .badge.hot{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);box-shadow:none}
+html:root[data-style="xai"] body.wv::after{display:none}
+html:root[data-style="xai"] .rule,html:root[data-style="xai"] .lvt,html:root[data-style="xai"] .lh small,html:root[data-style="xai"] .st i{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+html:root[data-style="xai"] .prof{background:#000d}
+html:root[data-style="xai"] input,html:root[data-style="xai"] select{background:#0a0a0a;color:#fff;border:1px solid #2e3138;border-radius:999px}
+html:root[data-style="xai"] .cpn{background:#0a0a0a;color:#fff;border:1px dashed #fff}
+html:root[data-style="xai"] .lh b{color:#fff}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
@@ -445,7 +488,7 @@ function oldRender(){
   <div class="row">${[2,3,4,5].map(n=>`<button class="p" onclick="start(${n})">${n} 人</button>`).join('')}</div>
   <details class="rule"><summary>規則摘要</summary>頭 3、中 5、尾 5,需 尾&gt;中&gt;頭(嚴格)。彩金:每局開始前隨機抽一個點數(A~K)為彩金,同一墩有 3/4/5 張彩金牌,每位對手付 底注×1/×2/×3(與鐵支、五雷等疊加)。對決模式:有加成牌組時可自選攤牌順序,加成牌墩攤出時有特效。輸家(總分最低)可要求換色,把雙副花色改成其他花色。底注 50。帕嘎(對同一玩家頭中尾三墩全勝):對方付 50;贏其餘所有玩家(3 人以上)為「紅不讓」,帕嘎改×3。衝三(頭墩三條)、鐵支、同花順(中/尾墩)各收每位對手 50,五雷收 250;雙方同墩都有特殊牌時比大小,大者收、小者付,同大小則不算。牌型由小至大:散牌、一對、兩對、三條、順子、同花、同花對子、同花兩對子、葫蘆、四條、同花順、五雷。A2345 最小順子,不可 QKA23。</details>
   <p class="rule">本版為單機原型(你 + 電腦),用來驗證規則與介面;多人連線房間待下一版。</p>`;return}
-  T.textContent=`第 ${G.round} 局`;
+  T.textContent=`第 ${G.round}${S&&S.maxRounds?' / '+S.maxRounds:''} 局`;
   if(G.phase=='result'){
     const R=G.res;
     app.innerHTML=jpBanner()+`<div class="rule">本局閒置 ${G.idle} 張,不參與比牌</div>`+
@@ -591,11 +634,15 @@ function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textCont
 function applyProf(){const L=myLv();
   [['bk',BACKS],['sk',SKINS],['fr',FRAMES]].forEach(([k,arr])=>{if(byId(arr,PF.sel[k]).lv>L)PF.sel[k]=arr[0].id});
   try{const r=document.documentElement.style,[a,y,n]=byId(SKINS,PF.sel.sk).c;
+    if(ls('ss_style')=='xai'){['--acc','--yel','--navy'].forEach(k=>r.removeProperty(k));r.setProperty('--back',backCss(PF.sel.bk));const s0=document.getElementById('skinw');if(s0)s0.textContent='';return refreshLvb()}
     r.setProperty('--acc',a);r.setProperty('--yel',y);r.setProperty('--navy',n);r.setProperty('--back',backCss(PF.sel.bk));
     let st=document.getElementById('skinw');if(!st){st=document.createElement('style');st.id='skinw';document.head.appendChild(st)}
     const e=c=>c.replace('#','%23');
     st.textContent=`body.wv::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 120' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C90 10 150 70 240 40 S360 20 400 35 V120 H0Z' fill='${e(n)}'/%3E%3Cpath d='M0 70 C80 40 160 95 250 65 S370 55 400 68 V120 H0Z' fill='${e(y)}'/%3E%3Cpath d='M0 92 C100 70 170 112 260 88 S365 82 400 92 V120 H0Z' fill='${e(a)}'/%3E%3C/svg%3E")!important}`}catch(_){}
   refreshLvb()}
+const styleName=()=>ls('ss_style')=='xai'?'XAI':'預設';
+function applyStyle(){try{document.documentElement.setAttribute('data-style',ls('ss_style')=='xai'?'xai':'def')}catch(_){}applyProf()}
+function toggleStyle(){ls('ss_style',ls('ss_style')=='xai'?'def':'xai');applyStyle();render()}
 function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv(),fr:PF.sel.fr,bk:PF.sel.bk}).catch(()=>{})}
 const nmTagDoc=(name,d)=>{const lv=Math.max(1,Math.min(LV_MAX,Math.floor((d&&d.lv)||1)));return `<span class="nmf fr-${byId(FRAMES,d&&d.fr).id}">${name}</span><small class="lvt">Lv.${lv} ${TITLES[lv]}</small>`};
 const nmTag=i=>nmTagDoc(NM[i],P[S.order[i]]);
@@ -632,7 +679,7 @@ function openProf(){let d=document.getElementById('prof');if(!d){d=document.crea
 <h4>名字外框</h4><div class="rws">${chips(FRAMES,'fr',x=>`<span class="nmf fr-${x.id}">${esc(myName||'名字')}</span>`)}</div>
 <h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<button class="rw ${okAt(x)?'':'lk'}" onclick="previewRw('it','${x.k}')">${x.e}<small>${x.n}${okAt(x)?' ▶預覽':' 🔒Lv.'+x.lv+' ▶預覽'}</small></button>`).join('')}</div>
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
-<h4>設定</h4><div class="rws"><button class="rw" onclick="speak('全世界都在等你')">🗣<small>試聽催促語音</small></button><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
+<h4>設定</h4><div class="rws"><button class="rw" onclick="toggleStyle();openProf()">🎨<small>介面風格:${styleName()}</small></button><button class="rw" onclick="speak('全世界都在等你')">🗣<small>試聽催促語音</small></button><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
 <h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
@@ -673,7 +720,7 @@ function useCoupon(i){const b=document.getElementById('cpb'),v=PF.inv[i];if(!v||
   v.used=Date.now();saveProf();showCoupon(i);openShop()}
 function closeCoupon(){const d=document.getElementById('cpn');if(d)d.remove()}
 async function init(){
-  G.peek=ls('ss_peek')=='1';updSnd();try{speechSynthesis.getVoices()}catch(_){}applyProf();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
+  G.peek=ls('ss_peek')=='1';updSnd();try{speechSynthesis.getVoices()}catch(_){}applyStyle();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
   if(USE_ACE&&typeof Image!='undefined')ACE.forEach(u=>{const i=new Image();i.src=u});
   uid=ls('ss_uid')||('u'+Math.random().toString(36).slice(2,10));ls('ss_uid',uid);myName=ls('ss_name')||'';
@@ -685,12 +732,13 @@ async function init(){
 }
 function entryHTML(){if(G.inv)return inviteHTML();return `<div class="pb"><h3>五人十三支 Online</h3><p class="rule">輸入暱稱後建立房間,把 4 碼代碼告訴朋友(最多 5 人,不足可加電腦)。朋友只要打開同一個網址即可,不需要任何帳號。</p>
 <input id="nm" maxlength="8" placeholder="暱稱(最多 8 字)" value="${esc(myName)}" style="${INP}">
+<div class="rule" style="margin-top:6px">要玩幾局(建立房間時設定)</div><select id="rds" style="${INP}"><option value="3">3 局</option><option value="5">5 局</option><option value="10" selected>10 局</option><option value="20">20 局</option><option value="0">不限局數</option></select>
 <div class="row"><button class="p" onclick="createRoom()" ${db?'':'disabled'}>建立房間</button></div>
 <div class="row"><input id="cd" maxlength="4" placeholder="房間代碼" style="${INP};flex:2;text-transform:uppercase"><button onclick="joinRoom()" ${db?'':'disabled'}>加入</button></div>
-<div class="msg">${err||(db?'':'連線伺服器中…(免費主機喚醒可能需 30~60 秒)')}</div></div>`}
+<div class="msg">${err||(db?'':'連線伺服器中…(免費主機喚醒可能需 30~60 秒)')}</div><div class="row"><button onclick="toggleStyle()">🎨 介面風格:${styleName()}</button></div></div>`}
 function getName(){const v=(document.getElementById('nm').value||'').trim().slice(0,8);if(!v){say('請先輸入暱稱');return false}myName=v;ls('ss_name',v);return true}
 async function createRoom(){if(!getName())return;const c=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[0|Math.random()*24]).join('');
-  try{await db.doc('rooms/'+c).set({host:uid,phase:'lobby',round:0,dbl:0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false});await enter(c)}catch(e){say('建立失敗:'+(e.message||e.code))}}
+  try{await db.doc('rooms/'+c).set({host:uid,phase:'lobby',round:0,dbl:0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:Math.max(0,parseInt((document.getElementById('rds')||{}).value)||0)});await enter(c)}catch(e){say('建立失敗:'+(e.message||e.code))}}
 async function joinRoom(){if(!getName())return;await enter((document.getElementById('cd').value||'').trim().toUpperCase())}
 async function enter(c){
   if(c.length!=4){code='';return say('請輸入 4 碼代碼')}
@@ -727,7 +775,7 @@ function hostTick(){const order=S.order||[],r=S.round;
     if(flag('adv'+r))return;
     if(order.some(id=>pd(id).want)){ctl().update({phase:'duel'});startBots()}else finishRound()}
   else if(S.phase=='duel'&&order.every(id=>pd(id)&&pd(id).sub&&pd(id).rev.every(x=>x))){if(flag('fin'+r))return;setTimeout(finishRound,2600)}
-  else if(S.phase=='result'&&order.length&&order.every(id=>!P[id]||P[id].bot||P[id].nr===r)){if(flag('nx'+r))return;deal()}}
+  else if(S.phase=='result'&&order.length&&!(S.maxRounds&&r>=S.maxRounds)&&order.every(id=>!P[id]||P[id].bot||P[id].nr===r)){if(flag('nx'+r))return;deal()}}
 function startBots(){const r=S.round,t=setInterval(()=>{if(!S||S.round!=r||S.phase!='duel')return clearInterval(t);
   const c=S.order.filter(id=>P[id]&&P[id].bot&&pd(id)&&pd(id).sub&&pd(id).rev.some(x=>!x));if(!c.length)return;
   const id=c[0|Math.random()*c.length],d=pd(id),rv=d.rev.slice(),un=[0,1,2].filter(k=>!rv[k]),
@@ -774,7 +822,12 @@ function swapPanel(){let h=G.swapMsg?`<div class="pb">${G.swapMsg}<br><span clas
   const mn=Math.min(...G.total);
   if(mn<0&&G.me>=0&&G.total[G.me]==mn&&!G.swapUsed)h+=`<div class="pb"><b>🔄 輸家要求換色</b><div class="rule">你目前總分最低,可把雙副花色改成別的花色(下一局生效)。目前:${compStr()}</div><div class="row">${[0,1,2,3].filter(x=>x!=G.dbl).map(x=>`<button onclick="doSwap(${x})">${SU[x]} 改為兩副</button>`).join('')}</div></div>`;
   return h}
+const isFinal=()=>!!(S&&S.maxRounds&&S.round>=S.maxRounds);
+function finalHTML(){const tot=id=>(S.total||{})[id]||0,rk=S.order.map((id,i)=>[i,tot(id)]).sort((a,b)=>b[1]-a[1]);
+  return `<div class="pb"><h3><span>🏁 遊戲結束 · 共 ${S.maxRounds} 局</span></h3>${rk.map(([i,t])=>{const r=rk.findIndex(x=>x[1]==t);return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--line)"><span>${['🥇','🥈','🥉'][r]||(r+1)+'.'} ${nmTag(i)}${i==G.me?'(你)':''}</span><b class="${t>0?'pos':t<0?'neg':''}">${t>0?'+':''}${t}</b></div>`}).join('')}<div class="row" style="margin-top:8px">${S.host==uid?'<button class="p" onclick="againGame()">再玩一場</button>':'<div class="rule" style="align-self:center">等房主再開一場…</div>'}<button onclick="leaveRoom()">離開房間</button></div></div>`}
+function againGame(){if(S.host!=uid)return;ctl().set({host:S.host,phase:'lobby',round:0,dbl:S.dbl||0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:S.maxRounds||0}).catch(e=>say('重開失敗:'+(e.message||e.code)))}
 function nextBtn(){
+  if(isFinal())return xpHTML()+finalHTML();
   const order=S.order,r=S.round,isB=id=>!!(P[id]&&P[id].bot),rdy=id=>!!(P[id]&&P[id].nr===r),hum=order.filter(id=>!isB(id)),n=hum.filter(rdy).length,me=rdy(uid);
   return xpHTML()+`<div class="pb"><div class="rule">每位玩家都按「準備」,才會開始下一局:</div>
 <div class="st" style="margin:6px 0">${order.map((id,i)=>isB(id)?'':`<i class="${rdy(id)?'ok':''}">${NM[i]}:${rdy(id)?'已準備':'看戰績中'}</i>`).join('')}</div>
@@ -782,7 +835,7 @@ function nextBtn(){
 ${S.host==uid?'<div class="row"><button onclick="forceNext()">⏭ 不等了,直接開始(房主)</button></div>':''}
 <div class="row"><button onclick="leaveRoom()">離開房間</button></div></div>`}
 function readyNext(){if(!S||S.phase!='result')return;const me=P[uid]&&P[uid].nr===S.round;pdoc(uid).update({nr:me?-1:S.round}).catch(()=>{})}
-function forceNext(){if(S.host!=uid||S.phase!='result')return;
+function forceNext(){if(S.host!=uid||S.phase!='result'||isFinal())return;
   const miss=S.order.filter(id=>P[id]&&!P[id].bot&&P[id].nr!==S.round).length;
   if(miss&&!confirm('還有 '+miss+' 位玩家沒按準備,確定直接開始下一局?'))return;
   if(!flag('nx'+S.round))deal()}
@@ -811,7 +864,7 @@ function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.
 <div class="pb"><div class="rule">邀請連結(朋友點開、輸入暱稱就能加入):</div><input id="lnk" readonly value="${inviteLink()}" onclick="this.select()" style="${INP};font-size:13px"><div class="row"><button class="p" onclick="lineInvite()">💬 傳到 LINE</button><button onclick="shareInvite()">📤 分享 / 複製</button></div></div>
 <div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${nmTagDoc(esc(P[id].name),P[id])}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
-<div class="row"><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
+<div class="row"><button onclick="toggleStyle()">🎨 介面風格:${styleName()}</button><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。${S.maxRounds?'共 '+S.maxRounds+' 局':'不限局數'}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
 function updJk(){try{const e=document.getElementById('jkc');if(!e)return;e.innerHTML=(S&&S.phase!='lobby'&&G.jr)?'🎰 彩金 <b>'+lb(G.jr)+'</b>':''}catch(_){}}
 function render(){
   try{document.getElementById('app').className=''}catch(_){}
@@ -819,7 +872,7 @@ function render(){
   try{document.body.classList.toggle('wv',!S||S.phase=='lobby')}catch(_){}
   const app=document.getElementById('app'),T=document.getElementById('tot');
   if(!S){T.textContent='五人十三支';app.innerHTML=entryHTML();return}
-  T.textContent=S.phase=='lobby'?'房間 '+code:'第 '+S.round+' 局';
+  T.textContent=S.phase=='lobby'?'房間 '+code:'第 '+S.round+(S.maxRounds?' / '+S.maxRounds:'')+' 局';
   if(S.phase=='lobby'){app.innerHTML=lobbyHTML();return}
   if(G.me<0){app.innerHTML='<p>這一局已開始,你不在名單內。請等下一局或請房主重新開局。</p><div class="row"><button onclick="leaveRoom()">離開房間</button></div>';return}
   const mine=pd(uid);G.status=S.order.map(id=>pd(id)&&pd(id).sub?1:0);
