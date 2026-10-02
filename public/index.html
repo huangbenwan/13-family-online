@@ -435,7 +435,10 @@ function oldRender(){
   `<div class="msg">${G.note||(G.hand.length==0&&err?err:'')}</div>
   <div class="row" style="margin:2px 0"><button onclick="setSort('suit')">按花色</button><button onclick="setSort('rank')">按大小 ${G.sortMode=='rank'?(G.asc?'↑小→大':'↓大→小'):''}</button></div>
   ${G.sel!=null&&G.hand.some(c=>c.id==G.sel)?'<div class="row" style="margin:2px 0"><button onclick="moveSel(-1)">◀ 左移</button><button onclick="moveSel(1)">右移 ▶</button></div>':(G.sortMode=='manual'?'<div class="rule">目前為手動排序</div>':'')}
-  <div class="row" style="margin:2px 0"><span class="rule" style="align-self:center">爛牌快捷:</span>${Object.keys(QK).map(k=>`<button onclick="quick('${k}')">${k}</button>`).join('')}</div>
+  <div class="rule" style="margin:8px 0 2px">牌型快捷(整手牌自動排,或單獨放一種牌型)</div>
+  <div class="row" style="margin:2px 0">${Object.keys(QK).map(k=>`<button style="padding:9px 4px;font-size:14px" onclick="quick('${k}')">${k}</button>`).join('')}</div>
+  <div class="row" style="margin:2px 0">${['順子','葫蘆','同花','三條'].map(k=>`<button style="padding:9px 4px;font-size:14px" onclick="typeQuick('${k}')">${k}</button>`).join('')}</div>
+  <div class="row" style="margin:2px 0"><button class="p" style="padding:10px 4px" onclick="restAll()">⬇ 剩餘全上</button></div>
   <div class="row" style="margin:2px 0"><button onclick="togglePeek()">🙈 瞇牌模式:${G.peek?'開':'關'}</button>${G.down&&G.down.size?`<button class="duel" onclick="openAll()">👀 一鍵全開(剩 ${G.down.size} 張)</button>`:''}</div>
   <div class="g7" ondragover="event.preventDefault()" ondrop="const id=+event.dataTransfer.getData('b');const l=G.lanes.findIndex(x=>x.some(c=>c.id==id));if(l>=0)back(l,id)">${G.hand.map(c=>G.down&&G.down.has(c.id)?`<div class="c cv" onclick="flip(${c.id})"><b>A</b><span>♠</span></div>`:chip(c,`draggable="true" ondrop="event.stopPropagation();moveBefore(+event.dataTransfer.getData('t'),${c.id})" ondragstart="event.dataTransfer.setData('t',${c.id});event.dataTransfer.setData('b',${c.id})" onclick="selCard(${c.id})"`).replace('class="c ','class="c '+(G.sel==c.id?'sel ':'')+(G.flipId==c.id?'fl ':''))).join('')}</div>
   <div class="row"><button onclick="clr()">全部收回</button><button ${G.canAuto?'':'disabled'} onclick="hint()">${G.canAuto?'自動理牌':'🔒 自動理牌'}</button><button class="p" ${ok?'':'disabled'} onclick="submit()">完成排牌</button></div>
@@ -473,6 +476,26 @@ function connectDb(){return new Promise(resolve=>{
 })}
 function flip(id){if(!G.down.has(id))return;G.down.delete(id);G.flipId=id;try{navigator.vibrate&&navigator.vibrate(15)}catch(_){}render();G.flipId=null}
 function openAll(){G.down=new Set();G.sel=null;render()}
+function comb5(a){const out=[];const n=a.length;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)for(let k=j+1;k<n;k++)for(let l=k+1;l<n;l++)for(let m=l+1;m<n;m++)out.push([a[i],a[j],a[k],a[l],a[m]]);return out}
+function typeQuick(k){G.down=new Set();
+  const pool=G.hand.slice(),L=G.lanes,order=k=='三條'?[0,2,1]:[2,1,0],t=order.find(i=>L[i].length==0&&(LS[i]==5||k=='三條'));
+  if(t==null){toast('沒有空的牌墩可放「'+k+'」(要先把那一墩的牌收回)');return}
+  let cands=[];
+  if(k=='三條'){const by={};pool.forEach(c=>(by[c.r]=by[c.r]||[]).push(c));
+    Object.keys(by).filter(r=>by[r].length>=3).forEach(r=>{const tr=by[r].slice(0,3);
+      if(LS[t]==3)cands.push(tr);else{const ks=[];pool.filter(c=>c.r!=r).sort((a,b)=>b.r-a.r).forEach(c=>{if(ks.length<2&&!ks.some(x=>x.r==c.r))ks.push(c)});if(ks.length==2)cands.push(tr.concat(ks))}})}
+  else{const cats={順子:[4,10],葫蘆:[8],同花:[5,6,7,10]}[k];cands=comb5(pool).filter(c=>cats.includes(catOf(ev(c))))}
+  if(!cands.length){toast('剩下的牌湊不出「'+k+'」');return}
+  const full=i=>L[i].length==LS[i]?ev(L[i]):null,nz=(v,d)=>v==null?d:v;
+  const lo=t==2?nz(full(1),-1):t==1?nz(full(0),-1):-1,hi=t==0?nz(full(1),Infinity):t==1?nz(full(2),Infinity):Infinity;
+  const sc=cands.map(c=>[ev(c),c]).sort((a,b)=>b[0]-a[0]),ok=sc.filter(([v])=>v>lo&&v<hi),pick=(ok[0]||sc[0])[1];
+  const ids=new Set(pick.map(c=>c.id));G.hand=G.hand.filter(c=>!ids.has(c.id));L[t]=pick;G.sel=null;render();
+  if(!ok.length)toast('⚠ 放上去牌墩順序會不合法(倒水),請再調整')}
+function restAll(){G.down=new Set();const L=G.lanes,inc=[0,1,2].filter(i=>L[i].length<LS[i]);
+  if(!G.hand.length){toast('已經沒有剩餘的牌了');return}
+  if(inc.length!=1){toast('請先排好其中兩墩(只剩一墩有空位),再按「剩餘全上」');return}
+  const t=inc[0];if(G.hand.length!=LS[t]-L[t].length){toast('剩餘牌數和空位對不上');return}
+  L[t]=L[t].concat(G.hand);G.hand=[];G.sel=null;render()}
 function togglePeek(){G.peek=!G.peek;ls('ss_peek',G.peek?'1':'0');
   if(G.peek){const pl=new Set(G.lanes.flat().map(c=>c.id));for(let i=G.hand.length-1;i>0;i--){const j=0|Math.random()*(i+1);[G.hand[i],G.hand[j]]=[G.hand[j],G.hand[i]]}
     G.down=new Set(G.hand.filter(c=>!pl.has(c.id)).map(c=>c.id));G.sel=null;G.sortMode='manual';G.pkMan=true}else G.down=new Set();render()}
