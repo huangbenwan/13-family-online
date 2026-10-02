@@ -352,24 +352,24 @@ html:root[data-style="zapier"] input,html:root[data-style="zapier"] select{backg
 html:root[data-style="zapier"] .prof{background:#2015158a}
 html:root[data-style="zapier"] .cpn{background:#fffefb;border:2px dashed #ff4f00}
 /* Zapier 特殊牌型動畫:像一條 Zap 工作流程依序「觸發 → 完成」 */
-html:root[data-style="zapier"] .fx{background:#fffefbf2;animation:fxin .25s}
-html:root[data-style="zapier"] .fx .rays,html:root[data-style="zapier"] .fx .sp,html:root[data-style="zapier"] .fx .fxbox{display:none}
-html:root[data-style="zapier"] .fx .zp{display:block;position:relative;width:min(86vw,360px);background:#fffefb;color:#201515;border:2px solid #201515;border-radius:16px;padding:18px 16px 6px;box-shadow:6px 6px 0 #ff4f00;animation:zpop .45s cubic-bezier(.2,1.4,.4,1)}
+.fx[data-fs="zapier"]{background:#fffefbf2;animation:fxin .25s}
+.fx[data-fs="zapier"] .rays,.fx[data-fs="zapier"] .sp,.fx[data-fs="zapier"] .fxbox{display:none}
+.fx[data-fs="zapier"] .zp{display:block;position:relative;width:min(86vw,360px);background:#fffefb;color:#201515;border:2px solid #201515;border-radius:16px;padding:18px 16px 6px;box-shadow:6px 6px 0 #ff4f00;animation:zpop .45s cubic-bezier(.2,1.4,.4,1)}
 @keyframes zpop{from{opacity:0;transform:translateY(24px) scale(.94)}}
-html:root[data-style="zapier"] .zk{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#605d52;margin-bottom:12px;font-weight:600}
-html:root[data-style="zapier"] .zs{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid #c5c0b1;border-radius:10px;margin-bottom:16px;position:relative;opacity:0;transform:translateY(8px);animation:zstep .4s forwards}
-html:root[data-style="zapier"] .zs.s1{animation-delay:.25s}html:root[data-style="zapier"] .zs.s2{animation-delay:.85s}html:root[data-style="zapier"] .zs.s3{animation-delay:1.45s}
+.fx[data-fs="zapier"] .zk{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#605d52;margin-bottom:12px;font-weight:600}
+.fx[data-fs="zapier"] .zs{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid #c5c0b1;border-radius:10px;margin-bottom:16px;position:relative;opacity:0;transform:translateY(8px);animation:zstep .4s forwards}
+.fx[data-fs="zapier"] .zs.s1{animation-delay:.25s}.fx[data-fs="zapier"] .zs.s2{animation-delay:.85s}.fx[data-fs="zapier"] .zs.s3{animation-delay:1.45s}
 @keyframes zstep{to{opacity:1;transform:none}}
-html:root[data-style="zapier"] .zs i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#201515;color:#fffefb;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
-html:root[data-style="zapier"] .zs::after{content:"";position:absolute;left:24px;top:100%;width:2px;height:16px;background:#201515;transform:scaleY(0);transform-origin:top;animation:zline .25s forwards}
-html:root[data-style="zapier"] .zs.s1::after{animation-delay:.6s}html:root[data-style="zapier"] .zs.s2::after{animation-delay:1.2s}html:root[data-style="zapier"] .zs.s3::after{display:none}
+.fx[data-fs="zapier"] .zs i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#201515;color:#fffefb;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.fx[data-fs="zapier"] .zs::after{content:"";position:absolute;left:24px;top:100%;width:2px;height:16px;background:#201515;transform:scaleY(0);transform-origin:top;animation:zline .25s forwards}
+.fx[data-fs="zapier"] .zs.s1::after{animation-delay:.6s}.fx[data-fs="zapier"] .zs.s2::after{animation-delay:1.2s}.fx[data-fs="zapier"] .zs.s3::after{display:none}
 @keyframes zline{to{transform:scaleY(1)}}
-html:root[data-style="zapier"] .zs.s3{background:#ff4f00;border:2px solid #201515;color:#fffefb;font-weight:700;font-size:clamp(18px,5.4vw,24px)}
-html:root[data-style="zapier"] .zs.s3 i{background:#fffefb;color:#ff4f00}
-html:root[data-style="zapier"] .zs.s3.royal{background:#201515;border-color:#ff4f00;box-shadow:0 0 0 3px #ff4f00}
-html:root[data-style="zapier"] .zs.s3{animation:zstep .4s 1.45s forwards,zpulse .7s 2.1s 3}
+.fx[data-fs="zapier"] .zs.s3{background:#ff4f00;border:2px solid #201515;color:#fffefb;font-weight:700;font-size:clamp(18px,5.4vw,24px)}
+.fx[data-fs="zapier"] .zs.s3 i{background:#fffefb;color:#ff4f00}
+.fx[data-fs="zapier"] .zs.s3.royal{background:#201515;border-color:#ff4f00;box-shadow:0 0 0 3px #ff4f00}
+.fx[data-fs="zapier"] .zs.s3{animation:zstep .4s 1.45s forwards,zpulse .7s 2.1s 3}
 @keyframes zpulse{50%{transform:scale(1.04)}}
-html:root[data-style="zapier"] .zb{position:absolute;bottom:0;left:var(--x);font-style:normal;font-size:22px;opacity:0;animation:zfly 1.8s var(--d) ease-out forwards}
+.fx[data-fs="zapier"] .zb{position:absolute;bottom:0;left:var(--x);font-style:normal;font-size:22px;opacity:0;animation:zfly 1.8s var(--d) ease-out forwards}
 @keyframes zfly{0%{opacity:0;transform:translateY(0) rotate(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-190px) rotate(40deg)}}
 
 .fx .cl{display:none}
@@ -416,19 +416,19 @@ html:root[data-style="clay"] input,html:root[data-style="clay"] select{backgroun
 html:root[data-style="clay"] .prof{background:#0006}
 html:root[data-style="clay"] .cpn{background:#fff;border:2px dashed #078a52;border-radius:28px}
 /* Clay 特殊牌型動畫:軟軟的黏土色塊「啵」地彈出 */
-html:root[data-style="clay"] .fx{background:#faf9f7ee;animation:fxin .25s}
-html:root[data-style="clay"] .fx .rays,html:root[data-style="clay"] .fx .sp,html:root[data-style="clay"] .fx .fxbox,html:root[data-style="clay"] .fx .zp{display:none}
-html:root[data-style="clay"] .fx .cl{display:block;position:relative;width:min(88vw,380px);height:min(88vw,380px)}
-html:root[data-style="clay"] .cl .bl{position:absolute;border-radius:58% 42% 55% 45%/50% 60% 40% 50%;opacity:.9;animation:clpop .9s cubic-bezier(.2,1.7,.4,1) var(--d) both,clmorph 5s ease-in-out infinite;box-shadow:inset -8px -10px 0 #0002,inset 6px 6px 0 #fff6}
+.fx[data-fs="clay"]{background:#faf9f7ee;animation:fxin .25s}
+.fx[data-fs="clay"] .rays,.fx[data-fs="clay"] .sp,.fx[data-fs="clay"] .fxbox,.fx[data-fs="clay"] .zp{display:none}
+.fx[data-fs="clay"] .cl{display:block;position:relative;width:min(88vw,380px);height:min(88vw,380px)}
+.fx[data-fs="clay"] .cl .bl{position:absolute;border-radius:58% 42% 55% 45%/50% 60% 40% 50%;opacity:.9;animation:clpop .9s cubic-bezier(.2,1.7,.4,1) var(--d) both,clmorph 5s ease-in-out infinite;box-shadow:inset -8px -10px 0 #0002,inset 6px 6px 0 #fff6}
 @keyframes clpop{from{transform:scale(0)}}
 @keyframes clmorph{50%{border-radius:42% 58% 46% 54%/58% 42% 58% 42%}}
-html:root[data-style="clay"] .cl .cc{position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #dad4c8;border-radius:36px;padding:18px 14px;text-align:center;box-shadow:rgba(0,0,0,.14) 0 6px 14px,rgba(0,0,0,.06) 0 -3px 3px inset;animation:clsq .9s cubic-bezier(.3,1.5,.5,1) .15s both}
+.fx[data-fs="clay"] .cl .cc{position:absolute;left:6%;right:6%;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #dad4c8;border-radius:36px;padding:18px 14px;text-align:center;box-shadow:rgba(0,0,0,.14) 0 6px 14px,rgba(0,0,0,.06) 0 -3px 3px inset;animation:clsq .9s cubic-bezier(.3,1.5,.5,1) .15s both}
 @keyframes clsq{0%{transform:translateY(-50%) scale(.2)}40%{transform:translateY(-50%) scale(1.14,.86)}60%{transform:translateY(-50%) scale(.94,1.07)}80%{transform:translateY(-50%) scale(1.03,.98)}100%{transform:translateY(-50%) scale(1)}}
-html:root[data-style="clay"] .cl .cw{font-size:clamp(20px,6vw,28px);font-weight:600}
-html:root[data-style="clay"] .cl .cp{display:inline-block;margin:8px 0;padding:6px 18px;border-radius:999px;background:#fbbd41;font-size:clamp(30px,9.5vw,46px);font-weight:700;box-shadow:inset 0 -4px 0 #0002,inset 0 3px 0 #fff7}
-html:root[data-style="clay"] .cl .cc.royal .cp{background:linear-gradient(90deg,#fc7981,#c1b0ff)}
-html:root[data-style="clay"] .cl .cs{font-size:14px;letter-spacing:3px;color:#6b655a;font-weight:600}
-html:root[data-style="clay"] .cl .ck{position:absolute;top:-6%;width:14px;height:22px;border-radius:7px;font-style:normal;animation:clfall 2.6s var(--d) ease-in infinite}
+.fx[data-fs="clay"] .cl .cw{font-size:clamp(20px,6vw,28px);font-weight:600}
+.fx[data-fs="clay"] .cl .cp{display:inline-block;margin:8px 0;padding:6px 18px;border-radius:999px;background:#fbbd41;font-size:clamp(30px,9.5vw,46px);font-weight:700;box-shadow:inset 0 -4px 0 #0002,inset 0 3px 0 #fff7}
+.fx[data-fs="clay"] .cl .cc.royal .cp{background:linear-gradient(90deg,#fc7981,#c1b0ff)}
+.fx[data-fs="clay"] .cl .cs{font-size:14px;letter-spacing:3px;color:#6b655a;font-weight:600}
+.fx[data-fs="clay"] .cl .ck{position:absolute;top:-6%;width:14px;height:22px;border-radius:7px;font-style:normal;animation:clfall 2.6s var(--d) ease-in infinite}
 @keyframes clfall{to{transform:translateY(125vh) rotate(540deg)}}
 /* Clay 版紅不讓(全壘打) */
 .hrc{position:fixed;inset:0;z-index:100;overflow:hidden;cursor:pointer;animation:fxin .3s}
@@ -616,7 +616,7 @@ const clayFx=(e,royal)=>`<div class="cl">${[[4,6,36],[60,2,30],[0,56,28],[66,58,
 const zapFx=(e,royal)=>`<div class="zp"><div class="zk">ZAP · 特殊牌型達成</div><div class="zs s1"><i>✓</i><span>${NM[e.who]} 攤開了牌墩</span></div><div class="zs s2"><i>✓</i><span>${LN[e.k]}</span></div><div class="zs s3 ${royal?'royal':''}"><i>⚡</i><span>${e.parts.join(' ＋ ')}</span></div>${Array.from({length:9},(_,i)=>`<b class="zb" style="--x:${(i*11+6)%96}%;--d:${1.6+i*.13}s">⚡</b>`).join('')}</div>`;
 function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBusy=true;
   const royal=e.parts.length>1||e.parts.some(t=>t=='五雷'||/×[23]/.test(t));
-  const d=document.createElement('div');d.className='fx'+(royal?' royal':'');
+  const d=document.createElement('div');d.className='fx'+(royal?' royal':'');d.setAttribute('data-fs',fxStyle(e.who));
   d.innerHTML='<div class="rays"></div>'+Array.from({length:22},()=>`<i class="sp" style="--x:${Math.random()*100}%;--y:${Math.random()*100}%;--d:${Math.random()*.9}s;--s:${8+Math.random()*16}px"></i>`).join('')+
    `<div class="fxbox"><h2>${NM[e.who]} · ${LN[e.k]}</h2><h2>${e.parts.join(' ＋ ')}</h2><small>${royal?'👑 尊 爵 不 凡 👑':'✦ 尊 爵 不 凡 ✦'}</small></div>`+zapFx(e,royal)+clayFx(e,royal);
   let fin=false;const done=()=>{if(fin)return;fin=true;d.remove();G.fxBusy=false;runFx()};playSnd();
@@ -758,7 +758,7 @@ ${los.map((n,i)=>`<span class="hc-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
 ${Array.from({length:22},(_,i)=>`<b class="hc-ck" style="left:${(i*29+7)%98}%;background:${CLC[i%5]};--d:${1.2+(i%7)*.3}s"></b>`).join('')}
 <div class="hc-bubble"><small>${nm}</small>我不是針對你，我是說在座的各位都是垃圾。</div><div class="hc-tip">點一下關閉</div>`;
   const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);setTimeout(done,10500)}
-function hongFx(w){if(curStyle()=='clay')return hongClay(w);
+function hongFx(w){if(fxStyle(w)=='clay')return hongClay(w);
   document.querySelectorAll&&document.querySelectorAll('.hr').forEach(e=>e.remove());
   const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-30,-60],[55,-70],[-45,-20],[60,-35],[10,-85]];
   const d=document.createElement('div');d.className='hr';
@@ -795,11 +795,12 @@ function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textCont
 const okSt=x=>x.lv<=myLv()||ls('ss_dev')=='1';
 const curStyle=()=>{const x=STYLE_LIST.find(t=>t.id==ls('ss_style'));return x&&okSt(x)?x.id:'zapier'};
 const styleName=()=>byId(STYLE_LIST,curStyle()).n.replace(' 風格','');
-function applyStyle(){try{document.documentElement.setAttribute('data-style',curStyle())}catch(_){}refreshLvb()}
+function applyStyle(){try{document.documentElement.setAttribute('data-style',curStyle())}catch(_){}refreshLvb();syncProf()}
+function fxStyle(who){if(!S||!S.order||!S.order.length)return curStyle();const id=S.order[who];if(id==uid)return curStyle();const st=P[id]&&P[id].st;return STYLE_LIST.some(x=>x.id==st)?st:'zapier'}
 const applyProf=()=>applyStyle();
 function toggleStyle(){const av=STYLE_LIST.filter(okSt);if(av.length<2){const nx=STYLE_LIST.find(t=>!okSt(t));toast('🔒 '+nx.n+' 要升到 Lv.'+nx.lv+' 才解鎖(點右上角「Lv」可以預覽)');return}
   const i=av.findIndex(t=>t.id==curStyle());ls('ss_style',av[(i+1)%av.length].id);applyStyle();render()}
-function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv()}).catch(()=>{})}
+function syncProf(){if(db&&code)pdoc(uid).update({lv:myLv(),st:curStyle()}).catch(()=>{})}
 const nmTagDoc=(name,d)=>{const lv=Math.max(1,Math.min(LV_MAX,Math.floor((d&&d.lv)||1)));return `<span class="nmf">${name}</span><small class="lvt">Lv.${lv} ${TITLES[lv]}</small>`};
 const nmTag=i=>nmTagDoc(NM[i],P[S.order[i]]);
 const xpEligible=()=>!!S&&(S.order||[]).length==5&&S.order.every(id=>!(P[id]&&P[id].bot));
