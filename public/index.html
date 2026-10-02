@@ -517,6 +517,137 @@ html:root[data-style="clay"] .cpn{background:#fff;border:2px dashed #078a52;bord
 @keyframes frp{to{opacity:.35;inset:16px}}
 .fx[data-tier="4"],.fx[data-tier="5"],.fx[data-tier="6"]{animation:fxin .25s,fxshake .6s .15s}
 @keyframes fxshake{20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-5px,3px)}80%{transform:translate(3px,-2px)}}
+
+.fx .s3{display:none}
+/* ===== 三次元 風格(Lv.4)靈感:Hotel URO 長崎 —「樹洞」、洞窟般的凹陷、地層與高度、白色階梯、括號小標 ===== */
+html:root[data-style="sanjigen"]{--bg:#f1ede6;--fg:#2a2622;--card:#faf8f4;--line:#d6cdc0;--edge2:#cfc5b7;--edge:#cfc5b7;--mut:#8a8076;--acc:#b5653a;--yel:#e9c58f;--navy:#3b342d;--ok:#5d7a52;--red:#b5442f;--empty:#ddd5c9;--lane:#e8e1d6}
+html:root[data-style="sanjigen"] body{background:linear-gradient(#f6f2ea,#efe9df 60%,#e6dfd2) fixed;color:#2a2622;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC","Hiragino Sans",sans-serif;letter-spacing:.02em}
+html:root[data-style="sanjigen"] b,html:root[data-style="sanjigen"] strong,html:root[data-style="sanjigen"] h3,html:root[data-style="sanjigen"] h4{font-weight:600}
+html:root[data-style="sanjigen"] .bar{background:#faf8f4;color:#2a2622;border:1px solid #d6cdc0;border-radius:16px;padding:8px 14px;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #d0c7b9,3px 6px 10px rgba(60,40,20,.14)}
+html:root[data-style="sanjigen"] .bar .rt,html:root[data-style="sanjigen"] .bar #tot{color:#2a2622}
+html:root[data-style="sanjigen"] .bar #tot::before{content:"("}html:root[data-style="sanjigen"] .bar #tot::after{content:")"}
+html:root[data-style="sanjigen"] .bar .chip{background:#efe9df;color:#2a2622;border:1px solid #d6cdc0;border-radius:10px;font-weight:600;box-shadow:0 3px 0 #c9bfb0}
+html:root[data-style="sanjigen"] .jkc{background:#e9c58f;color:#2a2622;border-radius:10px;box-shadow:0 3px 0 #c9a46a}
+html:root[data-style="sanjigen"] button{border-radius:12px;background:#faf8f4;color:#2a2622;border:1px solid #cfc5b7;font-weight:500;box-shadow:0 4px 0 #bfb5a6,0 7px 10px rgba(60,40,20,.14)}
+html:root[data-style="sanjigen"] button.p{background:#b5653a;color:#fff;border-color:#b5653a;box-shadow:0 4px 0 #84451f,0 7px 10px rgba(60,40,20,.2)}
+html:root[data-style="sanjigen"] button.duel{background:#3b342d;color:#f1ede6;border-color:#3b342d;box-shadow:0 4px 0 #1a1612,0 7px 10px rgba(60,40,20,.2)}
+html:root[data-style="sanjigen"] button:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #bfb5a6}
+html:root[data-style="sanjigen"] button.p:active:not(:disabled){box-shadow:0 1px 0 #84451f}html:root[data-style="sanjigen"] button.duel:active:not(:disabled){box-shadow:0 1px 0 #1a1612}
+html:root[data-style="sanjigen"] button:disabled{opacity:.45}
+html:root[data-style="sanjigen"] .pb,html:root[data-style="sanjigen"] .pbox,html:root[data-style="sanjigen"] .pvw,html:root[data-style="sanjigen"] .rw,html:root[data-style="sanjigen"] .bd{background:#faf8f4;border:1px solid #d6cdc0;border-radius:18px;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #d0c7b9,3px 6px 10px rgba(60,40,20,.12)}
+html:root[data-style="sanjigen"] .rw,html:root[data-style="sanjigen"] .bd{border-radius:14px}
+html:root[data-style="sanjigen"] .pvw{border:1px dashed #b5653a}
+html:root[data-style="sanjigen"] .rw.cur{border:2px solid #b5653a}
+html:root[data-style="sanjigen"] .lane{background:linear-gradient(#dcd4c8,#e8e1d6 45%);border:1px solid #cfc5b7;border-radius:18px;box-shadow:inset 0 8px 16px rgba(60,40,20,.2),inset 0 -2px 0 #fff9}
+html:root[data-style="sanjigen"] #app{counter-reset:ln}html:root[data-style="sanjigen"] .lane{counter-increment:ln}
+html:root[data-style="sanjigen"] .lane .lh span::before{content:"(0" counter(ln) ") ";color:#8a8076;font-weight:400}
+html:root[data-style="sanjigen"] .pb.vip{border:1px solid #e9c58f;box-shadow:0 0 0 3px #e9c58f88;animation:none}
+html:root[data-style="sanjigen"] .lane.vip{box-shadow:inset 0 8px 16px rgba(60,40,20,.2),0 0 0 3px #e9c58f88;animation:none}
+html:root[data-style="sanjigen"] .lane.tg{outline:2px dashed #b5653a;outline-offset:-4px}
+html:root[data-style="sanjigen"] .e{background:#cfc6b9;border:0;border-radius:12px;box-shadow:inset 0 5px 10px rgba(0,0,0,.28),inset 0 -1px 0 #fff8}
+html:root[data-style="sanjigen"] .c,html:root[data-style="sanjigen"] .slots .c,html:root[data-style="sanjigen"] .lane .c{background:#faf8f4;color:#2a2622;border:1px solid #cfc5b7;border-radius:12px;box-shadow:0 1px 0 #fff inset,1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9,3px 6px 8px rgba(60,40,20,.22)}
+html:root[data-style="sanjigen"] .c.r{color:#b5442f}
+html:root[data-style="sanjigen"] .c.sel{outline:2px solid #b5653a;transform:translateY(-6px);box-shadow:0 1px 0 #fff inset,2px 4px 0 #d0c7b9,3px 8px 0 #c6bdaf,5px 14px 14px rgba(60,40,20,.3)}
+html:root[data-style="sanjigen"] .c.cv,html:root[data-style="sanjigen"] .sm .c.back{background:repeating-linear-gradient(0deg,#c97b4a 0 6px,#d99a6c 6px 12px,#e9c58f 12px 18px,#cfe3ee 18px 24px)!important;border:1px solid #cfc5b7}
+html:root[data-style="sanjigen"] .c.cv::after{color:#fff;text-shadow:0 1px 2px #0006}
+html:root[data-style="sanjigen"] .sm .c{border-radius:7px;box-shadow:1px 1px 0 #d0c7b9,2px 2px 0 #c6bdaf,2px 3px 4px rgba(60,40,20,.2)}
+html:root[data-style="sanjigen"] .lane .c.gold,html:root[data-style="sanjigen"] .sm .c.gold{background:#f6e3c0;border:2px solid #c9a46a;animation:none}
+html:root[data-style="sanjigen"] .st i{background:#efe9df;border:1px solid #d6cdc0;color:#8a8076;border-radius:8px;box-shadow:0 2px 0 #c9bfb0}
+html:root[data-style="sanjigen"] .st i.ok{background:#7d8c6a;border-color:#7d8c6a;color:#fff;box-shadow:0 2px 0 #566248}
+html:root[data-style="sanjigen"] .jp{background:#faf8f4;color:#2a2622;border:1px solid #d6cdc0;box-shadow:none}
+html:root[data-style="sanjigen"] .xpbar{background:#ddd5c9;box-shadow:inset 0 2px 4px rgba(0,0,0,.2)}html:root[data-style="sanjigen"] .xpbar i{background:linear-gradient(90deg,#c97b4a,#e9c58f,#cfe3ee)}
+html:root[data-style="sanjigen"] .pt{background:#3b342d;color:#f1ede6;border-radius:18px;box-shadow:1px 2px 0 #1a1612,2px 4px 0 #1a1612}html:root[data-style="sanjigen"] .pl{background:#e9c58f;color:#2a2622;border-radius:10px}
+html:root[data-style="sanjigen"] .badge{background:#e9c58f;color:#2a2622;box-shadow:none;border-radius:6px}html:root[data-style="sanjigen"] .badge.hot{background:#c97b4a;color:#fff}
+html:root[data-style="sanjigen"] .tt,html:root[data-style="sanjigen"] .tt.ok{background:#3b342d;color:#f1ede6;box-shadow:none;border-radius:12px}html:root[data-style="sanjigen"] .tt.gold{background:#e9c58f;color:#2a2622}
+html:root[data-style="sanjigen"] .pos{color:#5d7a52}html:root[data-style="sanjigen"] .neg{color:#b5442f}
+html:root[data-style="sanjigen"] .op.win{background:#7d8c6a33;color:#5d7a52}html:root[data-style="sanjigen"] .op.win i{background:#5d7a52}
+html:root[data-style="sanjigen"] .op.lose{background:#b5442f22;color:#b5442f}html:root[data-style="sanjigen"] .op.lose i{background:#b5442f}
+html:root[data-style="sanjigen"] body.wv::after{background:linear-gradient(#cfe3ee 0 22%,#ecd9bd 22% 46%,#b8ada0 46% 68%,#8a5a3a 68% 88%,#3b342d 88%)!important}
+html:root[data-style="sanjigen"] body.wv::before{content:"(Elevation 377)";position:fixed;right:14px;bottom:8px;font-size:11px;letter-spacing:.2em;color:#f1ede6bb;pointer-events:none;z-index:0}
+html:root[data-style="sanjigen"] input,html:root[data-style="sanjigen"] select{background:#faf8f4;border:1px solid #cfc5b7;color:#2a2622;border-radius:10px;box-shadow:inset 0 3px 6px rgba(60,40,20,.12)}
+html:root[data-style="sanjigen"] .prof{background:rgba(42,38,34,.45)}
+html:root[data-style="sanjigen"] .cpn{background:#faf8f4;border:2px dashed #b5653a;border-radius:18px}
+/* 三次元 特殊牌型動畫:從樹洞升起的立體方塊,越稀有越厚、越高、越亮 */
+.fx[data-fs="sanjigen"]{--cc0:#c97b4a;--cc1:#8a8076;--cc2:#f4c9a1;--cc3:#7d8c6a;--cc4:#cfe3ee;--rgr:50%;--rgw:2px;--cfw:8px;--cfh:8px;--cfr:50%;--flash:#fff7e8;--tgc:#2a2622;--fr:28px;--bw:2px;background:radial-gradient(ellipse at 50% 0,#fff7e8 0,#efe9df 45%,#cfc6b9 100%);animation:fxin .25s}
+.fx[data-fs="sanjigen"] .rays,.fx[data-fs="sanjigen"] .sp,.fx[data-fs="sanjigen"] .fxbox{display:none}
+.fx[data-fs="sanjigen"] .s3{display:block;position:relative;width:min(88vw,380px);height:min(88vw,380px);perspective:900px}
+.fx[data-fs="sanjigen"] .se{position:absolute;left:0;right:0;top:-2%;text-align:center;font-size:12px;letter-spacing:.3em;color:#8a8076}
+.fx[data-fs="sanjigen"] .stg{position:absolute;left:6%;right:6%;top:50%;margin-top:-92px;transform-style:preserve-3d;animation:s3in 1.1s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes s3in{0%{opacity:0;transform:translateY(130px) rotateX(70deg) scale(.6)}100%{opacity:1;transform:rotateX(8deg) rotateY(-10deg)}}
+.fx[data-fs="sanjigen"][data-tier="2"] .stg,.fx[data-fs="sanjigen"][data-tier="3"] .stg{animation:s3in 1.1s cubic-bezier(.2,1.3,.4,1) both,s3sw 4s 1.1s ease-in-out infinite alternate}
+.fx[data-fs="sanjigen"][data-tier="4"] .stg,.fx[data-fs="sanjigen"][data-tier="5"] .stg,.fx[data-fs="sanjigen"][data-tier="6"] .stg{animation:s3spin 1.7s cubic-bezier(.3,1.2,.4,1) both,s3sw 4s 1.7s ease-in-out infinite alternate}
+@keyframes s3sw{from{transform:rotateX(8deg) rotateY(-10deg)}to{transform:rotateX(4deg) rotateY(10deg)}}
+@keyframes s3spin{0%{opacity:0;transform:translateY(130px) rotateY(0) scale(.5)}60%{opacity:1}100%{opacity:1;transform:rotateX(8deg) rotateY(710deg)}}
+.fx[data-fs="sanjigen"] .sf{background:#faf8f4;border:1px solid #cfc5b7;border-radius:20px;padding:18px 14px 12px;text-align:center}
+.fx[data-fs="sanjigen"] .sw{font-size:clamp(18px,5.6vw,24px);color:#2a2622}
+.fx[data-fs="sanjigen"] .sp3{margin:6px 0;font-size:clamp(34px,11vw,54px);font-weight:700;color:#e9a574;letter-spacing:.04em}
+.fx[data-fs="sanjigen"][data-tier="6"] .sp3{background:linear-gradient(90deg,#f4c9a1,#e9c58f,#fff7e8,#e9c58f,#f4c9a1);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:s3shine 2.2s linear infinite}
+@keyframes s3shine{to{background-position:200% 0}}
+.fx[data-fs="sanjigen"] .sc{font-size:12px;letter-spacing:.3em;color:#8a8076}
+.fx[data-fs="sanjigen"] .bm{position:absolute;top:-8%;left:var(--x);width:22%;height:92%;background:linear-gradient(rgba(255,244,214,.85),transparent);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);transform-origin:50% 0;transform:rotate(var(--r));opacity:0;animation:bmin 1.2s var(--d) forwards}
+@keyframes bmin{to{opacity:.75}}
+.fx[data-fs="sanjigen"] .sls{position:absolute;left:6%;right:6%;bottom:6%}
+.fx[data-fs="sanjigen"] .sl{display:block;height:9px;margin-top:3px;border-radius:3px;background:linear-gradient(90deg,#8a5a3a,#c97b4a);opacity:0;animation:slin .5s var(--d) cubic-bezier(.2,1.4,.4,1) both}
+.fx[data-fs="sanjigen"] .sl:nth-child(2n){background:linear-gradient(90deg,#b8ada0,#e8d9c0)}.fx[data-fs="sanjigen"] .sl:nth-child(3n){background:linear-gradient(90deg,#cfe3ee,#e9c58f)}
+@keyframes slin{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+.fx[data-fs="sanjigen"] .or{position:absolute;left:-6%;right:-6%;top:50%;height:60%;margin-top:-30%;border:2px dashed #c97b4a;border-radius:50%;transform:rotateX(72deg);animation:s3or 5s linear infinite}
+.fx[data-fs="sanjigen"] .or.o2{border-color:#7d8c6a;animation-duration:7s;animation-direction:reverse;left:2%;right:2%}
+@keyframes s3or{from{transform:rotateX(72deg) rotateZ(0)}to{transform:rotateX(72deg) rotateZ(360deg)}}
+.fx[data-fs="sanjigen"] .du{position:absolute;bottom:0;width:6px;height:6px;border-radius:50%;background:#f4c9a1;box-shadow:0 0 8px #f4c9a1;opacity:0;animation:duf 4s var(--d) ease-out infinite}
+@keyframes duf{0%{opacity:0;transform:translateY(0)}20%{opacity:.9}100%{opacity:0;transform:translateY(-330px)}}
+/* XAI 版紅不讓:黑底方格、細線稿、終端機文字 */
+.hrx{position:fixed;inset:0;z-index:100;background:#0a0a0a;color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;cursor:pointer;animation:fxin .3s;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px}
+.hrx::after{content:"";position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:hflash .45s 1s}
+.hx-svg{position:absolute;inset:0;width:100%;height:100%}
+.hx-svg *{fill:none;stroke:#fff;stroke-width:.7;stroke-linecap:round}
+.hx-ball{fill:#fff!important;transform-box:fill-box;transform-origin:center;animation:hxpitch 1s linear forwards,hxhome 1.9s 1.05s ease-out forwards}
+@keyframes hxpitch{from{transform:translate(70px,0)}to{transform:translate(0,0)}}
+@keyframes hxhome{to{transform:translate(70px,-120px) scale(.3);opacity:0}}
+.hx-bat{stroke-width:1.4;transform-box:fill-box;transform-origin:0 50%;transform:rotate(-105deg);animation:hxready .25s infinite alternate,hxswing .3s 1s forwards cubic-bezier(.3,0,.2,1)}
+@keyframes hxready{from{transform:rotate(-112deg)}to{transform:rotate(-100deg)}}
+@keyframes hxswing{0%{transform:rotate(-105deg)}70%{transform:rotate(12deg)}100%{transform:rotate(30deg)}}
+.hx-trace{stroke-dasharray:100;stroke-dashoffset:100;opacity:.85;animation:hxdash 1.6s 1.05s linear forwards}
+@keyframes hxdash{to{stroke-dashoffset:0}}
+.hx-ring{stroke:#ff7a17;opacity:0;transform-box:fill-box;transform-origin:center;animation:hxring .9s 1s ease-out forwards}
+.hx-ring.r2{animation-delay:1.15s}
+@keyframes hxring{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(14)}}
+.hx-hud{position:absolute;left:14px;top:calc(env(safe-area-inset-top,0px) + 14px);font-size:11px;line-height:1.8;color:rgba(255,255,255,.7)}
+.hx-hud div{overflow:hidden;white-space:nowrap;width:0;animation:hxtype .9s steps(28) forwards}
+@keyframes hxtype{to{width:28ch}}
+.hx-log{position:absolute;left:14px;top:30%;font-size:12px;line-height:1.9;color:rgba(255,255,255,.75)}
+.hx-log div{opacity:0;animation:hxl .3s forwards}
+@keyframes hxl{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.hx-title{position:absolute;left:0;right:0;top:12%;text-align:center;font-size:clamp(34px,13vw,64px);letter-spacing:.06em;opacity:0;animation:hxl .5s 1.7s forwards}
+.hx-title i{display:inline-block;width:.5em;height:.9em;background:#ff7a17;margin-left:.1em;vertical-align:-.05em;animation:hxblink .8s steps(2) infinite}
+@keyframes hxblink{50%{opacity:0}}
+.hx-sub{position:absolute;left:0;right:0;top:calc(12% + clamp(44px,16vw,78px));text-align:center;letter-spacing:.5em;color:rgba(255,255,255,.6);opacity:0;animation:hxl .5s 1.9s forwards}
+.hx-quote{position:absolute;left:5%;right:5%;bottom:14%;border:1px solid rgba(255,255,255,.5);padding:14px;font-size:clamp(15px,4.6vw,22px);line-height:1.5;opacity:0;animation:hxl .4s 2.5s forwards}
+.hx-quote small{display:block;margin-top:8px;color:rgba(255,255,255,.55);font-size:11px}
+.hx-quote .cur{display:inline-block;width:.5em;height:1em;background:#fff;margin-left:2px;vertical-align:-.15em;animation:hxblink .8s steps(2) infinite}
+.hx-tip{position:absolute;left:0;right:0;bottom:1%;text-align:center;font-size:11px;color:rgba(255,255,255,.4)}
+/* 三次元 版紅不讓:從樹洞把球打上地層、飆到海拔 377 */
+.hrs{position:fixed;inset:0;z-index:100;overflow:hidden;cursor:pointer;animation:fxin .3s}
+.hrs>*{position:absolute}
+.hs-bg{inset:0;background:linear-gradient(#cfe3ee 0 18%,#f6e6cc 18% 34%,#d9d0c3 34% 56%,#b8ada0 56% 74%,#8a5a3a 74% 90%,#3b342d 90%)}
+.hs-sun{left:50%;top:-20vmin;width:60vmin;height:60vmin;margin-left:-30vmin;border-radius:50%;background:radial-gradient(#fff7e8,#f4c9a1 45%,transparent 70%);opacity:0;animation:hssun 1.4s 2.6s forwards}
+@keyframes hssun{to{opacity:.95;transform:scale(1.3)}}
+.hs-cave{left:50%;bottom:-2%;width:46vmin;height:40vmin;margin-left:-23vmin;border-radius:50% 50% 0 0;background:radial-gradient(#0e0b09,#3b342d);box-shadow:inset 0 14px 30px #000a,0 -3px 0 #8a5a3a}
+.hs-ruler{right:16px;top:14%;bottom:12%;width:2px;background:#2a2622;opacity:.6}
+.hs-mark{position:absolute;left:-7px;bottom:0;width:16px;height:4px;background:#b5442f;animation:hsmark 1.9s 1.05s cubic-bezier(.3,.1,.3,1) forwards}
+@keyframes hsmark{to{bottom:calc(100% - 4px)}}
+.hs-el{right:14px;top:calc(14% - 22px);font-size:12px;letter-spacing:.15em;color:#2a2622;background:#faf8f4;border:1px solid #cfc5b7;border-radius:8px;padding:2px 8px;box-shadow:1px 2px 0 #d9d0c3}
+.hs-man{left:9%;bottom:24%;width:22vmin;height:26vmin;background:#c97b4a;border-radius:46% 46% 40% 40%/58% 58% 42% 42%;box-shadow:1px 1px 0 #a85a31,2px 2px 0 #a85a31,3px 3px 0 #9b5029,4px 4px 0 #9b5029,5px 5px 0 #84451f,6px 6px 0 #84451f,7px 12px 14px rgba(0,0,0,.35);animation:hcsq .55s ease-in-out infinite alternate}
+.hs-man i{position:absolute;top:34%;width:11%;height:11%;background:#2a2622;border-radius:50%}.hs-man .e1{left:30%}.hs-man .e2{right:30%}
+.hs-bat{left:25%;bottom:40%;width:36vmin;height:6vmin;background:linear-gradient(#f4c9a1,#d99a6c);border-radius:99px;box-shadow:1px 1px 0 #b87a4c,2px 2px 0 #b87a4c,3px 3px 0 #9b5029,4px 6px 8px rgba(0,0,0,.3);transform-origin:5% 50%;transform:rotate(-105deg);animation:hcready .25s infinite alternate,hcswing .3s 1s forwards cubic-bezier(.3,0,.2,1)}
+.hs-ball{left:100%;bottom:44%;width:9vmin;height:9vmin;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#e9e2d4 55%,#9a9184);box-shadow:3px 5px 8px rgba(0,0,0,.35);animation:hcpitch 1s linear forwards,hshome 2s 1.05s ease-in forwards}
+@keyframes hshome{0%{transform:translate(-62vw,0) scale(1.2)}100%{transform:translate(-30vw,-112vh) scale(.12) rotate(720deg)}}
+.hs-fly{left:36%;top:50%;background:#faf8f4;color:#2a2622;border:1px solid #cfc5b7;padding:3px 12px;border-radius:8px;font-size:4.4vmin;white-space:nowrap;opacity:0;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9;animation:hfly 2.4s 1.05s ease-out forwards}
+.hs-title{top:4%;left:0;right:0;text-align:center;font-size:clamp(40px,14vw,76px);font-weight:900}
+.hs-title span{display:inline-block;color:#e9a574;opacity:0;text-shadow:1px 1px 0 #b5653a,2px 2px 0 #b5653a,3px 3px 0 #a85a31,4px 4px 0 #a85a31,5px 5px 0 #9b5029,6px 6px 0 #9b5029,7px 9px 12px rgba(0,0,0,.3);animation:hcl .6s forwards cubic-bezier(.2,1.7,.4,1)}
+.hs-du{bottom:0;width:6px;height:6px;border-radius:50%;background:#f4c9a1;box-shadow:0 0 8px #f4c9a1;opacity:0;animation:duf 4s var(--d) ease-out infinite}
+.hs-bubble{left:6%;right:6%;top:20%;background:#faf8f4;color:#2a2622;border:1px solid #cfc5b7;border-radius:18px;padding:12px 16px;font-weight:600;font-size:clamp(18px,5.4vw,30px);text-align:center;line-height:1.35;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9,3px 6px 0 #c6bdaf,4px 10px 14px rgba(60,40,20,.25);opacity:0;animation:hbp .5s 2.5s forwards cubic-bezier(.2,1.6,.4,1)}
+.hs-bubble small{display:block;color:#8a8076;font-size:.6em;margin-bottom:2px;letter-spacing:.1em}
+.hs-tip{left:0;right:0;bottom:1%;text-align:center;font-size:12px;color:#f1ede6aa}
 </style></head><body>
 <div class="bar"><span class="rt"><span id="tot">五人十三支</span><span id="jkc" class="jkc"></span></span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
@@ -683,7 +814,10 @@ const zapFx=(e,t)=>{const w=NM[e.who],st=t==1?[w+' 攤開了牌墩']:[w+' 攤開
   const rows=st.map((x,i)=>`<div class="zs" style="--sd:${(.25+i*.45).toFixed(2)}s"><i>✓</i><span>${x}</span></div>`).join(''),fd=(.25+st.length*.45).toFixed(2);
   return `<div class="zp"><div class="zk">ZAP · 特殊牌型達成 · LV ${t}</div>${rows}<div class="zs fin" style="--sd:${fd}s"><i>⚡</i><span>${e.parts.join(' ＋ ')}</span></div>${t>=6?'<div class="zz">ZAP!!!</div>':''}${Array.from({length:t*3},(_,i)=>`<b class="zb" style="--x:${(i*11+6)%96}%;--d:${(1.2+st.length*.4+i*.1).toFixed(2)}s">⚡</b>`).join('')}</div>`};
 const xaiFx=(e,t)=>`<div class="xa"><div class="xk">// SPECIAL HAND · TIER ${t}/6</div><div class="xw">${NM[e.who]} · ${LN[e.k]}</div><div class="xp">${e.parts.join(' ＋ ')}</div><div class="xs">${TIER_NAME[t]}</div><i class="xc a"></i><i class="xc b"></i><i class="xc c"></i><i class="xc d"></i>${t>=3?'<i class="xl"></i>':''}${t>=6?'<div class="xg">OVERRIDE</div>':''}</div>`;
-const FX_CORE={zapier:zapFx,xai:xaiFx,clay:clayFx};
+const sanFx=(e,t)=>{const dp=4+t*2,col=['#d9d0c3','#d3cabd','#cdc4b7','#c7beb1'],sh=Array.from({length:dp},(_,i)=>`${i+1}px ${i+1}px 0 ${col[i%4]}`).join(',')+`,${dp+3}px ${dp+8}px 16px rgba(60,40,20,.3)`,
+    ts=Array.from({length:3+t},(_,i)=>`${i+1}px ${i+1}px 0 ${['#b5653a','#a85a31','#9b5029'][i%3]}`).join(','),bm=[1,2,3,4,5,7][t-1],ev=[40,120,210,290,340,377][t-1];
+  return `<div class="s3"><div class="se">(Elevation ${ev})</div>${Array.from({length:bm},(_,i)=>`<i class="bm" style="--x:${(8+i*(84/bm)).toFixed(0)}%;--r:${(-18+i*(36/Math.max(bm-1,1))).toFixed(0)}deg;--d:${(.1+i*.12).toFixed(2)}s"></i>`).join('')}<div class="stg"><div class="sf" style="box-shadow:${sh}"><div class="sw">${NM[e.who]} · ${LN[e.k]}</div><div class="sp3" style="text-shadow:${ts}">${e.parts.join(' ＋ ')}</div><div class="sc">(0${t}) ${TIER_NAME[t]}</div></div></div><div class="sls">${Array.from({length:t},(_,i)=>`<i class="sl" style="--i:${i};--d:${(.5+i*.15).toFixed(2)}s"></i>`).join('')}</div>${t>=5?'<i class="or o1"></i><i class="or o2"></i>':''}${Array.from({length:t*5},(_,i)=>`<b class="du" style="left:${(i*17+9)%96}%;--d:${((i%7)*.4).toFixed(1)}s"></b>`).join('')}</div>`};
+const FX_CORE={zapier:zapFx,xai:xaiFx,clay:clayFx,sanjigen:sanFx};
 function runFx(){if(G.fxBusy||!G.fxQ.length)return;const e=G.fxQ.shift();G.fxBusy=true;
   const tier=tierOf(e.parts),fs=fxStyle(e.who),royal=tier>=5;
   const d=document.createElement('div');d.className='fx'+(royal?' royal':'');d.setAttribute('data-fs',fs);d.setAttribute('data-tier',tier);
@@ -828,7 +962,31 @@ ${los.map((n,i)=>`<span class="hc-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
 ${Array.from({length:22},(_,i)=>`<b class="hc-ck" style="left:${(i*29+7)%98}%;background:${CLC[i%5]};--d:${1.2+(i%7)*.3}s"></b>`).join('')}
 <div class="hc-bubble"><small>${nm}</small>我不是針對你，我是說在座的各位都是垃圾。</div><div class="hc-tip">點一下關閉</div>`;
   const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);setTimeout(done,10500)}
-function hongFx(w){if(fxStyle(w)=='clay')return hongClay(w);
+function hongXai(w){
+  document.querySelectorAll&&document.querySelectorAll('.hrx').forEach(e=>e.remove());
+  const nm=NM[w],los=NM.filter((_,i)=>i!=w),d=document.createElement('div');d.className='hrx';
+  d.innerHTML=`<svg class="hx-svg" viewBox="0 0 100 160" preserveAspectRatio="xMidYMid slice"><line x1="0" y1="118" x2="100" y2="118"/>
+<g><circle cx="22" cy="92" r="4"/><line x1="22" y1="96" x2="22" y2="110"/><line x1="22" y1="110" x2="17" y2="118"/><line x1="22" y1="110" x2="28" y2="118"/><line x1="22" y1="100" x2="30" y2="102"/></g>
+<line class="hx-bat" x1="30" y1="102" x2="54" y2="102"/><path class="hx-trace" pathLength="100" d="M54 102 Q 78 30 128 -30"/>
+<circle class="hx-ring" cx="54" cy="102" r="2"/><circle class="hx-ring r2" cx="54" cy="102" r="2"/><circle class="hx-ball" cx="54" cy="102" r="2.2"/></svg>
+<div class="hx-hud"><div style="animation-delay:.1s">&gt; EVENT / HOME_RUN</div><div style="animation-delay:.6s">&gt; actor: ${nm}</div><div style="animation-delay:1.1s">&gt; opponents: ALL_OUT</div></div>
+<div class="hx-log">${los.map((n,i)=>`<div style="animation-delay:${(1.4+i*.18).toFixed(2)}s">&gt; ${n} ........ OUT</div>`).join('')}</div>
+<div class="hx-title">HOME RUN<i></i></div><div class="hx-sub">全壘打</div>
+<div class="hx-quote">&gt; 我不是針對你，我是說在座的各位都是垃圾。<i class="cur"></i><small>— ${nm}</small></div><div class="hx-tip">點一下關閉</div>`;
+  const done=()=>d.remove();d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);setTimeout(done,10500)}
+function hongSan(w){
+  document.querySelectorAll&&document.querySelectorAll('.hrs').forEach(e=>e.remove());
+  const nm=NM[w],los=NM.filter((_,i)=>i!=w),d=document.createElement('div');d.className='hrs';
+  d.innerHTML=`<div class="hs-bg"></div><div class="hs-sun"></div><div class="hs-cave"></div>
+<div class="hs-ruler"><i class="hs-mark"></i></div><div class="hs-el">(Elevation 0)</div>
+<div class="hs-man"><i class="e1"></i><i class="e2"></i></div><div class="hs-bat"></div><div class="hs-ball"></div>
+${los.map((n,i)=>`<span class="hs-fly" style="--dx:${[-30,46,-46,56,6][i%5]}vw;--dy:${[-58,-66,-18,-34,-80][i%5]}vh;--r:${(i%2?1:-1)*(240+i*70)}deg;animation-delay:${(1.05+i*.07).toFixed(2)}s">${n}</span>`).join('')}
+<div class="hs-title">${'全壘打'.split('').map((c,i)=>`<span style="animation-delay:${(1.7+i*.12).toFixed(2)}s">${c}</span>`).join('')}</div>
+${Array.from({length:18},(_,i)=>`<b class="hs-du" style="left:${(i*23+6)%96}%;--d:${((i%6)*.5+1.2).toFixed(1)}s"></b>`).join('')}
+<div class="hs-bubble"><small>(${nm})</small>我不是針對你，我是說在座的各位都是垃圾。</div><div class="hs-tip">點一下關閉</div>`;
+  const el=d.querySelector&&d.querySelector('.hs-el'),t0=Date.now()+1050;let iv=setInterval(()=>{const p=Math.min(1,Math.max(0,(Date.now()-t0)/1900));if(el)el.textContent='(Elevation '+Math.round(p*377)+')';if(p>=1)clearInterval(iv)},50);
+  const done=()=>{clearInterval(iv);d.remove()};d.onclick=done;document.body.appendChild(d);setTimeout(playSnd,1000);setTimeout(done,10500)}
+function hongFx(w){const hs=fxStyle(w);if(hs=='clay')return hongClay(w);if(hs=='xai')return hongXai(w);if(hs=='sanjigen')return hongSan(w);
   document.querySelectorAll&&document.querySelectorAll('.hr').forEach(e=>e.remove());
   const nm=NM[w],los=NM.filter((_,i)=>i!=w),vec=[[-30,-60],[55,-70],[-45,-20],[60,-35],[10,-85]];
   const d=document.createElement('div');d.className='hr';
@@ -847,7 +1005,7 @@ const COIN='<i class="coin"></i>';
 const LV_MAX=12,TITLES=['','牌桌路人甲','十三支學徒','倒水常客','蟑螂殺手','拖鞋大師','打槍小能手','彩金獵人','鐵支收割機','同花順之神','全壘打打者','紅不讓大魔王','牌桌傳說'];
 const need=lv=>750+50*(lv-1);
 function levelOf(xp){let lv=1,r=xp;while(lv<LV_MAX&&r>=need(lv)){r-=need(lv);lv++}const mx=lv>=LV_MAX;return{lv,rem:mx?0:r,need:mx?1:need(lv),max:mx}}
-const STYLE_LIST=[{id:'zapier',n:'Zapier 風格',lv:1},{id:'xai',n:'XAI 風格',lv:2},{id:'clay',n:'Clay 風格',lv:3}];
+const STYLE_LIST=[{id:'zapier',n:'Zapier 風格',lv:1},{id:'xai',n:'XAI 風格',lv:2},{id:'clay',n:'Clay 風格',lv:3},{id:'sanjigen',n:'三次元 風格',lv:4}];
 const ITEMS=[{k:'slipper',e:'🩴',n:'拖鞋',lv:1},{k:'fart',e:'💨',n:'放屁',lv:1},{k:'spit',e:'💦',n:'口水',lv:1},
  {k:'banana',e:'🍌',n:'香蕉皮',lv:5},{k:'tofu',e:'🧀',n:'臭豆腐',lv:8},{k:'sock',e:'🧦',n:'臭襪子',lv:11}];
 const BADGES=[{id:'hong1',e:'⚾',n:'全壘打初體驗',d:'第一次達成紅不讓',ok:t=>t.hong>=1},{id:'win3',e:'🔥',n:'三連勝小霸王',d:'連贏 3 局',ok:t=>t.bestStreak>=3},
@@ -909,7 +1067,7 @@ ${ls('ss_dev')=='1'?'<h4>🛠 測試(網址加 ?dev=0 可關閉)</h4><div class=
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
   d.scrollTop=keep}
-const mockUI=id=>id=='clay'?`<div style="background:#faf9f7;color:#000;border:1px solid #dad4c8;border-radius:24px;padding:10px;text-align:left"><div style="background:#fff;border:1px solid #dad4c8;border-radius:22px;padding:6px 12px;margin-bottom:8px;font-weight:600">第 3 / 10 局 <span style="background:#fc7981;border-radius:99px;padding:2px 10px;margin-left:6px">彩金 K</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="background:#078a52;color:#fff;border-radius:99px;padding:5px 14px">完成排牌</span><span style="background:#c1b0ff;border-radius:99px;padding:5px 14px">對決</span><span style="background:#84e7a5;border-radius:99px;padding:5px 14px">已完成</span><span style="background:#fbbd41;border-radius:99px;padding:5px 14px">排牌中</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;border:1px solid #dad4c8;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">A♠</span><span style="background:#fff;border:1px solid #dad4c8;color:#e5484d;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">K♥</span><span style="background:linear-gradient(135deg,#c1b0ff,#fc7981,#fbbd41);border-radius:12px;padding:8px 14px">　</span></div></div>`:id=='xai'?`<div style="background:#0a0a0a;color:#fff;border:1px solid #2a2d33;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:1px solid #2a2d33;padding-bottom:6px;margin-bottom:8px;font-family:ui-monospace,Menlo,monospace">第 3 / 10 局 · 彩金 K</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 12px">完成排牌</span><span style="border:1px solid #ff7a17;border-radius:999px;padding:5px 12px">對決</span><span style="background:#fff;color:#0a0a0a;border-radius:999px;padding:5px 12px">剩餘</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;color:#0a0a0a;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fff;color:#e8432b;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="border:1px dashed rgba(255,255,255,.3);border-radius:6px;padding:8px 14px">　</span></div></div>`
+const mockUI=id=>id=='sanjigen'?`<div style="background:#f1ede6;color:#2a2622;border:1px solid #d6cdc0;border-radius:16px;padding:10px;text-align:left"><div style="background:#faf8f4;border:1px solid #d6cdc0;border-radius:14px;padding:6px 12px;margin-bottom:8px;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #d0c7b9">(第 3 / 10 局) <span style="background:#e9c58f;border-radius:8px;padding:2px 8px;margin-left:6px">彩金 K</span></div><div style="background:linear-gradient(#dcd4c8,#e8e1d6);border-radius:14px;padding:8px;box-shadow:inset 0 6px 12px rgba(60,40,20,.22)"><div style="color:#8a8076;font-size:12px;margin-bottom:4px">(01) 頭墩</div><div style="display:flex;gap:5px"><span style="background:#faf8f4;border:1px solid #cfc5b7;border-radius:10px;padding:8px 8px;font-weight:700;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9,3px 6px 6px rgba(60,40,20,.2)">A♠</span><span style="background:#faf8f4;border:1px solid #cfc5b7;color:#b5442f;border-radius:10px;padding:8px 8px;font-weight:700;box-shadow:1px 2px 0 #d9d0c3,2px 4px 0 #cfc6b9,3px 6px 6px rgba(60,40,20,.2)">K♥</span><span style="background:#cfc6b9;border-radius:10px;padding:8px 16px;box-shadow:inset 0 4px 8px rgba(0,0,0,.28)">　</span></div></div><div style="display:flex;gap:6px;margin-top:8px"><span style="background:#b5653a;color:#fff;border-radius:12px;padding:6px 14px;box-shadow:0 4px 0 #84451f">完成排牌</span><span style="background:#3b342d;color:#f1ede6;border-radius:12px;padding:6px 14px;box-shadow:0 4px 0 #1a1612">對決</span></div></div>`:id=='clay'?`<div style="background:#faf9f7;color:#000;border:1px solid #dad4c8;border-radius:24px;padding:10px;text-align:left"><div style="background:#fff;border:1px solid #dad4c8;border-radius:22px;padding:6px 12px;margin-bottom:8px;font-weight:600">第 3 / 10 局 <span style="background:#fc7981;border-radius:99px;padding:2px 10px;margin-left:6px">彩金 K</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="background:#078a52;color:#fff;border-radius:99px;padding:5px 14px">完成排牌</span><span style="background:#c1b0ff;border-radius:99px;padding:5px 14px">對決</span><span style="background:#84e7a5;border-radius:99px;padding:5px 14px">已完成</span><span style="background:#fbbd41;border-radius:99px;padding:5px 14px">排牌中</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;border:1px solid #dad4c8;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">A♠</span><span style="background:#fff;border:1px solid #dad4c8;color:#e5484d;border-radius:12px;padding:8px 8px;font-weight:700;box-shadow:0 2px 2px #0002">K♥</span><span style="background:linear-gradient(135deg,#c1b0ff,#fc7981,#fbbd41);border-radius:12px;padding:8px 14px">　</span></div></div>`:id=='xai'?`<div style="background:#0a0a0a;color:#fff;border:1px solid #2a2d33;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:1px solid #2a2d33;padding-bottom:6px;margin-bottom:8px;font-family:ui-monospace,Menlo,monospace">第 3 / 10 局 · 彩金 K</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 12px">完成排牌</span><span style="border:1px solid #ff7a17;border-radius:999px;padding:5px 12px">對決</span><span style="background:#fff;color:#0a0a0a;border-radius:999px;padding:5px 12px">剩餘</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fff;color:#0a0a0a;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fff;color:#e8432b;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="border:1px dashed rgba(255,255,255,.3);border-radius:6px;padding:8px 14px">　</span></div></div>`
  :`<div style="background:#fffefb;color:#201515;border:1px solid #c5c0b1;border-radius:12px;padding:10px;text-align:left"><div style="border-bottom:2px solid #201515;padding-bottom:6px;margin-bottom:8px;font-weight:700">第 3 / 10 局 <span style="background:#ff4f00;color:#fffefb;border-radius:6px;padding:2px 8px;margin-left:6px">彩金 K</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="border:1px solid #c5c0b1;border-radius:8px;padding:5px 12px;font-weight:600">全部收回</span><span style="background:#ff4f00;color:#fffefb;border-radius:8px;padding:5px 12px;font-weight:600">完成排牌</span><span style="background:#201515;color:#fffefb;border-radius:8px;padding:5px 12px;font-weight:600">對決</span></div><div style="display:flex;gap:5px;margin-top:8px"><span style="background:#fffefb;border:1.5px solid #201515;border-radius:6px;padding:8px 8px;font-weight:700">A♠</span><span style="background:#fffefb;border:1.5px solid #201515;color:#d93a1e;border-radius:6px;padding:8px 8px;font-weight:700">K♥</span><span style="background:#ff4f00;border:1.5px solid #201515;border-radius:6px;padding:8px 14px">　</span></div></div>`;
 function previewRw(key,id){const el=document.getElementById('pvw');if(!el)return;let h='';
   if(key=='st'){const x=byId(STYLE_LIST,id);h=`<div class="rule">${x.n}(Lv.${x.lv} 解鎖)</div>${mockUI(id)}`}
