@@ -254,8 +254,13 @@ html .c.cv,html .sm .c.back{background:var(--back)}
 .cpn{position:relative;background:#fffdf5;color:#1f2638;border:3px dashed var(--acc);border-radius:22px;padding:18px 20px;max-width:340px;width:84%;text-align:center;animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
 .cpn h3{margin:4px 0 10px;font-size:20px}.cpr{margin:4px 0;font-size:14px}
 .stamp{display:inline-block;margin:10px 0;padding:4px 18px;border:4px solid #c62828;color:#c62828;font-weight:900;font-size:26px;border-radius:10px;transform:rotate(-8deg)}
+.bar{justify-content:space-between}
+.bar .rt{font-weight:800;font-size:15px;color:#fff;white-space:nowrap}
+.bar .rg{display:flex;gap:6px;align-items:center}
+.bar .chip{flex:none;border:0;border-radius:999px;background:#ffffff26;color:#fff;box-shadow:none;padding:5px 11px;font-size:13px;font-weight:800;display:inline-flex;align-items:center;gap:5px;margin:0}
+.coin{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11' fill='%23b8860b'/%3E%3Ccircle cx='12' cy='12' r='9.5' fill='%23f5c518'/%3E%3Ccircle cx='12' cy='12' r='7' fill='none' stroke='%23d99a00' stroke-width='1.4'/%3E%3Cpath d='M12 7.2l1.5 3 3.3.5-2.4 2.3.6 3.3L12 14.7 9 16.3l.6-3.3-2.4-2.3 3.3-.5z' fill='%23fff1a8' stroke='%23d99a00' stroke-width='.6'/%3E%3C/svg%3E") center/contain no-repeat}
 </style></head><body>
-<div class="bar"><h1><span class="dots"><i style="background:#e8622a"></i><i style="background:#f0b33c"></i><i style="background:#52b69a"></i><i style="background:#fff"></i></span>五人十三支</h1><span><span id="tot"></span> <button id="coinb" onclick="openShop()" style="flex:none;padding:2px 10px;font-size:13px;margin-left:4px">🪙0</button><button id="lvb" onclick="openProf()" style="flex:none;padding:2px 10px;font-size:13px;margin-left:4px">Lv.1</button><button id="snd" onclick="toggleSnd()" style="flex:none;padding:2px 8px;font-size:15px;margin-left:4px">🔊</button></span></div>
+<div class="bar"><span id="tot" class="rt">五人十三支</span><span class="rg"><button id="coinb" class="chip" onclick="openShop()"><i class="coin"></i>0</button><button class="chip" onclick="openShop()">🛒 商店</button><button id="lvb" class="chip" onclick="openProf()">Lv.1</button></span></div>
 <div id="app"></div>
 <script>
 const SU=['♠','♥','♦','♣'],CAT=['散牌','一對','兩對','三條','順子','同花','同花對子','同花兩對子','葫蘆','四條','同花順','五雷'];
@@ -436,7 +441,7 @@ function oldRender(){
   <div class="row">${[2,3,4,5].map(n=>`<button class="p" onclick="start(${n})">${n} 人</button>`).join('')}</div>
   <details class="rule"><summary>規則摘要</summary>頭 3、中 5、尾 5,需 尾&gt;中&gt;頭(嚴格)。彩金:每局開始前隨機抽一個點數(A~K)為彩金,同一墩有 3/4/5 張彩金牌,每位對手付 底注×1/×2/×3(與鐵支、五雷等疊加)。對決模式:有加成牌組時可自選攤牌順序,加成牌墩攤出時有特效。輸家(總分最低)可要求換色,把雙副花色改成其他花色。底注 50。帕嘎(對同一玩家頭中尾三墩全勝):對方付 50;贏其餘所有玩家(3 人以上)為「紅不讓」,帕嘎改×3。衝三(頭墩三條)、鐵支、同花順(中/尾墩)各收每位對手 50,五雷收 250;雙方同墩都有特殊牌時比大小,大者收、小者付,同大小則不算。牌型由小至大:散牌、一對、兩對、三條、順子、同花、同花對子、同花兩對子、葫蘆、四條、同花順、五雷。A2345 最小順子,不可 QKA23。</details>
   <p class="rule">本版為單機原型(你 + 電腦),用來驗證規則與介面;多人連線房間待下一版。</p>`;return}
-  T.textContent=`第 ${G.round} 局 · ${G.n} 人`;
+  T.textContent=`第 ${G.round} 局`;
   if(G.phase=='result'){
     const R=G.res;
     app.innerHTML=jpBanner()+`<div class="rule">本局閒置 ${G.idle} 張,不參與比牌</div>`+
@@ -545,6 +550,7 @@ ${los.map((n,i)=>`<span class="hr-fly" style="--dx:${vec[i%5][0]}vw;--dy:${vec[i
   try{navigator.vibrate&&setTimeout(()=>navigator.vibrate([80,30,160]),1000)}catch(_){}
   setTimeout(done,10500)}
 /* ===== 等級 / 成就 / 解鎖(存在這支手機 localStorage) ===== */
+const COIN='<i class="coin"></i>';
 const LV_MAX=12,TITLES=['','牌桌路人甲','十三支學徒','倒水常客','蟑螂殺手','拖鞋大師','打槍小能手','彩金獵人','鐵支收割機','同花順之神','全壘打打者','紅不讓大魔王','牌桌傳說'];
 const need=lv=>750+50*(lv-1);
 function levelOf(xp){let lv=1,r=xp;while(lv<LV_MAX&&r>=need(lv)){r-=need(lv);lv++}const mx=lv>=LV_MAX;return{lv,rem:mx?0:r,need:mx?1:need(lv),max:mx}}
@@ -570,7 +576,7 @@ PF.xp=PF.xp||0;PF.coins=PF.coins||0;PF.inv=PF.inv||[];PF.st=PF.st||{};PF.bd=PF.b
 const saveProf=()=>ls('ss_prof2',JSON.stringify(PF)),myLv=()=>levelOf(PF.xp).lv,okAt=x=>x.lv<=myLv();
 const byId=(arr,id)=>arr.find(x=>x.id==id)||arr[0],backCss=id=>byId(BACKS,id).css;
 const reactList=()=>ITEMS.filter(okAt).map(x=>[x.k,x.e+' '+x.n]);
-function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textContent='Lv.'+myLv();const c=document.getElementById('coinb');if(c)c.textContent='🪙'+PF.coins}catch(_){}}
+function refreshLvb(){try{const b=document.getElementById('lvb');if(b)b.textContent='Lv.'+myLv();const c=document.getElementById('coinb');if(c)c.innerHTML=COIN+PF.coins}catch(_){}}
 function applyProf(){const L=myLv();
   [['bk',BACKS],['sk',SKINS],['fr',FRAMES]].forEach(([k,arr])=>{if(byId(arr,PF.sel[k]).lv>L)PF.sel[k]=arr[0].id});
   try{const r=document.documentElement.style,[a,y,n]=byId(SKINS,PF.sel.sk).c;
@@ -602,7 +608,7 @@ function lvUp(a,b){const un=[BACKS,SKINS,FRAMES,ITEMS].flatMap((arr,i)=>arr.filt
    `<div class="lvbox"><small>LEVEL UP!</small><h2>Lv.${b}</h2><div class="lvt2">${TITLES[b]}</div>${un.length?`<div class="lvun">🎁 新解鎖<br>${un.join('<br>')}</div>`:''}<small>點一下關閉</small></div>`;
   d.onclick=()=>d.remove();document.body.appendChild(d);playSnd();setTimeout(()=>d.remove(),9000)}
 function xpHTML(){const L=levelOf(PF.xp),g=G.lastXp;
-  return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP · 🪙+${g.gain}</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div>${xpEligible()?'':'<div class="rule" style="color:var(--red);font-weight:700">⚠ 本局有電腦或不足 5 位真人玩家,不計經驗值</div>'}</div>`}
+  return `<div class="pb"><div class="xpl"><b>Lv.${L.lv} ${TITLES[L.lv]}</b>${g&&g.r==S.round?`<span class="xpg">本局 +${g.xp} XP · ${COIN}+${g.gain}</span>`:''}</div><div class="xpbar"><i style="width:${L.max?100:Math.round(L.rem/L.need*100)}%"></i></div><div class="rule">${L.max?'已達最高等級':L.rem+' / '+L.need+' XP'} · 點右上角 Lv 可看檔案與成就</div>${xpEligible()?'':'<div class="rule" style="color:var(--red);font-weight:700">⚠ 本局有電腦或不足 5 位真人玩家,不計經驗值</div>'}</div>`}
 function openProf(){let d=document.getElementById('prof');if(!d){d=document.createElement('div');d.id='prof';document.body.appendChild(d)}
   const keep=d.scrollTop,L=levelOf(PF.xp),sel=PF.sel,t=PF.st,nb=BADGES.filter(b=>PF.bd[b.id]).length;
   const chips=(arr,key,fn)=>arr.map(x=>{const on=okAt(x),cur=sel[key]==x.id;return `<button class="rw ${cur?'cur':''} ${on?'':'lk'}" onclick="${on?`pickRw('${key}','${x.id}')`:`previewRw('${key}','${x.id}')`}">${fn(x)}<small>${on?(cur?'使用中':x.n):'🔒 Lv.'+x.lv+' 點我預覽'}</small></button>`}).join('');
@@ -615,6 +621,7 @@ function openProf(){let d=document.getElementById('prof');if(!d){d=document.crea
 <h4>名字外框</h4><div class="rws">${chips(FRAMES,'fr',x=>`<span class="nmf fr-${x.id}">${esc(myName||'名字')}</span>`)}</div>
 <h4>不爽道具(結算時輸給對方可送出)</h4><div class="rws">${ITEMS.map(x=>`<button class="rw ${okAt(x)?'':'lk'}" onclick="previewRw('it','${x.k}')">${x.e}<small>${x.n}${okAt(x)?' ▶預覽':' 🔒Lv.'+x.lv+' ▶預覽'}</small></button>`).join('')}</div>
 <h4>成就(${nb}/${BADGES.length})</h4><div class="bds">${BADGES.map(b=>`<div class="bd ${PF.bd[b.id]?'':'lk'}"><span>${PF.bd[b.id]?b.e:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
+<h4>設定</h4><div class="rws"><button class="rw" onclick="toggleSnd();openProf()">${sndOn?'🔊':'🔇'}<small>音效:${sndOn?'開':'關'}</small></button></div>
 <h4>動畫</h4><div class="rws"><button class="rw" onclick="lvUp(1,2)">🎉<small>預覽升級動畫</small></button></div>
 <h4>統計</h4><div class="rule">玩了 ${t.rounds||0} 局 · 贏 ${t.wins||0} 局 · 最高連勝 ${t.bestStreak||0} · 紅不讓 ${t.hong||0} 次 · 被打槍 ${t.beaten||0} 次</div>
 <div class="rule" style="margin-top:6px">資料存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;
@@ -633,9 +640,9 @@ const fmtT=t=>{const d=new Date(t),z=n=>String(n).padStart(2,'0');return `${d.ge
 function openShop(){let d=document.getElementById('shop');if(!d){d=document.createElement('div');d.id='shop';document.body.appendChild(d)}
   const keep=d.scrollTop;d.className='prof';
   const inv=PF.inv.map((v,i)=>[v,i]).reverse(),nm=id=>(SHOP.find(x=>x.id==id)||{n:id,e:'🎁'});
-  d.innerHTML=`<div class="pbox"><div class="ph"><b style="font-size:18px">🪙 金幣商店</b><button onclick="closeShop()">✕ 關閉</button></div>
-<div class="pt"><div class="pl" style="font-size:22px">🪙 ${PF.coins}</div><div><div class="pn">我的金幣</div><div style="font-size:12px;opacity:.85">5 位真人一起玩時,每局贏的分數 1:1 換成金幣(輸不扣,可一直累加)</div></div></div>
-<h4>商品</h4>${SHOP.map(x=>`<div class="bd" style="margin-bottom:6px"><span>${x.e}</span><b>${x.n}</b><small>${x.d}</small><button class="p" style="margin-top:6px" ${PF.coins>=x.price?'':'disabled'} onclick="buyItem('${x.id}')">${PF.coins>=x.price?'🪙 '+x.price+' 兌換':'🪙 '+x.price+'(還差 '+(x.price-PF.coins)+')'}</button></div>`).join('')}
+  d.innerHTML=`<div class="pbox"><div class="ph"><b style="font-size:18px">${COIN} 金幣商店</b><button onclick="closeShop()">✕ 關閉</button></div>
+<div class="pt"><div class="pl" style="font-size:22px">${COIN} ${PF.coins}</div><div><div class="pn">我的金幣</div><div style="font-size:12px;opacity:.85">5 位真人一起玩時,每局贏的分數 1:1 換成金幣(輸不扣,可一直累加)</div></div></div>
+<h4>商品</h4>${SHOP.map(x=>`<div class="bd" style="margin-bottom:6px"><span>${x.e}</span><b>${x.n}</b><small>${x.d}</small><button class="p" style="margin-top:6px" ${PF.coins>=x.price?'':'disabled'} onclick="buyItem('${x.id}')">${PF.coins>=x.price?COIN+' '+x.price+' 兌換':COIN+' '+x.price+'(還差 '+(x.price-PF.coins)+')'}</button></div>`).join('')}
 <h4>我的物品(${PF.inv.filter(v=>!v.used).length} 張未使用)</h4>${inv.length?inv.map(([v,i])=>`<div class="bd" style="margin-bottom:6px"><span>${nm(v.id).e}</span><b>${nm(v.id).n}</b><small>編號 ${v.code} · 購買 ${fmtT(v.at)}</small>${v.used?`<small>已使用 ${fmtT(v.used)}</small><button onclick="showCoupon(${i})">查看</button>`:`<button class="p" onclick="showCoupon(${i})">出示 / 使用</button>`}</div>`).join(''):'<div class="rule">還沒有物品。</div>'}
 ${ls('ss_dev')=='1'?'<div class="row" style="margin-top:10px"><button onclick="devCoins()">🛠 測試:+1000 金幣</button></div>':''}
 <div class="rule" style="margin-top:8px">金幣和物品存在這支手機裡,清除瀏覽器資料或換手機會歸零。</div></div>`;d.scrollTop=keep}
@@ -798,8 +805,8 @@ function render(){
   try{document.getElementById('app').className=''}catch(_){}
   try{document.body.classList.toggle('wv',!S||S.phase=='lobby')}catch(_){}
   const app=document.getElementById('app'),T=document.getElementById('tot');
-  if(!S){T.textContent='';app.innerHTML=entryHTML();return}
-  T.textContent='房間 '+code+' · 第 '+S.round+' 局';
+  if(!S){T.textContent='五人十三支';app.innerHTML=entryHTML();return}
+  T.textContent=S.phase=='lobby'?'房間 '+code:'第 '+S.round+' 局';
   if(S.phase=='lobby'){app.innerHTML=lobbyHTML();return}
   if(G.me<0){app.innerHTML='<p>這一局已開始,你不在名單內。請等下一局或請房主重新開局。</p><div class="row"><button onclick="leaveRoom()">離開房間</button></div>';return}
   const mine=pd(uid);G.status=S.order.map(id=>pd(id)&&pd(id).sub?1:0);
