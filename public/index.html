@@ -708,7 +708,7 @@ function ev(cs){
   if(n==5){
     const fl=cs.every(c=>c.s==cs[0].s),rs=cs.map(c=>c.r).sort((a,b)=>b-a);
     let st=g.length==5&&rs[0]-rs[4]==4;
-    if(g.length==5&&rs.join()=='14,5,4,3,2'){st=true;rk=[5]}else if(st)rk=[rs[0]];
+    if(g.length==5&&rs.join()=='14,5,4,3,2'&&!survOn()){st=true;rk=[5]}else if(st)rk=[rs[0]];
     cat=cn=='5'?11:st&&fl?10:cn=='41'?9:cn=='32'?8:fl&&cn=='221'?7:fl&&cn=='2111'?6:fl?5:st?4:cn=='311'?3:cn=='221'?2:cn=='2111'?1:0;
   }else cat=cn=='3'?3:cn=='21'?1:0;
   if([3,8,9,11].includes(cat))rk=[rk[0]]; // 只比主要點數
@@ -717,12 +717,12 @@ function ev(cs){
 const catOf=v=>Math.floor(v/P5);
 const C5=[];for(let m=0;m<8192;m++){let k=0;for(let i=0;i<13;i++)k+=m>>i&1;if(k==5)C5.push(m)}
 function auto(h){
-  const pick=m=>h.filter((_,i)=>m>>i&1),v5=C5.map(m=>ev(pick(m))),f3={};
+  const pick=m=>h.filter((_,i)=>m>>i&1),v5=C5.map(m=>scr(pick(m))),f3={};
   for(const strict of [1,0]){
     let best=null,bs=-1;
     for(let a=0;a<C5.length;a++)for(let b=0;b<C5.length;b++){
       if(C5[a]&C5[b])continue;const fm=8191^C5[a]^C5[b];
-      const vf=f3[fm]??=ev(pick(fm)),vt=v5[a],vm=v5[b];
+      const vf=f3[fm]??=scr(pick(fm)),vt=v5[a],vm=v5[b];
       if(strict?!(vt>vm&&vm>vf):!(vt>=vm&&vm>=vf))continue;
       const s=vt+vm+vf*2;if(s>bs){bs=s;best=[fm,C5[b],C5[a]]}
     }
@@ -778,7 +778,7 @@ function hint(){if(!G.canAuto){toast('🔒 要等其他玩家都完成排牌,才
 function legal(){
   if(G.hand.length)return'還有 '+G.hand.length+' 張牌未放入三墩';
   for(let i=0;i<3;i++)if(G.lanes[i].length!=LS[i])return'各墩張數需為 3／5／5';
-  const [h,m,t]=G.lanes.map(ev);
+  const [h,m,t]=G.lanes.map(scr);
   if(!(m>h))return'倒水:中墩牌力需大於頭墩';if(!(t>m))return'倒水:尾墩牌力需大於中墩';return''}
 function submit(){if(legal())return;G.duel=false;G.status[0]=1;G.phase='wait';check();render()}
 function check(){if((G.phase=='play'||G.phase=='wait')&&G.status.every(x=>x)&&G.lanes.flat().length==13){G.duel?startDuel():finish()}}
@@ -888,7 +888,7 @@ function laneHTML(i){
   let cells=l.map(c=>chip(c,`onclick="event.stopPropagation();back(${i},${c.id})"`).replace('class="c ','class="c '+(hs.has(c.id)?'gold ':'')));
   while(cells.length<LS[i])cells.push('<div class="e"></div>');
   return `<div class="lane ${G.sel!=null&&!full?'tg':''} ${fp.length?'vip':''}" onclick="laneClick(${i})" ondragover="event.preventDefault()" ondrop="place(${i},+event.dataTransfer.getData('t'))">
-  <div class="lh"><span>${LN[i]}(${LS[i]}張)</span><b>${full?CAT[catOf(ev(l))]:l.length+'/'+LS[i]}${G.sel!=null&&!full?' ← 點此放入':''}${fp.length?`<span class="badge">✦ ${fp.join(' ＋ ')}</span>`:''}</b></div><div class="g5">${cells.join('')}</div></div>`}
+  <div class="lh"><span>${LN[i]}(${LS[i]}張)</span><b>${full?CAT[catOf(ev(l))]+svTag(l):l.length+'/'+LS[i]}${G.sel!=null&&!full?' ← 點此放入':''}${fp.length?`<span class="badge">✦ ${fp.join(' ＋ ')}</span>`:''}</b></div><div class="g5">${cells.join('')}</div></div>`}
 function oldRender(){
   const app=document.getElementById('app'),T=document.getElementById('tot');
   if(!G.round){T.textContent='';app.innerHTML=`<p>選擇本局人數(你 + 電腦玩家)。每位玩家固定 13 張,65 張牌:黑桃 2 副、其餘花色各 1 副。</p>
@@ -903,10 +903,10 @@ function oldRender(){
       const sp=R.V[i].map((v,k)=>spec(v,k)?LN[k]+spec(v,k).n:'').filter(Boolean),jt=R.JM[i].map((m,k)=>m?LN[k]+'彩金'+lb(R.jr)+(m>1?'×'+m:''):'').filter(Boolean),vip=sp.length||jt.length||R.hong[i];
       return `<div class="pb ${vip?'vip':''}"><h3><span>${nmTag(i)}${i==G.me?'(你)':''}${R.hong[i]?'<span class="badge hot" onclick="hongFx(${i})" style="cursor:pointer">🔥 紅不讓 ⚾</span>':''}${sp.map(t=>`<span class="badge">✦ ${t}</span>`).join('')}${jt.map(t=>`<span class="badge">🎰 ${t}</span>`).join('')}</span><span class="${R.sc[i]>0?'pos':R.sc[i]<0?'neg':''}">本局 ${R.sc[i]>0?'+':''}${R.sc[i]} · 累計 ${G.total[i]}</span></h3>
       ${summary(R,i)}
-      ${l.map((c,k)=>{const hs=hiIds(c,k),sk=spec(R.V[i][k],k)||R.JM[i][k];if(R.JM[i][k])c.forEach(x=>{if(x.r==R.jr)hs.add(x.id)});return `<div class="sm">${c.map(x=>mini(x,hs.has(x.id))).join('')}${'<span></span>'.repeat(5-c.length)}<em class="${sk?'gl':''}">${LN[k]}<br>${CAT[catOf(R.V[i][k])]}</em></div>`}).join('')}</div>`}).join('')+
+      ${l.map((c,k)=>{const hs=hiIds(c,k),sk=spec(R.V[i][k],k)||R.JM[i][k];if(R.JM[i][k])c.forEach(x=>{if(x.r==R.jr)hs.add(x.id)});return `<div class="sm">${c.map(x=>mini(x,hs.has(x.id))).join('')}${'<span></span>'.repeat(5-c.length)}<em class="${sk?'gl':''}">${LN[k]}<br>${CAT[catOf(R.V[i][k])]}${survOn()?' · '+fmtSv(R.D[i][k]):''}</em></div>`}).join('')}</div>`}).join('')+
     `<div class="pb"><h3>對戰明細(${R.pairs.length} 組)</h3>${R.pairs.map(p=>`<div style="padding:5px 0;border-top:1px solid var(--line);font-size:13px"><div style="display:flex;justify-content:space-between"><b>${NM[p.a]} vs ${NM[p.b]}</b><b class="${p.s>0?'pos':p.s<0?'neg':''}">${NM[p.a]} ${p.s>0?'+':''}${p.s} / ${NM[p.b]} ${p.s>0?'−':p.s<0?'+':''}${Math.abs(p.s)}</b></div><div class="rule">頭${tn(p.r[0])} 中${tn(p.r[1])} 尾${tn(p.r[2])}${p.items.map(i=>`<br>${NM[i.w]} ${i.t} +${i.s}`).join('')||'<br>無得分'}</div></div>`).join('')}</div>
-    ${swapPanel()}${nextBtn()}`;return}
-  const st=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`;
+    ${swapPanel()}${survOn()?battleHTML(R):''}${nextBtn()}`;return}
+  const st=jpBanner()+`<div class="st">${survOn()?'<i class="ok">⚔ 生存模式</i>':''}${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>${survOn()?hpLine():''}`;
   if(G.phase=='duel'){app.innerHTML=duelHTML();return}
   if(G.phase=='wait'){
     app.innerHTML=st+[0,1,2].map(i=>`<div class="lane"><div class="lh"><span>${LN[i]}</span><b>${CAT[catOf(ev(G.lanes[i]))]}</b></div><div class="g5">${G.lanes[i].map(mini).join('')}</div></div>`).join('')+'<p class="rule">'+(G.duel?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>';return}
@@ -965,9 +965,9 @@ function typeQuick(k){G.down=new Set();
   else if(k=='兩對'){const pr=rs.filter(r=>by[r].length>=2);for(let i=0;i<pr.length;i++)for(let j=i+1;j<pr.length;j++){const ks=kick([pr[i],pr[j]],1);if(ks)cands.push(by[pr[i]].slice(0,2).concat(by[pr[j]].slice(0,2),ks))}cands=cands.filter(c=>catOf(ev(c))==2)}
   else{const cats={順子:[4,10],葫蘆:[8],同花:[5,6,7,10]}[k];cands=comb5(pool).filter(c=>cats.includes(catOf(ev(c))))}
   if(!cands.length){toast('剩下的牌湊不出「'+k+'」');return}
-  const full=i=>L[i].length==LS[i]?ev(L[i]):null,nz=(v,d)=>v==null?d:v;
+  const full=i=>L[i].length==LS[i]?scr(L[i]):null,nz=(v,d)=>v==null?d:v;
   const lo=t==2?nz(full(1),-1):t==1?nz(full(0),-1):-1,hi=t==0?nz(full(1),Infinity):t==1?nz(full(2),Infinity):Infinity;
-  const sc=cands.map(c=>[ev(c),c]).sort((a,b)=>b[0]-a[0]),ok=sc.filter(([v])=>v>lo&&v<hi),pick=(ok[0]||sc[0])[1];
+  const sc=cands.map(c=>[scr(c),c]).sort((a,b)=>b[0]-a[0]),ok=sc.filter(([v])=>v>lo&&v<hi),pick=(ok[0]||sc[0])[1];
   const ids=new Set(pick.map(c=>c.id));G.hand=G.hand.filter(c=>!ids.has(c.id));L[t]=pick;G.sel=null;render();
   if(!ok.length)toast('⚠ 放上去牌墩順序會不合法(倒水),請再調整')}
 function restAll(){G.down=new Set();const L=G.lanes,inc=[0,1,2].filter(i=>L[i].length<LS[i]);
@@ -1221,6 +1221,41 @@ function chatMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecogni
     r.onresult=e=>{const t=(e.results&&e.results[0]&&e.results[0][0]&&e.results[0][0].transcript)||'';micStop();const el=document.getElementById('ctx');if(el)el.value=t;if(!t)return;if(chatCd()>0)toast('⏳ 已轉成文字,等 '+chatCd()+' 秒後再按送出');else chatSend()};
     r.onerror=()=>{micStop();toast('沒有聽清楚,再說一次')};r.onend=()=>micStop();r.onspeechend=()=>{try{r.stop()}catch(_){}};
     micTo=setTimeout(micStop,12000);r.start()}catch(_){micStop()}}
+/* ===== 生存模式「牌型壓制」:勝負歸勝負、傷害歸傷害,血條 + 護盾 + 陣亡淘汰 =====
+   【勝負】先比牌型(牌型高的直接贏);同牌型比「最大的」(由大到小逐張比,一對先比對子、兩對先比較大的對子、同花對子先比對子),
+   相同再比雜魚。→ 勝負順序和娛樂模式相同(只有 A-2-3-4-5 不是順子,A 一律 14)。
+   【每一墩的數值】= (組成牌型的牌點數和 + 基礎傷害) × 基礎倍率 + 雜魚點數和(雜魚平加,不乘倍率)。
+   一對 = 對子 2 張、兩對 = 兩個對子 4 張、三條 = 3 張、四條 = 4 張,雜魚是其餘的牌;葫蘆、同花系、順子、散牌、五雷 = 全部牌(沒有雜魚)。
+   贏的一方,這個數值是「傷害」;輸的一方,同樣算法的數值是「防禦力」。
+   【攻防】只有「頭中尾三墩全贏」才會攻擊與防禦(平手、沒全贏都不算)。傷害 = 贏家頭中尾數值加總,防禦力 = 輸家頭中尾數值加總。
+   傷害 > 防禦(+原有護盾):差額扣血。傷害 ≤ 防禦(+原有護盾):不扣血,剩下的防禦變成護盾,保留到下一局。
+   一個贏家三墩全贏多位對手,各自計算。陣亡(血量 ≤ 0)就淘汰,剩下的人繼續,直到只剩一人。 */
+const HP_MAX=84172800; // 五雷最大一墩 (A×5) 的 2 倍 = 2 × (70+20480) × 2048
+const SV_BASE=[0,20,40,80,160,320,640,1280,2560,5120,10240,20480],SV_MULT=[1,2,4,8,16,32,64,128,256,512,1024,2048];
+const SV_MIN=[21,60,204,695,2880,10912,41984,165632,658432,2625539,10506240,41963520],SV_MAX=[59,132,388,1001,3520,12128,45056,172288,672768,2650125,10547200,42086400];
+const OWNER=()=>ls('ss_dev')=='1',survOn=()=>!!(S&&S.mode=='survival');
+function svScore(cs){const cat=catOf(ev(cs)),cn={};cs.forEach(c=>cn[c.r]=(cn[c.r]||0)+1);let core=0,kick=0;
+  cs.forEach(c=>{const x=cn[c.r];if(cat==1||cat==2?x==2:cat==3?x==3:cat==9?x==4:true)core+=c.r;else kick+=c.r});
+  return (core+SV_BASE[cat])*SV_MULT[cat]+kick} // 組成牌型的牌乘倍率,雜魚平加
+const scr=cs=>ev(cs); // 勝負:牌型 → 由大到小逐張比(同娛樂模式;生存模式下 A-2-3-4-5 不是順子)
+const fmtSv=n=>n>=1e8?(n/1e8).toFixed(2)+'億':n>=1e4?(n/1e4).toFixed(n>=1e6?0:1)+'萬':String(n);
+const svTag=l=>survOn()?' · '+fmtSv(svScore(l)):'';
+function svTable(){const rows=SV_BASE.map((m,i)=>`<tr><td>${CAT[i]}</td><td>${m}</td><td>×${SV_MULT[i]}</td><td>${SV_MIN[i].toLocaleString()}~${SV_MAX[i].toLocaleString()}</td></tr>`).join('');
+  return `<details class="pb"><summary><b>⚔ 生存模式規則(牌型壓制 + 血條護盾)</b></summary><div class="rule"><b>勝負</b>:先比牌型,牌型高的直接贏;同牌型比最大的(由大到小逐張比,一對先比對子、兩對先比較大的對子),相同再比雜魚。<br><b>每墩數值</b> = (組成牌型的牌點數和 + 基礎傷害) × 倍率 + 雜魚點數和(平加)。贏家的是「傷害」,輸家同算法的是「防禦力」。<br><b>攻防</b>:只有「頭中尾三墩全贏」才攻擊與防禦,平手或沒全贏都不算。傷害 = 贏家頭中尾加總,防禦力 = 輸家頭中尾加總。傷害 > 防禦:差額扣血;傷害 ≤ 防禦:不扣血,剩下的防禦變護盾,保留到下一局。多位對手各自計算。<br><b>血量</b> ${HP_MAX.toLocaleString()}(五雷最大一墩的 2 倍);血量歸零陣亡淘汰,直到剩一人。A 一律 14,A-2-3-4-5 不是順子。</div>
+<table><tr><td><b>牌型</b></td><td><b>基礎傷害</b></td><td><b>倍率</b></td><td><b>5 張數值範圍</b></td></tr>${rows}</table>
+<div class="rule" style="margin-top:6px">頭墩(3 張):散牌 9~39、一對 51~109、三條 688~976。</div></details>`}
+const hpOf=id=>{const h=S&&S.hp&&S.hp[id];return h==null?HP_MAX:h},shOf=id=>{const h=S&&S.sh&&S.sh[id];return h||0};
+const fmtHp=n=>Math.max(0,Math.round(n)).toLocaleString();
+function hpLine(){return '<div class="rule" style="margin:4px 0">'+S.order.map((id,i)=>`❤ ${NM[i]} ${fmtSv(Math.max(0,hpOf(id)))}${shOf(id)?' 🛡'+fmtSv(shOf(id)):''}`).join(' · ')+'</div>'}
+function battleHTML(R){
+  const tot=R.D.map(r=>r.reduce((a,b)=>a+b,0));
+  const bars=S.order.map((id,i)=>{const hp=hpOf(id),pc=Math.max(0,Math.round(hp/HP_MAX*100));
+    return `<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${NM[i]}${i==G.me?'(你)':''} ${hp<=0?'💀 陣亡':''}</span><span>❤ ${fmtHp(hp)} / ${fmtHp(HP_MAX)}${shOf(id)?' · 🛡 '+fmtHp(shOf(id)):''}</span></div><div class="xpbar"><i style="width:${pc}%"></i></div><div class="rule">本局頭中尾數值加總:${tot[i].toLocaleString()}</div></div>`}).join('');
+  const lines=R.bt.length?R.bt.map(b=>`<div style="font-size:13px;padding:4px 0;border-top:1px solid var(--line)">⚔ <b>${NM[b.w]}</b> 三墩全贏 <b>${NM[b.l]}</b>:傷害 ${b.atk.toLocaleString()} vs 防禦 ${b.def.toLocaleString()}${b.sh?' + 護盾 '+b.sh.toLocaleString():''} → ${b.net>0?`<b class="neg">${NM[b.l]} 扣 ${b.net.toLocaleString()} 血</b>`:`全數擋下,${NM[b.l]} 剩 ${(-b.net).toLocaleString()} 護盾`}</div>`).join(''):'<div class="rule">本局沒有人三墩全贏,沒有人受到傷害。</div>';
+  return `<div class="pb"><h3>⚔ 生存戰鬥</h3>${lines}<div style="margin-top:6px">${bars}</div></div>`}
+function survWinHTML(){const w=S.over,nm=esc((P[w]&&P[w].name)||'?'),host=S.host==uid;
+  return `<div class="pb"><h3>🏆 生存模式結束</h3><div style="font-size:20px;font-weight:800;margin:8px 0">${nm}${w==uid?'(你)':''} 是最後的生還者!</div><div class="rule">共打了 ${S.round} 局。</div>
+<div class="row" style="margin-top:8px">${host?'<button class="p" onclick="againGame()">再玩一場</button>':'<div class="rule" style="align-self:center">等房主再開一場…</div>'}<button onclick="leaveRoom()">離開房間</button></div></div>`}
 async function init(){
   G.peek=ls('ss_peek')=='1';updSnd();chatBuild();try{speechSynthesis.getVoices()}catch(_){}applyStyle();try{const q=new URLSearchParams(location.search);if(q.get('dev')=='1')ls('ss_dev','1');if(q.get('dev')=='0')ls('ss_dev','')}catch(_){}{const q=((typeof location!='undefined'&&new URLSearchParams(location.search).get('room'))||'').toUpperCase();if(/^[A-Z]{4}$/.test(q))G.inv=q}
   G.down=new Set();
@@ -1234,18 +1269,19 @@ async function init(){
 }
 function entryHTML(){if(G.inv)return inviteHTML();return `<div class="pb"><h3>五人十三支 Online</h3><p class="rule">輸入暱稱後建立房間,把 4 碼代碼告訴朋友(最多 5 人,不足可加電腦)。朋友只要打開同一個網址即可,不需要任何帳號。</p>
 <input id="nm" maxlength="8" placeholder="暱稱(最多 8 字)" value="${esc(myName)}" style="${INP}">
-<div class="rule" style="margin-top:6px">要玩幾局(建立房間時設定)</div><select id="rds" style="${INP}"><option value="3">3 局</option><option value="5">5 局</option><option value="10" selected>10 局</option><option value="20">20 局</option><option value="0">不限局數</option></select>
+<div class="rule" style="margin-top:6px">要玩幾局(建立房間時設定)</div><select id="rds" style="${INP}"><option value="3">3 局</option><option value="5">5 局</option><option value="10" selected>10 局</option><option value="20">20 局</option><option value="0">不限局數</option></select>${OWNER()?'<div class="rule" style="margin-top:6px">遊戲模式</div><select id="gm" style="'+INP+'"><option value="fun">娛樂模式</option><option value="survival">生存模式(僅限你使用)</option></select>':''}
 <div class="row"><button class="p" onclick="createRoom()" ${db?'':'disabled'}>建立房間</button></div>
 <div class="row"><input id="cd" maxlength="4" placeholder="房間代碼" style="${INP};flex:2;text-transform:uppercase"><button onclick="joinRoom()" ${db?'':'disabled'}>加入</button></div>
 <div class="msg">${err||(db?'':'連線伺服器中…(免費主機喚醒可能需 30~60 秒)')}</div><div class="row"><button onclick="toggleStyle()">🎨 介面風格:${styleName()}</button></div></div>`}
 function getName(){const v=(document.getElementById('nm').value||'').trim().slice(0,8);if(!v){say('請先輸入暱稱');return false}myName=v;ls('ss_name',v);return true}
 async function createRoom(){if(!getName())return;const c=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[0|Math.random()*24]).join('');
-  try{await db.doc('rooms/'+c).set({host:uid,phase:'lobby',round:0,dbl:0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:Math.max(0,parseInt((document.getElementById('rds')||{}).value)||0)});await enter(c)}catch(e){say('建立失敗:'+(e.message||e.code))}}
+  try{await db.doc('rooms/'+c).set({host:uid,phase:'lobby',round:0,dbl:0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:(OWNER()&&(document.getElementById('gm')||{}).value=='survival')?0:Math.max(0,parseInt((document.getElementById('rds')||{}).value)||0),mode:(OWNER()&&(document.getElementById('gm')||{}).value=='survival')?'survival':'fun'});await enter(c)}catch(e){say('建立失敗:'+(e.message||e.code))}}
 async function joinRoom(){if(!getName())return;await enter((document.getElementById('cd').value||'').trim().toUpperCase())}
 async function enter(c){
   if(c.length!=4){code='';return say('請輸入 4 碼代碼')}
   code=c;
   try{const s=await ctl().get();if(!s.exists){code='';ls('ss_code','');render();return say('找不到房間 '+c)}
+    if((s.data()||{}).mode=='survival'&&!OWNER()){code='';ls('ss_code','');render();return say('生存模式目前尚未開放')}
     const ps=await db.collection('rooms/'+c+'/p').get(),mine=ps.docs.some(d=>d.id==uid);
     if(!mine&&ps.size>=5){code='';return say('房間已滿')}
     if(mine)await pdoc(uid).update({name:myName||'玩家'});else await pdoc(uid).set({name:myName||'玩家',t:Date.now(),round:-1,sub:null,want:0,rev:[0,0,0]});
@@ -1277,37 +1313,46 @@ function hostTick(){const order=S.order||[],r=S.round;
     if(flag('adv'+r))return;
     if(order.some(id=>pd(id).want)){ctl().update({phase:'duel'});startBots()}else finishRound()}
   else if(S.phase=='duel'&&order.every(id=>pd(id)&&pd(id).sub&&pd(id).rev.every(x=>x))){if(flag('fin'+r))return;setTimeout(finishRound,2600)}
-  else if(S.phase=='result'&&order.length&&!(S.maxRounds&&r>=S.maxRounds)&&order.every(id=>!P[id]||P[id].bot||P[id].nr===r)){if(flag('nx'+r))return;deal()}}
+  else if(S.phase=='result'&&order.length&&!S.over&&!(S.maxRounds&&r>=S.maxRounds)&&order.every(id=>!P[id]||P[id].bot||P[id].nr===r)){if(flag('nx'+r))return;deal()}}
 function startBots(){const r=S.round,t=setInterval(()=>{if(!S||S.round!=r||S.phase!='duel')return clearInterval(t);
   const c=S.order.filter(id=>P[id]&&P[id].bot&&pd(id)&&pd(id).sub&&pd(id).rev.some(x=>!x));if(!c.length)return;
   const id=c[0|Math.random()*c.length],d=pd(id),rv=d.rev.slice(),un=[0,1,2].filter(k=>!rv[k]),
     pl=un.filter(k=>!fxParts(d.sub[k],k).length),pool=pl.length?pl:un,k=pool[0|Math.random()*pool.length];rv[k]=1;
   pdoc(id).update({rev:rv}).catch(()=>{})},1000)}
 function compute(){
-  const order=S.order,N=order.length,L=order.map((_,i)=>subOf(i)),V=L.map(l=>l.map(ev)),sc=Array(N).fill(0),pairs=[];
+  const order=S.order,N=order.length,L=order.map((_,i)=>subOf(i)),V=L.map(l=>l.map(ev)),W=L.map(l=>l.map(scr)),D=L.map(l=>l.map(svScore)),sc=Array(N).fill(0),pairs=[];
   const JM=L.map(l=>l.map(c=>{const n=c.filter(x=>x.r==S.jr).length;return n>=5?3:n==4?2:n==3?1:0}));
   const sw=Array.from({length:N},()=>Array(N).fill(false)),RS={};
-  for(let a=0;a<N;a++)for(let b=a+1;b<N;b++){const r=[0,1,2].map(k=>Math.sign(V[a][k]-V[b][k]));RS[a+','+b]=r;
+  for(let a=0;a<N;a++)for(let b=a+1;b<N;b++){const r=[0,1,2].map(k=>Math.sign(W[a][k]-W[b][k]));RS[a+','+b]=r;
     if(r.every(x=>x==1))sw[a][b]=true;else if(r.every(x=>x==-1))sw[b][a]=true}
   const hong=sw.map(row=>N>=3&&row.filter(Boolean).length==N-1);
   for(let a=0;a<N;a++)for(let b=a+1;b<N;b++){const items=[];
     if(sw[a][b]||sw[b][a]){const w=sw[a][b]?a:b;items.push({w,t:'帕嘎'+(hong[w]?'(紅不讓×3)':''),s:BASE*(hong[w]?3:1)})}
     for(let k=0;k<3;k++){const sa=spec(V[a][k],k),sb=spec(V[b][k],k);
-      if(sa&&sb){const d=Math.sign(V[a][k]-V[b][k]);if(d){const sp=d>0?sa:sb;items.push({w:d>0?a:b,t:LN[k]+sp.n,s:BASE*sp.m})}}
+      if(sa&&sb){const d=Math.sign(W[a][k]-W[b][k]);if(d){const sp=d>0?sa:sb;items.push({w:d>0?a:b,t:LN[k]+sp.n,s:BASE*sp.m})}}
       else if(sa)items.push({w:a,t:LN[k]+sa.n,s:BASE*sa.m});else if(sb)items.push({w:b,t:LN[k]+sb.n,s:BASE*sb.m});
       const ja=JM[a][k],jb=JM[b][k],jt=m=>LN[k]+'彩金'+lb(S.jr)+(m>1?'×'+m:'');
       if(ja&&!jb)items.push({w:a,t:jt(ja),s:BASE*ja});else if(jb&&!ja)items.push({w:b,t:jt(jb),s:BASE*jb})}
     const net=items.reduce((x,i)=>x+(i.w==a?i.s:-i.s),0);sc[a]+=net;sc[b]-=net;pairs.push({a,b,r:RS[a+','+b],items,s:net})}
-  return{L,V,sc,pairs,hong,JM,jr:S.jr}}
+  const bt=[];if(S.mode=='survival'){const T=D.map(r=>r.reduce((x,y)=>x+y,0)),sh0=(S.phase=='result'?S.shPrev:S.sh)||{};
+    for(let a=0;a<N;a++)for(let b=0;b<N;b++)if(sw[a][b]){const atk=T[a],def=T[b],sh=sh0[order[b]]||0;bt.push({w:a,l:b,atk,def,sh,net:atk-(def+sh)})}}
+  return{L,V,W,D,sc,pairs,hong,JM,jr:S.jr,bt}}
+function svApply(R,order){const hp={},sh={},shPrev={},att={};order.forEach(id=>{hp[id]=hpOf(id);sh[id]=shOf(id);shPrev[id]=shOf(id)});
+  R.bt.forEach(b=>{(att[b.l]=att[b.l]||[]).push(b)});
+  Object.keys(att).forEach(l=>{const id=order[l],arr=att[l],loss=arr.reduce((x,b)=>x+Math.max(0,b.net),0);
+    hp[id]-=loss;sh[id]=loss>0?0:Math.max(0,-Math.max(...arr.map(b=>b.net)))}); // 被打到:沒擋完 → 護盾歸零;全擋下 → 剩下的防禦(對最強一擊)成為護盾;沒被打到 → 護盾不變
+  const alive=order.filter(id=>hp[id]>0);let over=null;if(alive.length<=1)over=alive[0]||order.reduce((a,b)=>hp[b]>hp[a]?b:a);
+  return{hp,sh,shPrev,over}}
 async function finishRound(){if(flag('done'+S.round))return;
   try{const R=compute(),order=S.order,total={...(S.total||{})};order.forEach((id,i)=>total[id]=(total[id]||0)+R.sc[i]);
     const mn=Math.min(...order.map(id=>total[id])),up={phase:'result',total,swapMsg:'',swapUsed:false};
+    if(S.mode=='survival'){const ap=svApply(R,order);up.hp=ap.hp;up.sh=ap.sh;up.shPrev=ap.shPrev;if(ap.over)up.over=ap.over}
     const lo=order.filter(id=>total[id]==mn);
     if(mn<0&&lo.every(id=>P[id]&&P[id].bot)&&Math.random()<.5){const w=lo[0|Math.random()*lo.length],ns=[0,1,2,3].filter(x=>x!=S.dbl),s2=ns[0|Math.random()*ns.length];
       up.dbl=s2;up.swapUsed=true;up.swapMsg=`🔄 ${esc(P[w].name)}(總分最低)要求換色:${SU[s2]} 改為 2 副,下一局生效`}
     await ctl().update(up)}catch(e){say('結算失敗:'+(e.message||e.code))}}
 async function deal(){
-  const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t).slice(0,5);if(ids.length<2||S.host!=uid)return;
+  const ids=(S.mode=='survival'&&S.round>0?(S.order||[]).filter(id=>P[id]&&hpOf(id)>0):Object.keys(P)).sort((a,b)=>P[a].t-P[b].t).slice(0,5);if(ids.length<2||S.host!=uid||S.over)return;
   const d=deck(),hands={};ids.forEach((id,i)=>hands[id]=d.slice(i*13,i*13+13));const round=(S.round||0)+1;
   try{await ctl().update({phase:'play',round,order:ids,hands,jr:2+(0|Math.random()*13),idle:65-ids.length*13,swapMsg:'',swapUsed:false});
     ids.forEach((id,i)=>{if(!P[id].bot)return;setTimeout(()=>{if(S&&S.round==round)pdoc(id).update({round,sub:auto(hands[id]),want:0,rev:[0,0,0]}).catch(()=>{})},600*(i+1))})}
@@ -1324,11 +1369,12 @@ function swapPanel(){let h=G.swapMsg?`<div class="pb">${G.swapMsg}<br><span clas
   const mn=Math.min(...G.total);
   if(mn<0&&G.me>=0&&G.total[G.me]==mn&&!G.swapUsed)h+=`<div class="pb"><b>🔄 輸家要求換色</b><div class="rule">你目前總分最低,可把雙副花色改成別的花色(下一局生效)。目前:${compStr()}</div><div class="row">${[0,1,2,3].filter(x=>x!=G.dbl).map(x=>`<button onclick="doSwap(${x})">${SU[x]} 改為兩副</button>`).join('')}</div></div>`;
   return h}
-const isFinal=()=>!!(S&&S.maxRounds&&S.round>=S.maxRounds);
+const isFinal=()=>!!(S&&(S.over||(S.maxRounds&&S.round>=S.maxRounds)));
 function finalHTML(){const tot=id=>(S.total||{})[id]||0,rk=S.order.map((id,i)=>[i,tot(id)]).sort((a,b)=>b[1]-a[1]);
   return `<div class="pb"><h3><span>🏁 遊戲結束 · 共 ${S.maxRounds} 局</span></h3>${rk.map(([i,t])=>{const r=rk.findIndex(x=>x[1]==t);return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--line)"><span>${['🥇','🥈','🥉'][r]||(r+1)+'.'} ${nmTag(i)}${i==G.me?'(你)':''}</span><b class="${t>0?'pos':t<0?'neg':''}">${t>0?'+':''}${t}</b></div>`}).join('')}<div class="row" style="margin-top:8px">${S.host==uid?'<button class="p" onclick="againGame()">再玩一場</button>':'<div class="rule" style="align-self:center">等房主再開一場…</div>'}<button onclick="leaveRoom()">離開房間</button></div></div>`}
-function againGame(){if(S.host!=uid)return;ctl().set({host:S.host,phase:'lobby',round:0,dbl:S.dbl||0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:S.maxRounds||0}).catch(e=>say('重開失敗:'+(e.message||e.code)))}
+function againGame(){if(S.host!=uid)return;ctl().set({host:S.host,phase:'lobby',round:0,dbl:S.dbl||0,jr:0,order:[],hands:{},total:{},idle:0,swapMsg:'',swapUsed:false,maxRounds:S.maxRounds||0,mode:S.mode||'fun'}).catch(e=>say('重開失敗:'+(e.message||e.code)))}
 function nextBtn(){
+  if(S.over)return xpHTML()+survWinHTML();
   if(isFinal())return xpHTML()+finalHTML();
   const order=S.order,r=S.round,isB=id=>!!(P[id]&&P[id].bot),rdy=id=>!!(P[id]&&P[id].nr===r),hum=order.filter(id=>!isB(id)),n=hum.filter(rdy).length,me=rdy(uid);
   return xpHTML()+`<div class="pb"><div class="rule">每位玩家都按「準備」,才會開始下一局:</div>
@@ -1346,7 +1392,7 @@ function duelHTML(){
   S.order.map((_,i)=>`<div class="pb"><h3><span>${NM[i]}${i==G.me?'(你)':''}</span><span class="rule">已攤 ${revOf(i).filter(Boolean).length}/3</span></h3>`+[0,1,2].map(k=>{
     const l=subOf(i)[k],r=revOf(i)[k],pad='<span></span>'.repeat(5-l.length);
     if(r){const hs=hiIds(l,k);if(fxParts(l,k).some(t=>t.startsWith('彩金')))l.forEach(x=>{if(x.r==G.jr)hs.add(x.id)});
-      return `<div class="sm ${G.last==i+','+k?'new':''}">${l.map(x=>mini(x,hs.has(x.id))).join('')}${pad}<em class="${fxParts(l,k).length?'gl':''}">${LN[k]}<br>${CAT[catOf(ev(l))]}</em></div>`}
+      return `<div class="sm ${G.last==i+','+k?'new':''}">${l.map(x=>mini(x,hs.has(x.id))).join('')}${pad}<em class="${fxParts(l,k).length?'gl':''}">${LN[k]}<br>${CAT[catOf(ev(l))]}${svTag(l)}</em></div>`}
     const me=i==G.me;return `<div class="sm hid ${me?'mine':''}" ${me?`onclick="reveal(${i},${k})"`:''}>${l.map(back5).join('')}${pad}<em>${LN[k]}<br>${me?'點我攤牌'+(fxParts(l,k).length?' ✦':''):'未攤牌'}</em></div>`}).join('')+'</div>').join('')+
   (S.host==uid?'<div class="row"><button onclick="skipDuel()">全部攤開(房主)</button></div>':'')}
 function inviteHTML(){return `<div class="pb"><h3>🎉 你被邀請加入房間</h3><div style="font-size:36px;font-weight:900;letter-spacing:8px;text-align:center;margin:6px 0">${G.inv}</div>
@@ -1366,7 +1412,7 @@ function lobbyHTML(){const ids=Object.keys(P).sort((a,b)=>P[a].t-P[b].t),host=S.
 <div class="pb"><div class="rule">邀請連結(朋友點開、輸入暱稱就能加入):</div><input id="lnk" readonly value="${inviteLink()}" onclick="this.select()" style="${INP};font-size:13px"><div class="row"><button class="p" onclick="lineInvite()">💬 傳到 LINE</button><button onclick="shareInvite()">📤 分享 / 複製</button></div></div>
 <div class="pb"><h3><span>玩家(${ids.length}/5)</span></h3>${ids.map(id=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${nmTagDoc(esc(P[id].name),P[id])}${P[id].bot?' 🤖':''}${id==S.host?' 👑':''}${id==uid?' (你)':''}</span>${host&&id!=uid?`<button style="flex:none;padding:2px 10px" onclick="kick('${id}')">✕</button>`:''}</div>`).join('')}</div>
 ${host?`<div class="row"><button onclick="addBot()" ${ids.length>=5?'disabled':''}>＋ 加入電腦</button><button class="p" onclick="deal()" ${ids.length<2?'disabled':''}>開始遊戲</button></div>`:'<p class="rule">等待房主開始遊戲…</p>'}
-<div class="row"><button onclick="toggleStyle()">🎨 介面風格:${styleName()}</button><button onclick="leaveRoom()">離開房間</button></div><p class="rule">目前牌組 ${compStr()}。${S.maxRounds?'共 '+S.maxRounds+' 局':'不限局數'}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
+<div class="row"><button onclick="toggleStyle()">🎨 介面風格:${styleName()}</button><button onclick="leaveRoom()">離開房間</button></div>${survOn()?svTable():''}<p class="rule">模式:${survOn()?'生存(牌型壓制)':'娛樂'}。目前牌組 ${compStr()}。${S.maxRounds?'共 '+S.maxRounds+' 局':'不限局數'}。房主需保持頁面開啟(負責發牌與結算)。</p>`}
 function updJk(){try{const e=document.getElementById('jkc');if(!e)return;e.innerHTML=(S&&S.phase!='lobby'&&G.jr)?'🎰 彩金 <b>'+lb(G.jr)+'</b>':''}catch(_){}}
 function render(){
   try{document.getElementById('app').className=''}catch(_){}
@@ -1376,10 +1422,10 @@ function render(){
   if(!S){T.textContent='五人十三支';app.innerHTML=entryHTML();return}
   T.textContent=S.phase=='lobby'?'房間 '+code:'第 '+S.round+(S.maxRounds?' / '+S.maxRounds:'')+' 局';
   if(S.phase=='lobby'){app.innerHTML=lobbyHTML();return}
-  if(G.me<0){app.innerHTML='<p>這一局已開始,你不在名單內。請等下一局或請房主重新開局。</p><div class="row"><button onclick="leaveRoom()">離開房間</button></div>';return}
+  if(G.me<0){app.innerHTML=(S.mode=='survival'&&S.hp&&S.hp[uid]!=null&&S.hp[uid]<=0?'<p>💀 你已陣亡,只能旁觀。剩下的人打到最後只剩一人。</p>':'<p>這一局已開始,你不在名單內。請等下一局或請房主重新開局。</p>')+'<div class="row"><button onclick="leaveRoom()">離開房間</button></div>';return}
   const mine=pd(uid);G.status=S.order.map(id=>pd(id)&&pd(id).sub?1:0);
   if(S.phase=='play'){
-    if(mine&&mine.sub){if(document.activeElement&&document.activeElement.id=='utx')return;app.innerHTML=jpBanner()+`<div class="st">${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
+    if(mine&&mine.sub){if(document.activeElement&&document.activeElement.id=='utx')return;app.innerHTML=jpBanner()+`<div class="st">${survOn()?'<i class="ok">⚔ 生存模式</i>':''}${G.status.map((s,i)=>`<i class="${s?'ok':''}">${NM[i]}:${s?'已完成':'排牌中'}</i>`).join('')}</div>`+
       mine.sub.map((l,k)=>`<div class="lane"><div class="lh"><span>${LN[k]}</span><b>${CAT[catOf(ev(l))]}</b></div><div class="g5">${l.map(x=>mini(x)).join('')}</div></div>`).join('')+'<p class="rule">'+(mine.want?'⚔ 對決模式:':'')+'已完成,等待其他玩家…</p>';return}
     G.canAuto=S.order.every((id,i)=>i==G.me||(pd(id)&&!!pd(id).sub));
     if(G.canAuto&&G.autoRd!==S.round){G.autoRd=S.round;toast('🔓 其他玩家都完成了,自動理牌已解鎖','ok')}
